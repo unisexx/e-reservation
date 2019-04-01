@@ -17,4 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// หน้าแรก
 Route::get('/home', 'HomeController@index')->name('home');
+
+// ตั้งค่า
+Route::resource('setting/room', 'Setting\\RoomController');
+

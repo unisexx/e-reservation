@@ -1,0 +1,87 @@
+a:hover,
+a:focus {
+    color: #71c55d;
+}
+
+#navigation {
+	border-top: 5px solid #71c55d;
+}
+
+a,.tp-caption a.btn:hover {
+	color: #71c55d;
+}
+.top-nav-collapse {
+	background: #71c55d;
+}
+
+.carousel-indicators .active {
+    background-color: #71c55d;
+}
+
+.header-text h2 span {
+    background-color: #71c55d;
+}
+
+
+.navbar-custom ul.nav ul.dropdown-menu li a:hover {
+	color: #71c55d;
+}
+
+.owl-theme .owl-controls .owl-page.active span,
+.owl-theme .owl-controls.clickable .owl-page:hover span {
+    background-color: #71c55d;
+}
+
+.widget-avatar .avatar:hover {
+    border: 5px solid #71c55d;
+}
+
+.bg-skin {
+	background: #71c55d;
+}
+
+.highlight-color {
+	background-color: #71c55d;
+}
+
+.service-box:hover {
+	border-bottom: 2px solid #71c55d;
+}
+
+
+
+form#contact-form input:focus,form#contact-form select:focus,form#contact-form textarea:focus {
+	border-color: #71c55d;
+}
+form.search-form input:focus {
+	border-color: #71c55d;
+}
+
+/* footer */
+ul.footer-menu li a:hover {
+	color: #7e7e7e;
+}
+
+footer a.totop:hover {
+	color: #7e7e7e;
+}
+
+
+.btn-skin { font-family: 'K2D', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 9px 25px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin-bottom: 15px;
+    border: 2px solid #71c55d;
+    background: #fff;
+    color: #71c55d;
+    text-decoration: none;
+}
+.btn-skin:hover {
+  background: #71c55d;	border-color: #71c55d;
+  color: #fff;
+}
