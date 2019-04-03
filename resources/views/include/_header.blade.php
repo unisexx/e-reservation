@@ -40,10 +40,10 @@
                         <li><a href="{{ url('/user') }}">ผู้ใช้งาน</a></li>
                         <li><a href="{{ url('/permission') }}">สิทธิ์การใช้งาน</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="{{ url('/room') }}">ห้องประชุม</a></li>
-                        <li><a href="{{ url('/vehicle') }}">ยานพาหนะ</a></li>
-                        <li><a href="{{ url('/driver') }}">พนักงานขับรถ</a></li>
-                        <li><a href="{{ url('/vehicle_type') }}">ประเภทรถ</a></li>
+                        <li><a href="{{ url('/setting/st-room') }}">ห้องประชุม</a></li>
+                        <li><a href="{{ url('/setting/st-vehicle') }}">ยานพาหนะ</a></li>
+                        <li><a href="{{ url('/setting/st-driver') }}">พนักงานขับรถ</a></li>
+                        <li><a href="{{ url('/setting/st-vehicle-type') }}">ประเภทรถ</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ url('/user/form') }}" class="vtip" title="{{ Auth::user()->name }}"><img

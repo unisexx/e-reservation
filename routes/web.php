@@ -21,5 +21,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 // ตั้งค่า
-Route::resource('setting/room', 'Setting\\RoomController');
+Route::resource('setting/st-room', 'Setting\\StRoomController');
 
