@@ -6,7 +6,7 @@
 <div id="search">
     <div id="searchBox">
         <form method="GET" action="{{ url('/setting/st-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
-            <input type="text" class="form-control" style="width:350px;" id="exampleInputName2" placeholder="ชื่อห้องประชุม" name="search" value="{{ request('search') }}">
+            <input type="text" class="form-control" style="width:350px;" placeholder="ชื่อห้องประชุม" name="search" value="{{ request('search') }}">
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
 
@@ -16,7 +16,7 @@
 
 {{-- @if(CanPerm('st-room-create')) --}}
 <div id="btnBox">
-    <input type="button" title="เพิ่มแผนงาน ASCC " value="เพิ่มห้องประชุม" onclick="document.location='{{ url('/setting/st-room/create') }}'"
+    <input type="button" title="เพิ่มห้องประชุม" value="เพิ่มห้องประชุม" onclick="document.location='{{ url('/setting/st-room/create') }}'"
         class="btn btn-warning vtip" />
 </div>
 {{-- @endif --}}
@@ -29,15 +29,22 @@
     <tr>
         <th>ลำดับ</th>
         <th>ภาพห้องประชุม</th>
-        <th style="width:50%">ชื่อห้องประชุม</th>
-        <th>รายละเอียด</th>
+        <th style="width:20%">ชื่อห้องประชุม</th>
+        <th style="width:30%">รายละเอียด</th>
+        <th>สถานะ</th>
         <th>จัดการ</th>
     </tr>
     @foreach($stroom as $key=>$item)
         <tr @if(($key % 2) == 1) class="odd" @endif>
             <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}</td>
-            <td>{{ $item->code }}</td>
+            <td>@if($item->image) <img src="{{ url('uploads/room/'.$item->image) }}" width="90"> @endif</td>
             <td>{{ $item->name }}</td>
+            <td>
+                <div>จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
+                <div>อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
+                <div>ผู้รับผิดชอบห้องประชุม : {{ !empty($item->res_name) ? $item->res_name : "-" }} {{ !empty($item->res_department_id) ? $item->res_department_id : "-" }}</div>
+                <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($item->fee) ? $item->fee : "-" }}</div>
+            </td>
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
 

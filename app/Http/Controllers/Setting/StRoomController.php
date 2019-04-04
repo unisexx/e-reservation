@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Model\StRoom;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\StRoomRequest;
+
 class StRoomController extends Controller
 {
     /**
@@ -24,10 +26,7 @@ class StRoomController extends Controller
         $perPage = 10;
 
         if (!empty($keyword)) {
-            $stroom = StRoom::where('code', 'LIKE', "%$keyword%")
-                ->orWhere('title', 'LIKE', "%$keyword%")
-                ->orWhere('description', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
+            $stroom = StRoom::where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
             $stroom = StRoom::latest()->paginate($perPage);
@@ -56,25 +55,17 @@ class StRoomController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(Request $request)
+    public function store(StRoomRequest $request)
     {
-        $this->validate($request, [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'name' => 'required',
-            'people' => 'required',
-            'equipment' => 'required',
-            'res_name' => 'required',
-            'res_tel' => 'required',
-            'res_department_id' => 'required',
-            'fee' => 'required',
-        ]);
-        
-        $imageName = time().'.'.request()->image->getClientOriginalExtension();
-        request()->image->move(public_path('uploads'), $imageName);
-
         $requestData = $request->all();
-        $requestData['image'] = $imageName;
-        // dd($requestData);
+        
+        // ไฟล์แนบ
+        if ($request->hasFile('image')) {
+            $imageName = time().'.'.request()->image->getClientOriginalExtension();
+            request()->image->move(public_path('uploads/room/'), $imageName);
+
+            $requestData['image'] = $imageName;
+        }
         
         StRoom::create($requestData);
 
@@ -121,14 +112,17 @@ class StRoomController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $id)
+    public function update(StRoomRequest $request, $id)
     {
-        $this->validate($request, [
-            'title' => 'required',
-		], [
-            'title.required' => 'ชื่อแผนงาน ASCC ห้ามเป็นค่าว่าง',
-		]);
         $requestData = $request->all();
+
+        // ไฟล์แนบ
+        if ($request->hasFile('image')) {
+            $imageName = time().'.'.request()->image->getClientOriginalExtension();
+            request()->image->move(public_path('uploads/room/'), $imageName);
+
+            $requestData['image'] = $imageName;
+        }
         
         $stroom = StRoom::findOrFail($id);
         $stroom->update($requestData);

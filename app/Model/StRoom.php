@@ -25,5 +25,12 @@ class StRoom extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','people','equipment','res_name','res_tel','res_department_id','fee','note','status'];
+    protected $fillable = ['name','people','equipment','res_name','res_tel','res_department_id','fee','note','status','image'];
+
+    /** Dear Custom Function */
+    // เช็กว่ามีฟิลด์อัพโหลดรูป (image) ในฐานข้อมูลมีค่าหรือไม่, ใช่ใน validate
+    public function notHavingImageInDb(){
+        return (empty($this->image)) ? true : false ;
+        //return true;
+    }
 }

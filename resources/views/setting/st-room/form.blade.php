@@ -1,7 +1,12 @@
 <table class="tbadd">
     <tr class="{{ $errors->has('image') ? 'has-error' : '' }}">
         <th>ภาพห้องประชุม<span class="Txt_red_12"> *</span></th>
-        <td><input type="file" name="image" /></td>
+        <td>
+            @if(isset($stroom->image)) 
+                <img src="{{ url('uploads/room/'.$stroom->image) }}" width="90">
+            @endif
+            <input type="file" name="image" />
+        </td>
     </tr>
     <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
         <th>ชื่อห้องประชุม<span class="Txt_red_12"> *</span></th>
@@ -12,7 +17,7 @@
     <tr class="{{ $errors->has('people') ? 'has-error' : '' }}">
         <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline"><input name="people" type="text" class="form-control" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" /> คน</div>
+            <div class="form-inline"><input name="people" type="number" min="1" class="form-control" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" /> คน</div>
         </td>
     </tr>
     <tr class="{{ $errors->has('equipment') ? 'has-error' : '' }}">
@@ -38,8 +43,8 @@
     <tr>
         <th>ค่าใช้จ่าย/ค่าธรรมเนียมฯ<span class="Txt_red_12"> *</span></th>
         <td>
-            <label style="margin-right:20px;"><input name="fee" type="radio" value="yes" {!! (@$stroom->fee == 'yes' || empty($stroom->id)) ? 'checked="checked"' : '' !!}/> มี</label>
-            <label><input name="fee" type="radio" value="no" {!! @$stroom->fee == 'no' ? 'checked="checked"' : '' !!}/> ไม่มี</label>
+            <label style="margin-right:20px;"><input name="fee" type="radio" value="มี" {!! (@$stroom->fee == 'มี' || empty($stroom->id)) ? 'checked="checked"' : '' !!}/> มี</label>
+            <label><input name="fee" type="radio" value="ไม่มี" {!! @$stroom->fee == 'ไม่มี' ? 'checked="checked"' : '' !!}/> ไม่มี</label>
         </td>
     </tr>
     <tr>
