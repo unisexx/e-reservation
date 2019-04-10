@@ -1,0 +1,23 @@
+@extends('layouts.admin')
+
+@section('content')
+
+<h3>ตั้งค่า ประเภทรถ (เพิ่ม / แก้ไข)</h3>
+
+@if ($errors->any())
+<ul class="alert alert-danger list-unstyled">
+    <li><b>ไม่สามารถบันทึกได้เนื่องจาก</b></li>
+    @foreach ($errors->all() as $error)
+    <li>- {{ $error }}</li>
+    @endforeach
+</ul>
+@endif
+
+<form method="POST" action="{{ url('/setting/st-vehicle-type') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+    {{ csrf_field() }}
+
+    @include ('setting.st-vehicle-type.form', ['formMode' => 'create'])
+
+</form>
+
+@endsection
