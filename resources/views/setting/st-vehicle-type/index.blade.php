@@ -35,7 +35,7 @@
     @foreach($stvehicletype as $key=>$item)
         <tr @if(($key % 2) == 1) class="odd" @endif>
             <td>{{ (($stvehicletype->currentPage() - 1 ) * $stvehicletype->perPage() ) + $loop->iteration }}</td>
-            <td>@if($item->image) <img src="{{ url('uploads/room/'.$item->image) }}" width="90"> @endif</td>
+            <td>{{ $item->name }}</td>
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
 

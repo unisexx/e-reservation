@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Model\StVehicleType;
 use Illuminate\Http\Request;
 
-// use App\Http\Requests\StVehicleTypeRequest;
-
 class StVehicleTypeController extends Controller
 {
     /**
@@ -55,17 +53,15 @@ class StVehicleTypeController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(StVehicleTypeRequest $request)
+    public function store(Request $request)
     {
-        $requestData = $request->all();
+        $this->validate($request, [
+            'name' => 'required',
+		], [
+            'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
+        ]);
         
-        // ไฟล์แนบ
-        if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
-
-            $requestData['image'] = $imageName;
-        }
+        $requestData = $request->all();
         
         StVehicleType::create($requestData);
 
@@ -112,18 +108,16 @@ class StVehicleTypeController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(StVehicleTypeRequest $request, $id)
+    public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required',
+		], [
+            'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
+        ]);
+
         $requestData = $request->all();
 
-        // ไฟล์แนบ
-        if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
-
-            $requestData['image'] = $imageName;
-        }
-        
         $stvehicletype = StVehicleType::findOrFail($id);
         $stvehicletype->update($requestData);
 
