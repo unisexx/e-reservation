@@ -21,14 +21,31 @@ class StDriverController extends Controller
         // ChkPerm('st-driver-view');
 
         $keyword = $request->get('search');
+        $st_department_code = $request->get('st_department_code');
+        $st_bureau_code = $request->get('st_bureau_code');
+        $st_division_code = $request->get('st_division_code');
         $perPage = 10;
 
-        if (!empty($keyword)) {
-            $rs = StDriver::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $rs = StDriver::latest()->paginate($perPage);
+        $rs = StDriver::select('*');
+
+        if (!empty($st_department_code)) {
+            $rs = $rs->where('st_department_code', $st_department_code);
         }
+
+        if (!empty($st_bureau_code)) {
+            $rs = $rs->where('st_bureau_code', $st_bureau_code);
+        }
+
+        if (!empty($st_division_code)) {
+            $rs = $rs->where('st_division_code', $st_division_code);
+        }
+
+        if (!empty($keyword)) {
+            $rs = $rs->where('name', 'LIKE', "%$keyword%");
+        }
+
+        $rs = $rs->orderBy('id','desc')->paginate($perPage);
+
 
         return view('setting.st-driver.index', compact('rs'));
     }
@@ -56,9 +73,17 @@ class StDriverController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name'               => 'required',
+            'st_department_code' => 'required',
+            'st_bureau_code'     => 'required',
+            'st_division_code'   => 'required',
+            'tel'                => 'required',
 		], [
-            'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
+            'name.required'               => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
+            'st_division_code.required'   => 'กลุ่ม ห้ามเป็นค่าว่าง',
+            'tel.required'                => 'เบอร์ติดต่อ ห้ามเป็นค่าว่าง',
         ]);
         
         $requestData = $request->all();
@@ -95,7 +120,7 @@ class StDriverController extends Controller
         // ตรวจสอบ permission
         // ChkPerm('st-driver-edit','setting/st-driver');
 
-        $stvehicletype = StDriver::findOrFail($id);
+        $rs = StDriver::findOrFail($id);
 
         return view('setting.st-driver.edit', compact('rs'));
     }
@@ -111,9 +136,17 @@ class StDriverController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name'               => 'required',
+            'st_department_code' => 'required',
+            'st_bureau_code'     => 'required',
+            'st_division_code'   => 'required',
+            'tel'                => 'required',
 		], [
-            'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
+            'name.required'               => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
+            'st_division_code.required'   => 'กลุ่ม ห้ามเป็นค่าว่าง',
+            'tel.required'                => 'เบอร์ติดต่อ ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();

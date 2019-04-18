@@ -20,6 +20,10 @@ Auth::routes();
 // หน้าแรก
 Route::get('/home', 'HomeController@index')->name('home');
 
+// ajax
+Route::get('ajaxGetBureau', 'AjaxController@ajaxGetBureau');
+Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
+
 // ตั้งค่า
 Route::resource('setting/st-room', 'Setting\\StRoomController');
 Route::resource('setting/st-vehicle', 'Setting\\StVehicleController');

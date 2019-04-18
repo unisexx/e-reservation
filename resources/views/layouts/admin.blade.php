@@ -11,5 +11,6 @@
 <body id="app-layout">
     @include('include._header')
     @yield('content')
+    {!! js_notify() !!}
 </body>
 </html>

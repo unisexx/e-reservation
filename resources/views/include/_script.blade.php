@@ -174,3 +174,55 @@ $( function() {
     });
 } );
 </script>
+
+{{-- alertify --}}
+<script src="{{ url('/js/alertify/alertify.min.js') }}"></script>
+<link href="{{ url('/js/alertify/css/alertify.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url('/js/alertify/css/themes/default.min.css') }}" rel="stylesheet" type="text/css" />
+
+
+<!-- chain select หน่วยงาน -->
+<script>
+$(document).ready(function(){
+    $('body').on('change', 'select[name=st_department_code]', function(){
+        getBureau( $(this).val() );
+    });
+    $('body').on('change', 'select[name=st_bureau_code]', function(){
+        getDivision( $(this).val() );
+    });
+});
+
+function getBureau($st_department_code){
+    $('select[name=st_bureau_code],select[name=st_division_code]').empty().selectpicker('refresh');
+
+    $.ajax({
+        method: "GET",
+        url: "{{ url('ajaxGetBureau') }}",
+        data: { 
+            st_department_code: $st_department_code,
+        }
+    }).done(function( data ) {
+        $.map(data, function (i) { 
+            $('select[name=st_bureau_code]').append('<option value="' + i.code + '">' + i.title + '</option>'); 
+        });
+        $('select[name=st_bureau_code]').selectpicker('refresh');
+    });
+}
+
+function getDivision($st_bureau_code){
+    $('select[name=st_division_code]').empty().selectpicker('refresh');
+
+    $.ajax({
+        method: "GET",
+        url: "{{ url('ajaxGetDivision') }}",
+        data: { 
+            st_bureau_code: $st_bureau_code,
+        }
+    }).done(function( data ) {
+        $.map(data, function (i) { 
+            $('select[name=st_division_code]').append('<option value="' + i.code + '">' + i.title + '</option>'); 
+        });
+        $('select[name=st_division_code]').selectpicker('refresh');
+    });
+}
+</script>

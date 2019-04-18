@@ -1,3 +1,25 @@
+<?php
+    // กระทรวง
+    $st_ministries = App\Model\StMinistry::orderBy('code','asc')->get();
+    $st_departments = App\Model\StDepartment::orderBy('code','asc')->get();
+
+    if(old('st_department_code')){
+        $st_bureaus = App\Model\StBureau::where('code','like',old('st_department_code').'%')->orderBy('code','asc')->get();
+    }
+
+    if(old('st_bureau_code')){
+        $st_divisions = App\Model\StDivision::where('code','like',old('st_bureau_code').'%')->orderBy('code','asc')->get();
+    }
+
+    if(isset($rs->st_department_code)){
+        $st_bureaus = App\Model\StBureau::where('code','like',$rs->st_department_code.'%')->orderBy('code','asc')->get();
+    }
+
+    if(isset($rs->st_bureau_code)){
+        $st_divisions = App\Model\StDivision::where('code','like',$rs->st_bureau_code.'%')->orderBy('code','asc')->get();
+    }
+?>
+
 <table class="tbadd">
     <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
         <th>ชื่อสกุล<span class="Txt_red_12"> *</span></th>
@@ -7,14 +29,36 @@
                     style="width:500px;" /></div>
         </td>
     </tr>
-    <tr class="{{ $errors->has('st_department_id') ? 'has-error' : '' }}">
+    <tr class="{{ $errors->has('st_department_code') || $errors->has('st_bureau_code') || $errors->has('st_division_code') ? 'has-error' : '' }}">
         <th>หน่วยงาน<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <select name="st_department_id" class="selectpicker" id="lunch" title="หน่วยงาน" data-live-search="true">
-                    <option>[สป-สบก(กอก)] สำนักบริหารงานกลาง กลุ่มอำนวยการ</option>
-                    <option>สป-สบก(กพบ)] สำนักบริหารงานกลาง กลุ่มการพัฒนาระบบการบริหารงานบุคคล</option>
+                
+                <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
+                    <option value="">+ กรม +</option>
+                    @foreach($st_departments as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
                 </select>
+
+                <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก">
+                    <option value="">+ สำนัก +</option>
+                    @if(old('st_department_code') || isset($rs->st_department_code))
+                    @foreach($st_bureaus as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
+                <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม">
+                    <option value="">+ กลุ่ม +</option>
+                    @if(old('st_bureau_code') || isset($rs->st_bureau_code))
+                    @foreach($st_divisions as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
             </div>
         </td>
     </tr>

@@ -13,11 +13,11 @@
 </ul>
 @endif
 
-<form method="POST" action="{{ url('/setting/st-vehicle-type/' . $stvehicletype->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+<form method="POST" action="{{ url('/setting/st-driver/' . $rs->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
     {{ method_field('PATCH') }}
     {{ csrf_field() }}
 
-    @include ('setting.st-vehicle-type.form', ['formMode' => 'edit'])
+    @include ('setting.st-driver.form', ['formMode' => 'edit'])
 
 </form>
 
