@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>ตั้งค่า ห้องประชุม (เพิ่ม / แก้ไข)</h3>
+<h3>ตั้งค่า ยานพาหนะ (เพิ่ม / แก้ไข)</h3>
 
 @if ($errors->any())
 <ul class="alert alert-danger list-unstyled">

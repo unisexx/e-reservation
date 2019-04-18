@@ -1,13 +1,43 @@
+<?php
+    // ประเภทรถ
+    $st_vehicle_types = App\Model\StVehicleType::where('status','1')->orderBy('id','asc')->get();
+
+    // พนักงานขับ
+    $st_drivers = App\Model\StDriver::where('status','1')->orderBy('id','asc')->get();
+
+    // หน่วยงานที่รับผิดชอบ
+    $st_departments = App\Model\StDepartment::orderBy('code','asc')->get();
+
+    if(old('st_department_code')){
+        $st_bureaus = App\Model\StBureau::where('code','like',old('st_department_code').'%')->orderBy('code','asc')->get();
+    }
+
+    if(old('st_bureau_code')){
+        $st_divisions = App\Model\StDivision::where('code','like',old('st_bureau_code').'%')->orderBy('code','asc')->get();
+    }
+
+    if(isset($rs->st_department_code)){
+        $st_bureaus = App\Model\StBureau::where('code','like',$rs->st_department_code.'%')->orderBy('code','asc')->get();
+    }
+
+    if(isset($rs->st_bureau_code)){
+        $st_divisions = App\Model\StDivision::where('code','like',$rs->st_bureau_code.'%')->orderBy('code','asc')->get();
+    }
+?>
+
 <table class="tbadd">
     <tr>
         <th>ประเภท<span class="Txt_red_12"> *</span> / ยี่ห้อ<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <select name="" class="form-control">
-                    <option>-- เลือกประเภทรถ --</option>
+                <select name="st_vehicle_type_id" class="form-control">
+                    @foreach($st_vehicle_types as $row)
+                    <option value="{{$row->id}}">{{$row->name}}</option>
+                    @endforeach
                 </select>
-                <input name="textarea4" type="text" class="form-control" id="textarea4" placeholder="ยี่ห้อ"
-                    style="width:300px;" /></div>
+
+                <input name="brand" type="text" class="form-control" placeholder="ยี่ห้อ" style="width:300px;" />
+            </div>
         </td>
     </tr>
     <tr>
@@ -15,12 +45,9 @@
                 class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <input name="textarea7" type="text" class="form-control" id="textarea7" placeholder="ที่นั่ง"
-                    style="width:100px;" />
-                <input name="textarea4" type="text" class="form-control" id="textarea4" placeholder="สี"
-                    style="width:200px;" />
-                <input name="textarea4" type="text" class="form-control" id="textarea4" placeholder="เลขทะเบียน"
-                    style="width:200px;" />
+                <input name="seat" type="text" class="form-control" placeholder="ที่นั่ง" style="width:100px;" />
+                <input name="color" type="text" class="form-control" placeholder="สี" style="width:200px;" />
+                <input name="reg_number" type="text" class="form-control" placeholder="เลขทะเบียน" style="width:200px;" />
             </div>
         </td>
     </tr>
@@ -28,30 +55,57 @@
         <th>หน่วยงานที่รับผิดชอบ<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <select name="lunch" class="selectpicker" id="lunch2" title="หน่วยงาน" data-live-search="true">
-                    <option selected="selected">[06102008001] กองยุทธศาสตร์และแผนงาน ฝ่ายบริหารทั่วไป</option>
-                    <option>[06102011001] ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร ฝ่ายบริหารทั่วไป</option>
+                
+                <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
+                    <option value="">+ กรม +</option>
+                    @foreach($st_departments as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
                 </select>
+
+                <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก">
+                    <option value="">+ สำนัก +</option>
+                    @if(old('st_department_code') || isset($rs->st_department_code))
+                    @foreach($st_bureaus as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
+                <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม">
+                    <option value="">+ กลุ่ม +</option>
+                    @if(old('st_bureau_code') || isset($rs->st_bureau_code))
+                    @foreach($st_divisions as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
             </div>
         </td>
     </tr>
     <tr>
         <th>พนักงานขับวันนี้<span class="Txt_red_12"> *</span></th>
-        <td><span class="form-inline">
-                <select name="select2" class="form-control">
-                    <option>นายวิทยา แก่นดี 081-9814314</option>
-                    <option>นายดารพ ป้องนวน 088-9866011</option>
+        <td>
+            <span class="form-inline">
+                <select name="st_driver_id" class="form-control">
+                    @foreach($st_drivers as $row)
+                    <option value="{{$row->id}}">{{$row->name}} {{$row->tel}}</option>
+                    @endforeach
                 </select>
-            </span></td>
+            </span>
+        </td>
     </tr>
     <tr>
         <th>สถานะ</th>
-        <td><span class="form-inline">
-                <select name="select" class="form-control">
-                    <option>พร้อมใช้</option>
-                    <option>ซ่อมบำรุง</option>
+        <td>
+            <span class="form-inline">
+                <select name="status" class="form-control">
+                    <option value="พร้อมใช้">พร้อมใช้</option>
+                    <option value="ซ่อมบำรุง">ซ่อมบำรุง</option>
                 </select>
-            </span></td>
+            </span>
+        </td>
     </tr>
 </table>
 <div id="btnBoxAdd">
