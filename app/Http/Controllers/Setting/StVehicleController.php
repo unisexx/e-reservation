@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Model\StVehicle;
 use Illuminate\Http\Request;
 
-// use App\Http\Requests\StVehicleRequest;
+use App\Http\Requests\StVehicleRequest;
 
 class StVehicleController extends Controller
 {
@@ -26,13 +26,13 @@ class StVehicleController extends Controller
         $perPage = 10;
 
         if (!empty($keyword)) {
-            $stvehicle = StVehicle::where('name', 'LIKE', "%$keyword%")
+            $rs = StVehicle::where('name', 'LIKE', "%$keyword%")
                 ->latest()->paginate($perPage);
         } else {
-            $stvehicle = StVehicle::latest()->paginate($perPage);
+            $rs = StVehicle::latest()->paginate($perPage);
         }
 
-        return view('setting.st-vehicle.index', compact('stvehicle'));
+        return view('setting.st-vehicle.index', compact('rs'));
     }
 
     /**
@@ -58,15 +58,15 @@ class StVehicleController extends Controller
     public function store(StVehicleRequest $request)
     {
         $requestData = $request->all();
-        
+
         // ไฟล์แนบ
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
+            $imageName = time() . '.' . request()->image->getClientOriginalExtension();
+            request()->image->move(public_path('uploads/vehicle/'), $imageName);
 
             $requestData['image'] = $imageName;
         }
-        
+
         StVehicle::create($requestData);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
@@ -82,9 +82,9 @@ class StVehicleController extends Controller
      */
     public function show($id)
     {
-        $stvehicle = StVehicle::findOrFail($id);
+        $rs = StVehicle::findOrFail($id);
 
-        return view('setting.st-vehicle.show', compact('stvehicle'));
+        return view('setting.st-vehicle.show', compact('rs'));
     }
 
     /**
@@ -99,9 +99,9 @@ class StVehicleController extends Controller
         // ตรวจสอบ permission
         // ChkPerm('st-vehicle-edit','setting/st-vehicle');
 
-        $stvehicle = StVehicle::findOrFail($id);
+        $rs = StVehicle::findOrFail($id);
 
-        return view('setting.st-vehicle.edit', compact('stvehicle'));
+        return view('setting.st-vehicle.edit', compact('rs'));
     }
 
     /**
@@ -118,14 +118,14 @@ class StVehicleController extends Controller
 
         // ไฟล์แนบ
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
+            $imageName = time() . '.' . request()->image->getClientOriginalExtension();
+            request()->image->move(public_path('uploads/vehicle/'), $imageName);
 
             $requestData['image'] = $imageName;
         }
-        
-        $stvehicle = StVehicle::findOrFail($id);
-        $stvehicle->update($requestData);
+
+        $rs = StVehicle::findOrFail($id);
+        $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
         return redirect('setting/st-vehicle');
