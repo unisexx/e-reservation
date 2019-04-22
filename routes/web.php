@@ -23,6 +23,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 // ajax
 Route::get('ajaxGetBureau', 'AjaxController@ajaxGetBureau');
 Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
+Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
+
 
 // ตั้งค่า
 Route::resource('setting/st-room', 'Setting\\StRoomController');
@@ -30,3 +32,5 @@ Route::resource('setting/st-vehicle', 'Setting\\StVehicleController');
 Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');
 Route::resource('setting/st-driver', 'Setting\\StDriverController');
 
+// จองห้องประชุม
+Route::resource('booking-room', 'BookingRoomController');

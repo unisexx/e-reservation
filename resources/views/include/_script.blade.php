@@ -12,18 +12,18 @@
 
 
 <!-- Fonts -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
 
 <!-- Styles -->
-<link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}"> 
+<link rel="stylesheet" href="{{ url('css/bootstrap.min.css') }}">
 
 <!-- JavaScripts -->
 <script src="{{ url('js/jquery.min.js') }}"></script>
 <script src="{{ url('js/bootstrap.min.js') }}"></script>
 
-	
-<link rel="stylesheet" href="{{ url('css/style.css') }}">	
+
+<link rel="stylesheet" href="{{ url('css/style.css') }}">
 <link rel="stylesheet" href="{{ url('css/bootstrap-select.css') }}">
 <script src="{{ url('js/bootstrap-select.js') }}"></script>
 
@@ -38,41 +38,52 @@
 <script src="{{ url('js/jquery.colorbox.js') }}"></script>
 <link media="screen" rel="stylesheet" href="{{ url('css/colorbox.css') }}" />
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         //Examples of how to assign the Colorbox event to elements
-        $(".inline").colorbox({inline:true, width:"95%"});
-        $(".inline2").colorbox({inline:true, width:"70%"});
+        $(".inline").colorbox({
+            inline: true,
+            width: "95%",
+            height: "95%"
+        });
+        $(".inline2").colorbox({
+            inline: true,
+            width: "70%"
+        });
         //Example of preserving a JavaScript event for inline calls.
-        $("#click").click(function(){ 
-            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
+        $("#click").click(function() {
+            $('#click').css({
+                "background-color": "#f00",
+                "color": "#fff",
+                "cursor": "inherit"
+            }).text("Open this window again and this message will still be here.");
             return false;
         });
     });
 </script>
 
-<script src="{{ url('js/jstree.min.js') }}"></script>
+<!-- <script src="{{ url('js/jstree.min.js') }}"></script>
 <link rel="stylesheet" href="{{ url('css/jstree.style.min.css') }}" />
 <script>
-$(function () {
-    // 6 create an instance when the DOM is ready
-    $('#jstree').jstree();
-    // 7 bind to events triggered on the tree
-    $('#jstree').on("changed.jstree", function (e, data) {
-        console.log(data.selected);
+    $(function() {
+        // 6 create an instance when the DOM is ready
+        $('#jstree').jstree();
+        // 7 bind to events triggered on the tree
+        $('#jstree').on("changed.jstree", function(e, data) {
+            console.log(data.selected);
+        });
+        // 8 interact with the tree - either way is OK
+        $('button').on('click', function() {
+            $('#jstree').jstree(true).select_node('child_node_1');
+            $('#jstree').jstree('select_node', 'child_node_1');
+            $.jstree.reference('#jstree').select_node('child_node_1');
+        });
     });
-    // 8 interact with the tree - either way is OK
-    $('button').on('click', function () {
-        $('#jstree').jstree(true).select_node('child_node_1');
-        $('#jstree').jstree('select_node', 'child_node_1');
-        $.jstree.reference('#jstree').select_node('child_node_1');
-    });
-});
-</script>
+</script> -->
 
-<script>  
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 
 <!-- Tooltip jquery -->
@@ -82,97 +93,137 @@ $(function () {
 <!-- number format -->
 <script type="text/javascript" src="{{ url('js/jquery.number.js') }}"></script>
 <script type="text/javascript">
-$(function(){
-	$('input.numDecimal').number( true, 2 );
-	$('input.numInt').number( true, 0 );
-	
-	$('input.numOnly').bind('keypress', function(e) {
-        return ( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57)) ? false : true ;
-	});
-});
+    $(function() {
+        $('input.numDecimal').number(true, 2);
+        $('input.numInt').number(true, 0);
+
+        $('input.numOnly').bind('keypress', function(e) {
+            return (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) ? false : true;
+        });
+    });
 </script>
 
 <!-- Input format new -->
 <script src="{{ url('js/jquery.inputmask.bundle.min.js') }}"></script>
 <script>
-$(document).ready(function(){
-    $(":input").inputmask();
-});
+    $(document).ready(function() {
+        $(":input").inputmask();
+    });
 </script>
 
 <!-- Input format -->
 <script type="text/javascript" src="{{ url('js/jquery.maskedinput.js') }}"></script>
 <script type="text/javascript">
-jQuery(function($){
-    $(".fdate").mask("99/99/9999");
-    $(".fmobile").mask("(999) 999-9999");
-    $(".fidcard").mask("9-9999-99999-99-9");
-    $(".fnum").mask("999,999,999");
-    $(".ftime").mask("99:99");
-});
+    jQuery(function($) {
+        $(".fdate").mask("99/99/9999");
+        $(".fmobile").mask("(999) 999-9999");
+        $(".fidcard").mask("9-9999-99999-99-9");
+        $(".fnum").mask("999,999,999");
+        $(".ftime").mask("99:99");
+    });
 </script>
 
 
 <!-- Listbox show/hide -->
 <script type="text/javascript">
-$(document).ready(function(){
-	$(".boxBetween").hide();
-    $("select").change(function(){
-        $(this).find("option:selected").each(function(){
-			
-			if($(this).attr("value")=="6"){
-                $(".boxBetween").show();
-            }
-            if($(this).attr("value")=="1" || $(this).attr("value")=="2" || $(this).attr("value")=="3" || $(this).attr("value")=="4" || $(this).attr("value")=="5"){
-                $(".boxBetween").hide();
-            }
-        });
-    }).change();
-});
+    $(document).ready(function() {
+        $(".boxBetween").hide();
+        $("select").change(function() {
+            $(this).find("option:selected").each(function() {
+
+                if ($(this).attr("value") == "6") {
+                    $(".boxBetween").show();
+                }
+                if ($(this).attr("value") == "1" || $(this).attr("value") == "2" || $(this).attr("value") == "3" || $(this).attr("value") == "4" || $(this).attr("value") == "5") {
+                    $(".boxBetween").hide();
+                }
+            });
+        }).change();
+    });
 </script>
 
 <!-- Radio show/hide -->
 <script type="text/javascript">
-$(document).ready(function(){
-	$(".boxAddMulti").hide();
-    $('input[type="radio"]').click(function(){
-		
-		//assets/form 
-        if($(this).attr("value")=="addone"){
-			$(".boxAddMulti").hide();
-        }
-		if($(this).attr("value")=="addmulti"){
-			$(".boxAddMulti").show();
-        }
-		
+    $(document).ready(function() {
+        $(".boxAddMulti").hide();
+        $('input[type="radio"]').click(function() {
+
+            //assets/form 
+            if ($(this).attr("value") == "addone") {
+                $(".boxAddMulti").hide();
+            }
+            if ($(this).attr("value") == "addmulti") {
+                $(".boxAddMulti").show();
+            }
+
+        });
     });
-});
 </script>
 
 <script>
-$( function() {
-    var availableTags = [
-        "[600200001] หน่วยตรวจสอบภายใน สำนักงานปลัดกระทรวงการพัฒนาสังคมฯ กรุงเทพฯ",
-        "[600200003] สำนักบริหารงานกลาง สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
-        "[600200000] สำนักงานปลัดกระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์ กรุงเทพฯ",
-        "[600200002] กลุ่มพัฒนาระบบบริหาร สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
-        "[600200004] ส่วนการคลัง สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
-    ];
-    $( "#tags" ).autocomplete({
-        source: availableTags
-    });
+    $(function() {
+        var availableTags = [
+            "[600200001] หน่วยตรวจสอบภายใน สำนักงานปลัดกระทรวงการพัฒนาสังคมฯ กรุงเทพฯ",
+            "[600200003] สำนักบริหารงานกลาง สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
+            "[600200000] สำนักงานปลัดกระทรวงพัฒนาสังคมและความมั่นคงของมนุษย์ กรุงเทพฯ",
+            "[600200002] กลุ่มพัฒนาระบบบริหาร สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
+            "[600200004] ส่วนการคลัง สำนักงานปลัดกระทรวงพัฒนาสังคมฯ กรุงเทพฯ",
+        ];
+        $("#tags").autocomplete({
+            source: availableTags
+        });
 
-    var availableTags2 = [
-        "สป-สบก(กอก) สำนักบริหารงานกลาง กลุ่มอำนวยการ",
-        "สป-สบก(กพบ) สำนักบริหารงานกลาง กลุ่มการพัฒนาระบบการบริหารงานบุคคล",
-        "สป-สบก(กพอ) สำนักบริหารงานกลาง กลุ่มการพัฒนาองค์กรและระบบงาน",
-        "สป-สบก(สกค) สำนักบริหารงานกลาง ส่วนการคลัง",
-        "สป-สบก(กพค) กลุ่มการพัฒนาบุคคลและเสริมสร้างคุณธรรม",
-    ];
-    $( "#tags2" ).autocomplete({
-        source: availableTags2
+        var availableTags2 = [
+            "สป-สบก(กอก) สำนักบริหารงานกลาง กลุ่มอำนวยการ",
+            "สป-สบก(กพบ) สำนักบริหารงานกลาง กลุ่มการพัฒนาระบบการบริหารงานบุคคล",
+            "สป-สบก(กพอ) สำนักบริหารงานกลาง กลุ่มการพัฒนาองค์กรและระบบงาน",
+            "สป-สบก(สกค) สำนักบริหารงานกลาง ส่วนการคลัง",
+            "สป-สบก(กพค) กลุ่มการพัฒนาบุคคลและเสริมสร้างคุณธรรม",
+        ];
+        $("#tags2").autocomplete({
+            source: availableTags2
+        });
     });
-} );
+</script>
+
+{{-- datepicker --}}
+<script src="{{ url('/js/bootstrap-datepicker-thai/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ url('/js/bootstrap-datepicker-thai/js/bootstrap-datepicker-thai.js') }}"></script>
+<script src="{{ url('/js/bootstrap-datepicker-thai/js/locales/bootstrap-datepicker.th.js') }}"></script>
+<link rel='stylesheet' type='text/css' href="{{ url('/js/bootstrap-datepicker-thai/css/datepicker.css') }}" />
+<script type="text/javascript">
+    function datepicker_active(obj) {
+        $(obj).datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            language: 'th-th',
+            clearBtn: true
+        });
+        $(obj).each(function(k, v) {
+            $(this).addClass('form-control').css({
+                'display': 'inline-block',
+                'width': '120px'
+            }); //.attr('readonly',true);
+            $(this).attr('placeholder', (!$(this).attr('placeholder') ? 'วัน/เดือน/ปี' : $(this).attr('placeholder')));
+            $(this).after(' <img src="{{url('images/calendar.png')}}" alt="" width="24" height="24" /> ');
+        });
+    }
+    $(function() {
+        datepicker_active('.datepicker');
+        /*
+        $('.datepicker').datepicker({
+        	format:'dd/mm/yyyy',
+        	autoclose:true,
+        	language:'th-th',
+        	clearBtn: true
+        });
+        $('.datepicker').each(function(k, v){
+        	$(this).addClass('form-control').css({'display':'inline-block', 'width':'120px'}); //.attr('readonly',true);
+        	$(this).attr('placeholder',(!$(this).attr('placeholder')?'วัน/เดือน/ปี':$(this).attr('placeholder')));
+        	$(this).after(' <img src="{{url('images/calendar.png')}}" alt="" width="24" height="24" /> ');
+        })
+        */
+    });
 </script>
 
 {{-- alertify --}}
@@ -183,46 +234,46 @@ $( function() {
 
 <!-- chain select หน่วยงาน -->
 <script>
-$(document).ready(function(){
-    $('body').on('change', 'select[name=st_department_code]', function(){
-        getBureau( $(this).val() );
-    });
-    $('body').on('change', 'select[name=st_bureau_code]', function(){
-        getDivision( $(this).val() );
-    });
-});
-
-function getBureau($st_department_code){
-    $('select[name=st_bureau_code],select[name=st_division_code]').empty().selectpicker('refresh');
-
-    $.ajax({
-        method: "GET",
-        url: "{{ url('ajaxGetBureau') }}",
-        data: { 
-            st_department_code: $st_department_code,
-        }
-    }).done(function( data ) {
-        $.map(data, function (i) { 
-            $('select[name=st_bureau_code]').append('<option value="' + i.code + '">' + i.title + '</option>'); 
+    $(document).ready(function() {
+        $('body').on('change', 'select[name=st_department_code]', function() {
+            getBureau($(this).val());
         });
-        $('select[name=st_bureau_code]').selectpicker('refresh');
-    });
-}
-
-function getDivision($st_bureau_code){
-    $('select[name=st_division_code]').empty().selectpicker('refresh');
-
-    $.ajax({
-        method: "GET",
-        url: "{{ url('ajaxGetDivision') }}",
-        data: { 
-            st_bureau_code: $st_bureau_code,
-        }
-    }).done(function( data ) {
-        $.map(data, function (i) { 
-            $('select[name=st_division_code]').append('<option value="' + i.code + '">' + i.title + '</option>'); 
+        $('body').on('change', 'select[name=st_bureau_code]', function() {
+            getDivision($(this).val());
         });
-        $('select[name=st_division_code]').selectpicker('refresh');
     });
-}
+
+    function getBureau($st_department_code) {
+        $('select[name=st_bureau_code],select[name=st_division_code]').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetBureau') }}",
+            data: {
+                st_department_code: $st_department_code,
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $('select[name=st_bureau_code]').append('<option value="' + i.code + '">' + i.title + '</option>');
+            });
+            $('select[name=st_bureau_code]').selectpicker('refresh');
+        });
+    }
+
+    function getDivision($st_bureau_code) {
+        $('select[name=st_division_code]').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetDivision') }}",
+            data: {
+                st_bureau_code: $st_bureau_code,
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $('select[name=st_division_code]').append('<option value="' + i.code + '">' + i.title + '</option>');
+            });
+            $('select[name=st_division_code]').selectpicker('refresh');
+        });
+    }
 </script>
