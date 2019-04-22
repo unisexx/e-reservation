@@ -22,15 +22,28 @@ class StVehicleController extends Controller
         // ตรวจสอบ permission
         // ChkPerm('st-vehicle-view');
 
+        $st_vehicle_type_id = $request->get('st_vehicle_type_id');
         $keyword = $request->get('search');
         $perPage = 10;
 
-        if (!empty($keyword)) {
-            $rs = StVehicle::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $rs = StVehicle::latest()->paginate($perPage);
+        $rs = StVehicle::select('*');
+
+        if (!empty($st_vehicle_type_id)) {
+            $rs = $rs->where('st_vehicle_type_id', $st_vehicle_type_id);
         }
+
+        if (!empty($keyword)) {
+            $rs = $rs->where('brand', 'LIKE', "%$keyword%");
+        }
+
+        $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
+
+        // if (!empty($keyword)) {
+        //     $rs = StVehicle::where('name', 'LIKE', "%$keyword%")
+        //         ->latest()->paginate($perPage);
+        // } else {
+        //     $rs = StVehicle::latest()->paginate($perPage);
+        // }
 
         return view('setting.st-vehicle.index', compact('rs'));
     }

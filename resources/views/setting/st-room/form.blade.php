@@ -1,9 +1,31 @@
+<?php
+// กระทรวง
+$st_ministries = App\Model\StMinistry::orderBy('code', 'asc')->get();
+$st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
+
+if (old('st_department_code')) {
+    $st_bureaus = App\Model\StBureau::where('code', 'like', old('st_department_code') . '%')->orderBy('code', 'asc')->get();
+}
+
+if (old('st_bureau_code')) {
+    $st_divisions = App\Model\StDivision::where('code', 'like', old('st_bureau_code') . '%')->orderBy('code', 'asc')->get();
+}
+
+if (isset($stroom->st_department_code)) {
+    $st_bureaus = App\Model\StBureau::where('code', 'like', $stroom->st_department_code . '%')->orderBy('code', 'asc')->get();
+}
+
+if (isset($stroom->st_bureau_code)) {
+    $st_divisions = App\Model\StDivision::where('code', 'like', $stroom->st_bureau_code . '%')->orderBy('code', 'asc')->get();
+}
+?>
+
 <table class="tbadd">
     <tr class="{{ $errors->has('image') ? 'has-error' : '' }}">
         <th>ภาพห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
-            @if(isset($stroom->image)) 
-                <img src="{{ url('uploads/room/'.$stroom->image) }}" width="90">
+            @if(isset($stroom->image))
+            <img src="{{ url('uploads/room/'.$stroom->image) }}" width="90">
             @endif
             <input type="file" name="image" />
         </td>
@@ -11,30 +33,51 @@
     <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
         <th>ชื่อห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
-            <input name="name" type="text" class="form-control" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" />
+            <input name="name" type="text" class="form-control" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" required />
         </td>
     </tr>
     <tr class="{{ $errors->has('people') ? 'has-error' : '' }}">
         <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline"><input name="people" type="number" min="1" class="form-control" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" /> คน</div>
+            <div class="form-inline"><input name="people" type="number" min="1" class="form-control" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน</div>
         </td>
     </tr>
     <tr class="{{ $errors->has('equipment') ? 'has-error' : '' }}">
         <th>อุปกรณ์ที่ติดตั้งในห้อง<span class="Txt_red_12"> *</span></th>
-        <td><input name="equipment" type="text" class="form-control" value="{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}" style="width:500px;" />
+        <td><input name="equipment" type="text" class="form-control" value="{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}" style="width:500px;" required />
         </td>
     </tr>
     <tr class="{{ $errors->has('res_name') || $errors->has('res_tel') || $errors->has('res_department_id') ? 'has-error' : '' }}">
         <th>ผู้รับผิดชอบห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline" style="margin-bottom:5px;">
-                <input name="res_name" type="text" class="form-control" placeholder="ชื่อผู้รับผิดชอบ" value="{{ isset($stroom->res_name) ? $stroom->res_name : old('res_name') }}" style="width:300px;" />
-                <input name="res_tel" type="text" class="form-control" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" />
+                <input name="res_name" type="text" class="form-control" placeholder="ชื่อผู้รับผิดชอบ" value="{{ isset($stroom->res_name) ? $stroom->res_name : old('res_name') }}" style="width:300px;" required />
+                <input name="res_tel" type="text" class="form-control" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" required />
             </div>
-            <select name="res_department_id" class="selectpicker" id="lunch" title="สังกัด" data-live-search="true">
-                <option value="1">[สป-สบก(กอก)] สำนักบริหารงานกลาง กลุ่มอำนวยการ</option>
-                <option value="2">[สป-สบก(กพบ)] สำนักบริหารงานกลาง กลุ่มการพัฒนาระบบการบริหารงานบุคคล</option>
+
+            <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม" required>
+                <option value="">+ กรม +</option>
+                @foreach($st_departments as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$stroom->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+            </select>
+
+            <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก" required>
+                <option value="">+ สำนัก +</option>
+                @if(old('st_department_code') || isset($stroom->st_department_code))
+                @foreach($st_bureaus as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$stroom->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+                @endif
+            </select>
+
+            <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม" required>
+                <option value="">+ กลุ่ม +</option>
+                @if(old('st_bureau_code') || isset($stroom->st_bureau_code))
+                @foreach($st_divisions as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$stroom->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+                @endif
             </select>
 
 
