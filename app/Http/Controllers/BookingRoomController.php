@@ -48,7 +48,13 @@ class BookingRoomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $requestData = $request->all();
+        $requestData['start_date'] = Date2DB($request->start_date);
+        $requestData['end_date'] = Date2DB($request->end_date);
+        BookingRoom::create($requestData);
+
+        set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+        return redirect('booking-room');
     }
 
     /**
@@ -70,7 +76,11 @@ class BookingRoomController extends Controller
      */
     public function edit($id)
     {
-        //
+        // ตรวจสอบ permission
+        // ChkPerm('st-room-edit','setting/st-room');
+
+        $rs = BookingRoom::findOrFail($id);
+        return view('booking-room.edit', compact('rs'));
     }
 
     /**
@@ -82,7 +92,15 @@ class BookingRoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $requestData = $request->all();
+        $requestData['start_date'] = Date2DB($request->start_date);
+        $requestData['end_date'] = Date2DB($request->end_date);
+        
+        $rs = BookingRoom::findOrFail($id);
+        $rs->update($requestData);
+
+        set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+        return redirect('booking-room');
     }
 
     /**
@@ -93,6 +111,12 @@ class BookingRoomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // ตรวจสอบ permission
+        // ChkPerm('st-vehicle-type-delete','setting/st-vehicle-type');
+
+        BookingRoom::destroy($id);
+
+        set_notify('success', 'ลบข้อมูลสำเร็จ');
+        return redirect('booking-room');
     }
 }

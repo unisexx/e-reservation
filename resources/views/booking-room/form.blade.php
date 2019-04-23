@@ -20,37 +20,37 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>รหัสการจอง / เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
-    <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly"> /
+    <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly" value="{{ isset($rs->id) ? 'RR'.sprintf('%05d', $rs->id) : '' }}"> /
 
-    <input id="tmpStRoomName" type="text" class="form-control" style="min-width:400px;" readonly="readonly">
-    <input type="hidden" name="st_room_id" value="">
+    <input id="tmpStRoomName" type="text" class="form-control" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : '' }}">
+    <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
     <a class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
 </div>
 
 
 <div class="form-group form-inline col-md-12">
     <label>ชื่อเรื่อง / หัวข้อการประชุม<span class="Txt_red_12"> *</span></label>
-    <input type="text" class="form-control " placeholder="ชื่อห้องประชุม" value="" style="min-width:500px;">
+    <input name="title" type="text" class="form-control " placeholder="ชื่อห้องประชุม" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;">
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span> / จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
-    <input type="text" class="form-control datepicker fdate" value="" style="width:120px;" />
-    <input type="text" class="form-control ftime" placeholder="เวลา" value="" style="width:70px;" />
+    <input name="start_date" type="text" class="form-control datepicker fdate" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" />
+    <input name="start_time" type="text" class="form-control ftime" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" />
     น.
     -
-    <input type="text" class="form-control datepicker fdate" value="" style="width:120px;" />
-    <input type="text" class="form-control ftime" placeholder="เวลา" value="" style="width:70px;" />
+    <input name="end_date" type="text" class="form-control datepicker fdate" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" />
+    <input name="end_time" type="text" class="form-control ftime" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" />
     น
     /
-    <input type="text" class="form-control " placeholder="จำนวน" value="" style="width:100px;">
+    <input name="number" type="text" class="form-control " placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" style="width:100px;">
     คน
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
     <div style="margin-bottom:5px;">
-        <input type="text" class="form-control " placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="" style="min-width:300px;">
+        <input name="request_name" type="text" class="form-control " placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;">
 
         <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม" required>
             <option value="">+ กรม +</option>
@@ -78,22 +78,22 @@ if (isset($rs->st_bureau_code)) {
         </select>
 
     </div>
-    <input type="text" class="form-control " placeholder="เบอร์โทรศัพท์" value="" style="min-width:300px;">
-    <input type="text" class="form-control " placeholder="อีเมล์" value="" style="min-width:300px;">
+    <input name="request_tel" type="text" class="form-control " placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;">
+    <input name="request_email" type="text" class="form-control " placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" style="min-width:300px;">
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
-    <textarea class="form-control " style="min-width:800px; height:80px"></textarea>
+    <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>สถานะ</label>
-    <select name="select" class="form-control" style="width:auto;">
-        <option selected="selected">รออนุมัติ</option>
-        <option>อนุมัติ</option>
-        <option>ไม่อนุมัติ</option>
-        <option>ยกเลิก</option>
+    <select name="status" class="form-control" style="width:auto;">
+        <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
+        <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+        <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
+        <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
     </select>
 </div>
 

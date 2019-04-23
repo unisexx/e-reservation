@@ -45,50 +45,44 @@
         <th style="width:5%">สถานะ</th>
         <th style="width:5%">จัดการ</th>
     </tr>
-    <tr>
-        <td>1</td>
-        <td nowrap="nowrap">BR61058</td>
-        <td>
-            <div class="topicMeeting">ผลการดำเนินงานรอบสัปดาห์เพื่อใช้ในรายการคืนความสุขให้คนในชาติ</div>
-            อาคาร ซี. พี. ทาวเวอร์ 3 (พญาไท) ห้องประชุมชั้น 7 <img src="{{ url('images/detail.png') }}" class="vtip" title="
-  <u>จำนวนคนที่รับรองได้</u> 15 คน<br>
-	<u>อุปกรณ์ที่ติดตั้งในห้อง</u> Projector 1 เครื่อง<br>
-	<u>ผู้รับผิดชอบห้องประชุม</u> นายจำเริญ นิจจรัลกุล กลุ่มการพัฒนาระบบสารสนเทศ ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร สป.พม.<br>
-	<u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> ไม่มี" />
-        </td>
-        <td>
-            <div class="boxStartEnd"><span class="start">เริ่ม</span> 02/11/2561 08:30 น.</div>
-            <div class="boxStartEnd"><span class="end">สิ้นสุด</span> 02/11/2561 12:00 น.</div>
-        </td>
-        <td>นางสาวจินตนา เอกอมร <img src="{{ url('images/detail.png') }}" class="vtip" title="กลุ่มการประเมินผล กองตรวจราชการ สำนักงานปลัดกระทรวง<br>
-081-1586585  jintana.e@m-society.go.th" /></td>
-        <td>รออนุมัติ</td>
-        <td><a href="<?= basename($_SERVER['PHP_SELF']) ?>?act=form"><img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" /></a><img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" /></td>
-    </tr>
-    @foreach($rs as $key=>$item)
-    <!-- <tr @if(($key % 2)==1) class="odd" @endif>
+    @foreach($rs as $key=>$row)
+    <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
-        <td>{{ $item->name }}</td>
-        <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
+        <td nowrap="nowrap">RR{{ sprintf("%05d", $row->id) }}</td>
         <td>
-
+            <div class="topicMeeting">{{ $row->title }}</div>
+            {{ $row->st_room->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
+            <u>จำนวนคนที่รับรองได้</u> {{ $row->st_room->people }} คน<br>
+            <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
+            <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
+            <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+        </td>
+        <td>
+            <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ $row->start_time }} น.</div>
+            <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ $row->end_time }} น.</div>
+        </td>
+        <td>{{ $row->request_name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
+        {{ $row->request_tel }} {{ $row->request_email }}" /></td>
+        <td>{{ $row->status }}</td>
+        <td>
             {{-- @if(CanPerm('st-vehicle-type-edit')) --}}
-            <a href="{{ url('booking-room/' . $item->id . '/edit') }}" title="Edit StAscc">
-                <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
+            <a href="{{ url('booking-room/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
+                <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
             </a>
             {{-- @endif --}}
-
+            
+            
             {{-- @if(CanPerm('st-vehicle-type-delete')) --}}
-            <form method="POST" action="{{ url('booking-room' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+            <form method="POST" action="{{ url('booking-room' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
-                <button type="submit" title="Delete StAscc" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none;">
+                <button type="submit" title="ลบรายการนี้" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
                     <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
                 </button>
             </form>
             {{-- @endif --}}
         </td>
-    </tr> -->
+    </tr>
     @endforeach
 </table>
 

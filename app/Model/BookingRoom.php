@@ -43,4 +43,24 @@ class BookingRoom extends Model
         'note',
         'status',
     ];
+
+    // relation
+    public function department()
+    {
+        return $this->hasOne('App\Model\StDepartment', 'code', 'st_department_code');
+    }
+
+    public function bureau()
+    {
+        return $this->hasOne('App\Model\StBureau', 'code', 'st_bureau_code');
+    }
+
+    public function division()
+    {
+        return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
+    }
+
+    public function st_room(){
+        return $this->hasOne('App\Model\StRoom', 'id', 'st_room_id');
+    }
 }

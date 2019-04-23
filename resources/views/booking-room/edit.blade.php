@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>ตั้งค่า ห้องประชุม (เพิ่ม / แก้ไข)</h3>
+<h3>จองห้องประชุม (เพิ่ม / แก้ไข)</h3>
 
 @if ($errors->any())
 <ul class="alert alert-danger list-unstyled">
@@ -13,11 +13,11 @@
 </ul>
 @endif
 
-<form method="POST" action="{{ url('/setting/st-vehicle-type/' . $stvehicletype->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+<form method="POST" action="{{ url('booking-room/' . $rs->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
     {{ method_field('PATCH') }}
     {{ csrf_field() }}
 
-    @include ('setting.st-vehicle-type.form', ['formMode' => 'edit'])
+    @include ('booking-room.form', ['formMode' => 'edit'])
 
 </form>
 
