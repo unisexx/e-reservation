@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 use App\Model\BookingRoom;
 
+use App\Http\Requests\BookingRoomRequest;
+
 class BookingRoomController extends Controller
 {
     /**
@@ -46,7 +48,7 @@ class BookingRoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookingRoomRequest $request)
     {
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
@@ -90,7 +92,7 @@ class BookingRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookingRoomRequest $request, $id)
     {
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
