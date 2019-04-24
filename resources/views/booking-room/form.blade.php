@@ -20,7 +20,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>รหัสการจอง / เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
-    <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly" value="{{ isset($rs->id) ? 'RR'.sprintf('%05d', $rs->id) : '' }}"> /
+    <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly" value="{{ isset($rs->code) ? $rs->code : '' }}"> /
 
     <input id="tmpStRoomName" type="text" class="form-control {{ $errors->has('st_room_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : '' }}" required >
     <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">

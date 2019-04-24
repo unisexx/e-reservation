@@ -20,14 +20,29 @@ class BookingRoomController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->get('search');
+        $data_type = $request->get('date_type');
+        $date_select = $request->get('date_select');
         $perPage = 10;
 
-        if (!empty($keyword)) {
-            $rs = BookingRoom::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $rs = BookingRoom::latest()->paginate($perPage);
+        $rs = BookingRoom::select('*');
+
+        if (!empty($date_select)) {
+            if($data_type == 'start_date'){
+                $rs = $rs->where('start_date',Date2DB($date_select));
+            }elseif($data_type == 'end_date'){
+                $rs = $rs->where('end_date',Date2DB($date_select));
+            }
         }
+
+        if (!empty($keyword)) {
+            $rs = $rs->where(function($q) use ($keyword){
+                $q->where('code', 'LIKE', "%$keyword%")
+                    ->orWhere('title', 'LIKE', "%$keyword%")
+                    ->orWhere('request_name', 'LIKE', "%$keyword%");
+            });
+        }
+
+        $rs = $rs->orderBy('id','desc')->paginate($perPage);
 
         return view('booking-room.index', compact('rs'));
     }
@@ -53,7 +68,13 @@ class BookingRoomController extends Controller
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
-        BookingRoom::create($requestData);
+        $data = BookingRoom::create($requestData);
+
+        // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
+        $rs = BookingRoom::find($data->id);
+        $rs->code = 'RR'.sprintf("%05d", $data->id);
+        $rs->save();
+        
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('booking-room');

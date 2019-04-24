@@ -9,13 +9,12 @@
 
             <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อการประชุม / ผู้ขอใช้ห้องประชุม" name="search" value="{{ request('search') }}">
 
-            <select name="select" class="form-control">
-                <option>วันที่เริ่ม</option>
-                <option>วันที่สิ้นสุด</option>
+            <select name="date_type" class="form-control">
+                <option value="start_date" @if(request('date_type') == 'start_date') selected @endif>วันที่เริ่ม</option>
+                <option value="end_date" @if(request('date_type') == 'end_date') selected @endif>วันที่สิ้นสุด</option>
             </select>
 
-            <input type="text" class="form-control fdate" id="exampleInputEmail2" value="" style="width:100px;" />
-            <img src="images/calendar.png" width="24" height="24" />
+            <input name="date_select" type="text" class="form-control fdate datepicker" value="{{ request('date_select') }}" style="width:100px;" />
 
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
@@ -48,7 +47,7 @@
     @foreach($rs as $key=>$row)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
-        <td nowrap="nowrap">RR{{ sprintf("%05d", $row->id) }}</td>
+        <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->title }}</div>
             {{ $row->st_room->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
@@ -58,8 +57,8 @@
             <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
         </td>
         <td>
-            <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ $row->start_time }} น.</div>
-            <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ $row->end_time }} น.</div>
+            <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
+            <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
         </td>
         <td>{{ $row->request_name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
         {{ $row->request_tel }} {{ $row->request_email }}" /></td>
