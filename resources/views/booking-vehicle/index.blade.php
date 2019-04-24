@@ -2,16 +2,17 @@
 
 @section('content')
 
-<h3>จองห้องประชุม</h3>
+<h3>จองยานพาหนะ</h3>
 <div id="search">
     <div id="searchBox">
         <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
 
-            <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อการประชุม / ผู้ขอใช้ห้องประชุม" name="search" value="{{ request('search') }}">
+            <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / ทะเบียนรถ / ชื่อคนขับ" name="search" value="{{ request('search') }}">
 
             <select name="date_type" class="form-control">
-                <option value="start_date" @if(request('date_type') == 'start_date') selected @endif>วันที่เริ่ม</option>
-                <option value="end_date" @if(request('date_type') == 'end_date') selected @endif>วันที่สิ้นสุด</option>
+                <option value="request_date" @if(request('date_type') == 'request_date') selected @endif>วันที่ขอใช้</option>
+                <option value="start_date" @if(request('date_type') == 'start_date') selected @endif>วันที่ไป</option>
+                <option value="end_date" @if(request('date_type') == 'end_date') selected @endif>วันที่กลับ</option>
             </select>
 
             <input name="date_select" type="text" class="form-control fdate datepicker" value="{{ request('date_select') }}" style="width:100px;" />
@@ -26,7 +27,7 @@
 {{-- @if(CanPerm('st-vehicle-type-create')) --}}
 <div id="btnBox"> <a href="{{ url('/booking-room/calendar') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
     <input type="button" title="export excel" value="export excel" class="btn vtip" />
-    <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
 </div>
 {{-- @endif --}}
 
@@ -39,14 +40,48 @@
     <tr>
         <th style="width:5%" class="nosort" data-sortcolumn="0" data-sortkey="0-0">ลำดับ</th>
         <th style="width:10%" class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
-        <th style="width:30%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">หัวข้อการประชุม / ห้องประชุม</th>
-        <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วัน เวลา ที่ต้องการใช้ห้อง</th>
-        <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">ผู้ขอใช้ห้องประชุม</th>
-        <th style="width:5%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะ</th>
-        <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="6-0">จัดการ</th>
+        <th style="width:25%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
+        <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
+        <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ / สถานที่ไป</th>
+        <th style="width:10%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">ผู้ขอใช้ยานพาหนะ</th>
+        <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="6-0">สถานะ</th>
+        <th style="width:10%" class="nosort" data-sortcolumn="7" data-sortkey="7-0">จัดการ</th>
     </tr>
     </thead>
     <tbody>
+
+
+    <tr>
+        <td data-value="1">1</td>
+        <td nowrap="nowrap" data-value="BR61058">BR61058</td>
+        <td data-value="
+  ไปประชุมคณะอนุกรรมการขับเคลื่อนการแก้ปัญหาการรุกลำน้ำสาธารณะ
+  ">
+            <div class="topicMeeting">ไปประชุมคณะอนุกรรมการขับเคลื่อนการแก้ปัญหาการรุกลำน้ำสาธารณะ</div>
+        </td>
+        <td data-value="
+  ขอใช้ 17/10/2561 10:00 น.
+  ไป 24/10/2561 09:00 น.
+    กลับ 24/10/2561 12:00 น.">
+            <div class="boxStartEnd"><span class="request">ขอใช้</span> 17/10/2561 10:00 น.</div>
+            <div class="boxStartEnd"><span class="start">ไป</span> 24/10/2561 09:00 น.</div>
+            <div class="boxStartEnd"><span class="end">กลับ</span> 24/10/2561 12:00 น.</div>
+        </td>
+        <td data-value="อาคาร ซี. พี. ทาวเวอร์ 3 (พญาไท) เวลา 08:30 น. 
+กระทรวงการพัฒนาสังคมฯ ">อาคาร ซี. พี. ทาวเวอร์ 3 (พญาไท) เวลา 08:30 น. <br><br>
+            กระทรวงการพัฒนาสังคมฯ </td>
+        <td data-value="นางสาวจินตนา  เอกอมร ">นางสาวจินตนา เอกอมร <img
+                src="http://demo_e-reservation.test/images/detail.png" class="vtip" title="กลุ่มการประเมินผล กองตรวจราชการ สำนักงานปลัดกระทรวง<br>
+081-1586585  jintana.e@m-society.go.th"></td>
+        <td data-value="รออนุมัติ">รออนุมัติ</td>
+        <td data-value=""><a href="index.php?act=form"><img src="http://demo_e-reservation.test/images/edit.png"
+                    width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้"></a><img
+                src="http://demo_e-reservation.test/images/remove.png" width="24" height="24" class="vtip"
+                title="ลบรายการนี้"></td>
+    </tr>
+
+
+
     @foreach($rs as $key=>$row)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>

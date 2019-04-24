@@ -26,6 +26,7 @@ class BookingVehicle extends Model
      * @var array
      */
     protected $fillable = [
+        'code',
         'gofor',
         'number',
         'start_date',

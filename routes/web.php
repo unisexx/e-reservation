@@ -34,3 +34,6 @@ Route::resource('setting/st-driver', 'Setting\\StDriverController');
 
 // จองห้องประชุม
 Route::resource('booking-room', 'BookingRoomController');
+
+// จองยานพาหนะ
+Route::resource('booking-vehicle', 'BookingVehicleController');
