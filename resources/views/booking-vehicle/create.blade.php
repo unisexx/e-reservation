@@ -13,10 +13,10 @@
 </ul>
 @endif
 
-<form method="POST" action="{{ url('booking-room') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="{{ url('booking-vehicle') }}" accept-charset="UTF-8" enctype="multipart/form-data">
     {{ csrf_field() }}
 
-    @include ('booking-room.form', ['formMode' => 'create'])
+    @include ('booking-vehicle.form', ['formMode' => 'create'])
 
 </form>
 

@@ -24,6 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('ajaxGetBureau', 'AjaxController@ajaxGetBureau');
 Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
 Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
+Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 
 
 // ตั้งค่า

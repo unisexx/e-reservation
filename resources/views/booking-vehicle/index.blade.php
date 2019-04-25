@@ -5,7 +5,7 @@
 <h3>จองยานพาหนะ</h3>
 <div id="search">
     <div id="searchBox">
-        <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
+        <form method="GET" action="{{ url('booking-vehicle') }}" accept-charset="UTF-8" class="form-inline" role="search">
 
             <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / ทะเบียนรถ / ชื่อคนขับ" name="search" value="{{ request('search') }}">
 
@@ -25,9 +25,9 @@
 </div>
 
 {{-- @if(CanPerm('st-vehicle-type-create')) --}}
-<div id="btnBox"> <a href="{{ url('/booking-room/calendar') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
+<div id="btnBox"> <a href="{{ url('/booking-vehicle/calendar') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
     <input type="button" title="export excel" value="export excel" class="btn vtip" />
-    <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
 </div>
 {{-- @endif --}}
 
@@ -88,11 +88,11 @@
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->title }}</div>
-            {{ $row->st_room->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
-            <u>จำนวนคนที่รับรองได้</u> {{ $row->st_room->people }} คน<br>
-            <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
-            <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
-            <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+            {{ $row->st_vehicle->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
+            <u>จำนวนคนที่รับรองได้</u> {{ $row->st_vehicle->people }} คน<br>
+            <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_vehicle->equipment }}<br>
+            <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_vehicle->res_name }} {{ $row->st_vehicle->department->title }} {{ $row->st_vehicle->bureau->title }}<br>{{ $row->st_vehicle->division->title }}<br>
+            <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_vehicle->fee }}" />
         </td>
         <td>
             <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
@@ -103,14 +103,14 @@
         <td>{{ $row->status }}</td>
         <td>
             {{-- @if(CanPerm('st-vehicle-type-edit')) --}}
-            <a href="{{ url('booking-room/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
+            <a href="{{ url('booking-vehicle/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
             </a>
             {{-- @endif --}}
             
             
             {{-- @if(CanPerm('st-vehicle-type-delete')) --}}
-            <form method="POST" action="{{ url('booking-room' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
+            <form method="POST" action="{{ url('booking-vehicle' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
                 <button type="submit" title="ลบรายการนี้" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">

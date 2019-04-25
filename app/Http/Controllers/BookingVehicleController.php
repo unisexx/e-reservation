@@ -72,7 +72,7 @@ class BookingVehicleController extends Controller
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
         $rs = BookingVehicle::find($data->id);
-        $rs->code = 'RR'.sprintf("%05d", $data->id);
+        $rs->code = 'RV'.sprintf("%05d", $data->id);
         $rs->save();
         
 
