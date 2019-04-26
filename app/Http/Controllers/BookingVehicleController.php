@@ -66,6 +66,7 @@ class BookingVehicleController extends Controller
     public function store(BookingVehicleRequest $request)
     {
         $requestData = $request->all();
+        $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
         $data = BookingVehicle::create($requestData);
@@ -116,6 +117,7 @@ class BookingVehicleController extends Controller
     public function update(BookingVehicleRequest $request, $id)
     {
         $requestData = $request->all();
+        $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
         

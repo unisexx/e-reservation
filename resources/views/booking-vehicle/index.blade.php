@@ -20,7 +20,6 @@
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
 
-
     </div>
 </div>
 
@@ -49,57 +48,24 @@
     </tr>
     </thead>
     <tbody>
-
-
-    <tr>
-        <td data-value="1">1</td>
-        <td nowrap="nowrap" data-value="BR61058">BR61058</td>
-        <td data-value="
-  ไปประชุมคณะอนุกรรมการขับเคลื่อนการแก้ปัญหาการรุกลำน้ำสาธารณะ
-  ">
-            <div class="topicMeeting">ไปประชุมคณะอนุกรรมการขับเคลื่อนการแก้ปัญหาการรุกลำน้ำสาธารณะ</div>
-        </td>
-        <td data-value="
-  ขอใช้ 17/10/2561 10:00 น.
-  ไป 24/10/2561 09:00 น.
-    กลับ 24/10/2561 12:00 น.">
-            <div class="boxStartEnd"><span class="request">ขอใช้</span> 17/10/2561 10:00 น.</div>
-            <div class="boxStartEnd"><span class="start">ไป</span> 24/10/2561 09:00 น.</div>
-            <div class="boxStartEnd"><span class="end">กลับ</span> 24/10/2561 12:00 น.</div>
-        </td>
-        <td data-value="อาคาร ซี. พี. ทาวเวอร์ 3 (พญาไท) เวลา 08:30 น. 
-กระทรวงการพัฒนาสังคมฯ ">อาคาร ซี. พี. ทาวเวอร์ 3 (พญาไท) เวลา 08:30 น. <br><br>
-            กระทรวงการพัฒนาสังคมฯ </td>
-        <td data-value="นางสาวจินตนา  เอกอมร ">นางสาวจินตนา เอกอมร <img
-                src="http://demo_e-reservation.test/images/detail.png" class="vtip" title="กลุ่มการประเมินผล กองตรวจราชการ สำนักงานปลัดกระทรวง<br>
-081-1586585  jintana.e@m-society.go.th"></td>
-        <td data-value="รออนุมัติ">รออนุมัติ</td>
-        <td data-value=""><a href="index.php?act=form"><img src="http://demo_e-reservation.test/images/edit.png"
-                    width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้"></a><img
-                src="http://demo_e-reservation.test/images/remove.png" width="24" height="24" class="vtip"
-                title="ลบรายการนี้"></td>
-    </tr>
-
-
-
     @foreach($rs as $key=>$row)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
-            <div class="topicMeeting">{{ $row->title }}</div>
-            {{ $row->st_vehicle->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
-            <u>จำนวนคนที่รับรองได้</u> {{ $row->st_vehicle->people }} คน<br>
-            <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_vehicle->equipment }}<br>
-            <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_vehicle->res_name }} {{ $row->st_vehicle->department->title }} {{ $row->st_vehicle->bureau->title }}<br>{{ $row->st_vehicle->division->title }}<br>
-            <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_vehicle->fee }}" />
+            <div class="topicMeeting">{{ $row->gofor }}</div>
+            <div>{{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }}</div>
         </td>
         <td>
+            <div class="boxStartEnd"><span class="request">ขอใช้</span> - </div>
             <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
             <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
         </td>
-        <td>{{ $row->request_name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
-        {{ $row->request_tel }} {{ $row->request_email }}" /></td>
+        <td>{{ $row->point_place }} เวลา {{ date("H:i", strtotime($row->point_time)) }} น.<br><br>-</td>
+        <td>
+            {{ $row->request_name }}
+            <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
+        </td>
         <td>{{ $row->status }}</td>
         <td>
             {{-- @if(CanPerm('st-vehicle-type-edit')) --}}
