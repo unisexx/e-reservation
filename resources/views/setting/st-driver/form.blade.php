@@ -21,26 +21,26 @@ if (isset($rs->st_bureau_code)) {
 ?>
 
 <table class="tbadd">
-    <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
+    <tr>
         <th>ชื่อสกุล<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <input name="name" value="{{ isset($rs->name) ? $rs->name : old('name') }}" type="text" class="form-control" placeholder="ชื่อ-สกุล" style="width:500px;" required /></div>
+                <input name="name" value="{{ isset($rs->name) ? $rs->name : old('name') }}" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" placeholder="ชื่อ-สกุล" style="width:500px;" required /></div>
         </td>
     </tr>
-    <tr class="{{ $errors->has('st_department_code') || $errors->has('st_bureau_code') || $errors->has('st_division_code') ? 'has-error' : '' }}">
+    <tr>
         <th>หน่วยงาน<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
 
-                <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม" required>
+                <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
 
-                <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก" required>
+                <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($rs->st_department_code))
                     @foreach($st_bureaus as $item)
@@ -49,7 +49,7 @@ if (isset($rs->st_bureau_code)) {
                     @endif
                 </select>
 
-                <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม" required>
+                <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($rs->st_bureau_code))
                     @foreach($st_divisions as $item)
@@ -61,11 +61,11 @@ if (isset($rs->st_bureau_code)) {
             </div>
         </td>
     </tr>
-    <tr class="{{ $errors->has('tel') ? 'has-error' : '' }}">
+    <tr>
         <th>เบอร์ติดต่อ <span class="Txt_red_12">*</span></th>
         <td>
             <div class="form-inline">
-                <input name="tel" value="{{ isset($rs->tel) ? $rs->tel : old('tel') }}" type="text" class="form-control" placeholder="เบอร์ติดต่อ" style="width:300px;" required />
+                <input name="tel" value="{{ isset($rs->tel) ? $rs->tel : old('tel') }}" type="text" class="form-control {{ $errors->has('tel') ? 'has-error' : '' }}" placeholder="เบอร์ติดต่อ" style="width:300px;" required />
             </div>
         </td>
     </tr>

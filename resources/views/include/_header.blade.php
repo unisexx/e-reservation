@@ -31,8 +31,8 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ url('images/setting.png') }}" width="24" height="24" />
                         ตั้งค่าข้อมูลหลัก <span class="caret"></span></a>
                     <ul class="dropdown-menu submenu" style="height:auto; max-height:450px; overflow-x: hidden;">
-                        <li><a href="{{ url('/user') }}">ผู้ใช้งาน</a></li>
-                        <li><a href="{{ url('/permission') }}">สิทธิ์การใช้งาน</a></li>
+                        <li><a href="{{ url('/setting/user') }}">ผู้ใช้งาน</a></li>
+                        <li><a href="{{ url('/setting/permission-group') }}">สิทธิ์การใช้งาน</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ url('/setting/st-room') }}">ห้องประชุม</a></li>
                         <li><a href="{{ url('/setting/st-vehicle') }}">ยานพาหนะ</a></li>

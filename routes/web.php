@@ -28,6 +28,8 @@ Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 
 
 // ตั้งค่า
+Route::resource('setting/user', 'Setting\\UserController');
+Route::resource('setting/permission-group', 'Setting\\PermissionGroupController');
 Route::resource('setting/st-room', 'Setting\\StRoomController');
 Route::resource('setting/st-vehicle', 'Setting\\StVehicleController');
 Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');

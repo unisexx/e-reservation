@@ -30,39 +30,39 @@ if (isset($stroom->st_bureau_code)) {
             <input type="file" name="image" />
         </td>
     </tr>
-    <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
+    <tr>
         <th>ชื่อห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
-            <input name="name" type="text" class="form-control" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" required />
+            <input name="name" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" required />
         </td>
     </tr>
-    <tr class="{{ $errors->has('people') ? 'has-error' : '' }}">
+    <tr>
         <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline"><input name="people" type="number" min="1" class="form-control" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน</div>
+            <div class="form-inline"><input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน</div>
         </td>
     </tr>
-    <tr class="{{ $errors->has('equipment') ? 'has-error' : '' }}">
+    <tr>
         <th>อุปกรณ์ที่ติดตั้งในห้อง<span class="Txt_red_12"> *</span></th>
-        <td><input name="equipment" type="text" class="form-control" value="{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}" style="width:500px;" required />
+        <td><input name="equipment" type="text" class="form-control {{ $errors->has('equipment') ? 'has-error' : '' }}" value="{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}" style="width:500px;" required />
         </td>
     </tr>
-    <tr class="{{ $errors->has('res_name') || $errors->has('res_tel') || $errors->has('res_department_id') ? 'has-error' : '' }}">
+    <tr>
         <th>ผู้รับผิดชอบห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline" style="margin-bottom:5px;">
-                <input name="res_name" type="text" class="form-control" placeholder="ชื่อผู้รับผิดชอบ" value="{{ isset($stroom->res_name) ? $stroom->res_name : old('res_name') }}" style="width:300px;" required />
-                <input name="res_tel" type="text" class="form-control" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" required />
+                <input name="res_name" type="text" class="form-control {{ $errors->has('res_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้รับผิดชอบ" value="{{ isset($stroom->res_name) ? $stroom->res_name : old('res_name') }}" style="width:300px;" required />
+                <input name="res_tel" type="text" class="form-control {{ $errors->has('res_tel') ? 'has-error' : '' }}" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" required />
             </div>
 
-            <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม" required>
+            <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
                 <option value="">+ กรม +</option>
                 @foreach($st_departments as $item)
                 <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$stroom->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
                 @endforeach
             </select>
 
-            <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก" required>
+            <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
                 <option value="">+ สำนัก +</option>
                 @if(old('st_department_code') || isset($stroom->st_department_code))
                 @foreach($st_bureaus as $item)
@@ -71,7 +71,7 @@ if (isset($stroom->st_bureau_code)) {
                 @endif
             </select>
 
-            <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม" required>
+            <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
                 <option value="">+ กลุ่ม +</option>
                 @if(old('st_bureau_code') || isset($stroom->st_bureau_code))
                 @foreach($st_divisions as $item)

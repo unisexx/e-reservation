@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // },
             @foreach($rs as $key=>$row)
             {
-                title: '{{ $row->title }}',
+                title: '{{ $row->gofor }}',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}'
             },
@@ -107,7 +107,7 @@ padding: 0 10px;
 }
 </style>
 
-<h3>จองห้องประชุม</h3>
+<h3>จองยานพาหนะ</h3>
 
 <!-- @foreach($rs as $key=>$row)
     {{ 'title = '.$row->title }}
@@ -118,7 +118,7 @@ padding: 0 10px;
 @endforeach -->
 
 <div id="btnBox">
- <a href="{{ url('booking-room') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>
+ <a href="{{ url('booking-vehicle') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>
 </div>
 <br clear="all">
 

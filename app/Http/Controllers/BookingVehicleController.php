@@ -89,7 +89,9 @@ class BookingVehicleController extends Controller
      */
     public function show($id)
     {
-        //
+        $rs = BookingVehicle::select('*');
+        $rs = $rs->orderBy('id','desc')->get();
+        return view('booking-vehicle.show', compact('rs'));
     }
 
     /**

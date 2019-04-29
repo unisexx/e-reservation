@@ -1,9 +1,9 @@
 <table class="tbadd">
-    <tr class="{{ $errors->has('name') ? 'has-error' : '' }}">
+    <tr>
         <th>ชื่อประเภทรถ<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <input name="name" value="{{ isset($stvehicletype->name) ? $stvehicletype->name : old('name') }}" type="text" class="form-control" placeholder="ชื่อประเภทรถ" style="width:500px;" required />
+                <input name="name" value="{{ isset($stvehicletype->name) ? $stvehicletype->name : old('name') }}" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" placeholder="ชื่อประเภทรถ" style="width:500px;" required />
             </div>
         </td>
     </tr>
