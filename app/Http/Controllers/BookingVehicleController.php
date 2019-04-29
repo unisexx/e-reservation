@@ -19,6 +19,9 @@ class BookingVehicleController extends Controller
      */
     public function index(Request $request)
     {
+        // ตรวจสอบ permission
+        ChkPerm('booking-vehicle-view');
+
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
@@ -54,6 +57,9 @@ class BookingVehicleController extends Controller
      */
     public function create()
     {
+        // ตรวจสอบ permission
+        ChkPerm('booking-vehicle-create', 'booking-vehicle');
+
         return view('booking-vehicle.create');
     }
 
@@ -103,7 +109,7 @@ class BookingVehicleController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-room-edit','setting/st-room');
+        ChkPerm('booking-vehicle-edit','booking-vehicle');
 
         $rs = BookingVehicle::findOrFail($id);
         return view('booking-vehicle.edit', compact('rs'));
@@ -139,7 +145,7 @@ class BookingVehicleController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-vehicle-type-delete','setting/st-vehicle-type');
+        ChkPerm('booking-vehicle-delete','booking-vehicle');
 
         BookingVehicle::destroy($id);
 

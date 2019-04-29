@@ -40,3 +40,6 @@ Route::resource('booking-room', 'BookingRoomController');
 
 // จองยานพาหนะ
 Route::resource('booking-vehicle', 'BookingVehicleController');
+
+// log
+Route::resource('log', 'LogController');

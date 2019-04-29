@@ -23,12 +23,12 @@
     </div>
 </div>
 
-{{-- @if(CanPerm('st-vehicle-type-create')) --}}
+@if(CanPerm('booking-vehicle-create'))
 <div id="btnBox"> <a href="{{ url('/booking-vehicle/show') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
     <input type="button" title="export excel" value="export excel" class="btn vtip" />
     <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
 </div>
-{{-- @endif --}}
+@endif
 
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
@@ -68,14 +68,14 @@
         </td>
         <td>{{ $row->status }}</td>
         <td>
-            {{-- @if(CanPerm('st-vehicle-type-edit')) --}}
+            @if(CanPerm('booking-vehicle-edit'))
             <a href="{{ url('booking-vehicle/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
             </a>
-            {{-- @endif --}}
+            @endif
             
             
-            {{-- @if(CanPerm('st-vehicle-type-delete')) --}}
+            @if(CanPerm('booking-vehicle-delete'))
             <form method="POST" action="{{ url('booking-vehicle' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
@@ -83,7 +83,7 @@
                     <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
                 </button>
             </form>
-            {{-- @endif --}}
+            @endif
         </td>
     </tr>
     @endforeach

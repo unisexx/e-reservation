@@ -21,7 +21,7 @@
                         <li><a href="{{ url('/') }}">Report 1</a></li>
                         <li><a href="{{ url('/') }}">Report 2</a></li>
                         <li><a href="{{ url('/') }}">Report 3</a></li>
-                        <li><a href="{{ url('/logfile') }}">ประวัติการใช้งาน</a></li>
+                        <li><a href="{{ url('/log') }}">ประวัติการใช้งาน</a></li>
                     </ul>
                 </li>
             </ul>
