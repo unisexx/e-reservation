@@ -20,7 +20,7 @@ class PermissionGroupController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('permission-group-view');
+        ChkPerm('permission-group-view');
 
         $keyword = $request->get('search');
         $perPage = 10;

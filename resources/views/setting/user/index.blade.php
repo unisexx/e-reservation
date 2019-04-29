@@ -12,10 +12,12 @@
 </div>
 </div>
 
+@if(CanPerm('user-create'))
 <div id="btnBox">
     <input type="button" title="เพิ่มผู้ใช้งาน" value="เพิ่มผู้ใช้งาน" onclick="document.location='{{ url('/setting/user/create') }}'"
         class="btn btn-warning vtip" />
 </div>
+@endif
 
 <div class="pagination-wrapper"> 
     {!! $user->appends(['search' => Request::get('search')])->render() !!} 
@@ -48,10 +50,13 @@
         @if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif
     </td>
     <td>
+        @if(CanPerm('user-edit'))
         <a href="{{ url('/setting/user/' . $item->id . '/edit') }}" title="Edit User">
             <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
         </a>
+        @endif
 
+        @if(CanPerm('user-delete'))
         <form method="POST" action="{{ url('/setting/user' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
             {{ method_field('DELETE') }}
             {{ csrf_field() }}
@@ -59,6 +64,7 @@
                 <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
             </button>
         </form>
+        @endif
     </td>
 </tr>
 @endforeach

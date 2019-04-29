@@ -28,11 +28,11 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
     </div>
 </div>
 
-{{-- @if(CanPerm('st-vehicle-create')) --}}
+@if(CanPerm('st-vehicle-create'))
 <div id="btnBox">
     <input type="button" title="เพิ่มยานพาหนะ" value="เพิ่มยานพาหนะ" onclick="document.location='{{ url('/setting/st-vehicle/create') }}'" class="btn btn-warning vtip" />
 </div>
-{{-- @endif --}}
+@endif
 
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
@@ -56,13 +56,13 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <td>{{$row->status}}</td>
         <td>
 
-            {{-- @if(CanPerm('st-vehicle-edit')) --}}
+            @if(CanPerm('st-vehicle-edit'))
             <a href="{{ url('/setting/st-vehicle/' . $row->id . '/edit') }}" title="Edit StAscc">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
             </a>
-            {{-- @endif --}}
+            @endif
 
-            {{-- @if(CanPerm('st-vehicle-delete')) --}}
+            @if(CanPerm('st-vehicle-delete'))
             <form method="POST" action="{{ url('/setting/st-vehicle' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
@@ -70,7 +70,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
                     <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
                 </button>
             </form>
-            {{-- @endif --}}
+            @endif
         </td>
     </tr>
     @endforeach

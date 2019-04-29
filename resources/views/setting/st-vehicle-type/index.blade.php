@@ -14,12 +14,12 @@
     </div>
 </div>
 
-{{-- @if(CanPerm('st-vehicle-type-create')) --}}
+@if(CanPerm('st-vehicle-type-create'))
 <div id="btnBox">
     <input type="button" title="เพิ่มประเภทรถ" value="เพิ่มประเภทรถ" onclick="document.location='{{ url('/setting/st-vehicle-type/create') }}'"
         class="btn btn-warning vtip" />
 </div>
-{{-- @endif --}}
+@endif
 
 <div class="pagination-wrapper"> 
     {!! $stvehicletype->appends(['search' => Request::get('search')])->render() !!} 
@@ -39,13 +39,13 @@
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
 
-                {{-- @if(CanPerm('st-vehicle-type-edit')) --}}
+                @if(CanPerm('st-vehicle-type-edit'))
                 <a href="{{ url('/setting/st-vehicle-type/' . $item->id . '/edit') }}" title="Edit StAscc">
                     <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
                 </a>
-                {{-- @endif --}}
+                @endif
 
-                {{-- @if(CanPerm('st-vehicle-type-delete')) --}}
+                @if(CanPerm('st-vehicle-type-delete'))
                 <form method="POST" action="{{ url('/setting/st-vehicle-type' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                     {{ method_field('DELETE') }}
                     {{ csrf_field() }}
@@ -53,7 +53,7 @@
                         <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
                     </button>
                 </form>
-                {{-- @endif --}}
+                @endif
             </td>
         </tr>
     @endforeach

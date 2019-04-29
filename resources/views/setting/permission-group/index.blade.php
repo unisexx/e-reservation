@@ -14,11 +14,12 @@
     </div>
 </div>
 
-
+@if(CanPerm('permission-group-create'))
 <div id="btnBox">
     <input type="button" title="เพิ่มสิทธิ์การใช้งาน" value="เพิ่มสิทธิ์การใช้งาน" onclick="document.location='{{ url('/setting/permission-group/create') }}'"
         class="btn btn-warning vtip" />
 </div>
+@endif
 
 
 <div class="pagination-wrapper"> 
@@ -40,10 +41,13 @@
             <!-- <td></td> -->
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
+                @if(CanPerm('permission-group-edit'))
                 <a href="{{ url('/setting/permission-group/' . $item->id . '/edit') }}" title="Edit StAscc">
                     <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
                 </a>
+                @endif
 
+                @if(CanPerm('permission-group-delete'))
                 <form method="POST" action="{{ url('/setting/permission-group' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                     {{ method_field('DELETE') }}
                     {{ csrf_field() }}
@@ -51,6 +55,7 @@
                         <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
                     </button>
                 </form>
+                @endif
             </td>
         </tr>
     @endforeach

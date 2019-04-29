@@ -18,7 +18,7 @@ class StVehicleTypeController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-vehicle-type-view');
+        ChkPerm('st-vehicle-type-view');
 
         $keyword = $request->get('search');
         $perPage = 10;
@@ -41,7 +41,7 @@ class StVehicleTypeController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-vehicle-type-create', 'setting/st-vehicle-type');
+        ChkPerm('st-vehicle-type-create', 'setting/st-vehicle-type');
 
         return view('setting.st-vehicle-type.create');
     }
@@ -93,7 +93,7 @@ class StVehicleTypeController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-vehicle-type-edit','setting/st-vehicle-type');
+        ChkPerm('st-vehicle-type-edit','setting/st-vehicle-type');
 
         $stvehicletype = StVehicleType::findOrFail($id);
 
@@ -135,7 +135,7 @@ class StVehicleTypeController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-vehicle-type-delete','setting/st-vehicle-type');
+        ChkPerm('st-vehicle-type-delete','setting/st-vehicle-type');
 
         StVehicleType::destroy($id);
 

@@ -52,7 +52,7 @@
 </table>
 <div id="btnBoxAdd">
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-ascc') }}'" class="btn btn-default" style="width:100px;" />
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/permission-group') }}'" class="btn btn-default" style="width:100px;" />
 </div>
 
 <script>
@@ -72,5 +72,10 @@ $(document).ready(function(){
         $(this).parent().closest('tr').find('input').prop('checked', false);
         return false;
     });
+
+    var permissionGroupId = "{{ @$permissiongroup->id }}";
+    if(permissionGroupId == ''){
+        $('.perm_id_20').find('input[type=checkbox]:eq(0)').attr("checked","checked");
+    }
 });
 </script>

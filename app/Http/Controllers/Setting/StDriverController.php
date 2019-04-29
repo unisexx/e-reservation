@@ -18,7 +18,7 @@ class StDriverController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-driver-view');
+        ChkPerm('st-driver-view');
 
         $keyword = $request->get('search');
         $st_department_code = $request->get('st_department_code');
@@ -58,7 +58,7 @@ class StDriverController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-driver-create', 'setting/st-driver');
+        ChkPerm('st-driver-create', 'setting/st-driver');
 
         return view('setting.st-driver.create');
     }
@@ -118,7 +118,7 @@ class StDriverController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-driver-edit','setting/st-driver');
+        ChkPerm('st-driver-edit','setting/st-driver');
 
         $rs = StDriver::findOrFail($id);
 
@@ -168,7 +168,7 @@ class StDriverController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-driver-delete','setting/st-driver');
+        ChkPerm('st-driver-delete','setting/st-driver');
 
         StDriver::destroy($id);
 

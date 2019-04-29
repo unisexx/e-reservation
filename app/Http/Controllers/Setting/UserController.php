@@ -19,7 +19,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('user-view');
+        ChkPerm('user-view');
 
         $keyword = $request->get('search');
         $perPage = 10;

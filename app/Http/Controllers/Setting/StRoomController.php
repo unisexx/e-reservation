@@ -20,7 +20,7 @@ class StRoomController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-room-view');
+        ChkPerm('st-room-view');
 
         $keyword = $request->get('search');
         $perPage = 10;
@@ -43,7 +43,7 @@ class StRoomController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-room-create', 'setting/st-room');
+        ChkPerm('st-room-create', 'setting/st-room');
 
         return view('setting.st-room.create');
     }
@@ -97,7 +97,7 @@ class StRoomController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-room-edit','setting/st-room');
+        ChkPerm('st-room-edit','setting/st-room');
 
         $stroom = StRoom::findOrFail($id);
 
@@ -141,7 +141,7 @@ class StRoomController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-room-delete','setting/st-room');
+        ChkPerm('st-room-delete','setting/st-room');
 
         StRoom::destroy($id);
 
