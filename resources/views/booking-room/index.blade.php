@@ -24,7 +24,7 @@
 </div>
 
 {{-- @if(CanPerm('st-vehicle-type-create')) --}}
-<div id="btnBox"> <a href="{{ url('/booking-room/calendar') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
+<div id="btnBox"> <a href="{{ url('/booking-room/show') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
     <input type="button" title="export excel" value="export excel" class="btn vtip" />
     <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
 </div>

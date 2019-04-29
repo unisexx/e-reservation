@@ -277,3 +277,15 @@
         });
     }
 </script>
+
+<!-- full calendar -->
+<link href="{{ url('js/fullcalendar-4.0.1/packages/core/main.css') }}" rel="stylesheet" />
+<link href="{{ url('js/fullcalendar-4.0.1/packages/daygrid/main.css') }}" rel="stylesheet" />
+<link href="{{ url('js/fullcalendar-4.0.1/packages/timegrid/main.css') }}" rel="stylesheet" />
+<link href="{{ url('js/fullcalendar-4.0.1/packages/list/main.css') }}" rel="stylesheet" />
+<script src="{{ url('js/fullcalendar-4.0.1/packages/core/main.js') }}"></script>
+<script src="{{ url('js/fullcalendar-4.0.1/packages/core/locales-all.js') }}"></script>
+<script src="{{ url('js/fullcalendar-4.0.1/packages/interaction/main.js') }}"></script>
+<script src="{{ url('js/fullcalendar-4.0.1/packages/daygrid/main.js') }}"></script>
+<script src="{{ url('js/fullcalendar-4.0.1/packages/timegrid/main.js') }}"></script>
+<script src="{{ url('js/fullcalendar-4.0.1/packages/list/main.js') }}"></script>

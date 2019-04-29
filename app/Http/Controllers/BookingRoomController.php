@@ -86,9 +86,11 @@ class BookingRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $rs = BookingRoom::select('*');
+        $rs = $rs->orderBy('id','desc')->get();
+        return view('booking-room.show', compact('rs'));
     }
 
     /**
