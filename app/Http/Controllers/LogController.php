@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 // logsActivity
-use Spatie\Activitylog\Models\Activity;
+// use Spatie\Activitylog\Models\Activity;
+
+use App\Model\ActivityLog;
 
 class LogController extends Controller
 {
@@ -20,20 +22,25 @@ class LogController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-ascc-view');
+        ChkPerm('log-view');
 
         $keyword = $request->get('search');
+        $description = $request->get('description');
         $perPage = 10;
 
-        if (!empty($keyword)) {
-            $logs = LogsActivity::where('code', 'LIKE', "%$keyword%")
-                ->orWhere('title', 'LIKE', "%$keyword%")
-                ->orWhere('description', 'LIKE', "%$keyword%")
-                ->orWhere('status', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $logs = Activity::latest()->paginate($perPage);
+        $log = new ActivityLog;
+
+        if(!empty($keyword)) {
+            $log = $log->whereHas('user', function($q) use($keyword){
+                    $q->where('name', 'LIKE', "%$keyword%");
+                });
         }
+
+        if(!empty($description)) {
+            $log = $log->where('description', "$description");
+        }
+
+        $logs = $log->latest()->paginate($perPage);
 
         return view('log.index', compact('logs'));
     }

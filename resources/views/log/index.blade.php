@@ -5,15 +5,24 @@
 <h3>ประวัติการใช้งาน</h3>
 <div id="search">
     <div id="searchBox">
-        <form method="GET" action="{{ url('/setting/st-ascc') }}" accept-charset="UTF-8" class="form-inline" role="search">
-            <input type="text" class="form-control" style="width:350px;" placeholder="รหัส / ชื่อแผนงาน ASCC " name="search" value="{{ request('search') }}">
+        <form method="GET" action="{{ url('/log') }}" accept-charset="UTF-8" class="form-inline" role="search">
+            <input type="text" class="form-control" style="width:350px;" id="exampleInputName2" placeholder="ชื่อ - สกุล ผู้ใช้งาน" name="search" value="{{ request('search') }}">
+
+            <select name="description" class="selectpicker" id="lunch" title="ทุกรายละเอียด" data-live-search="true">
+                <option value="">+ รายละเอียด +</option>
+                <option value="created" @if(@request('description') == 'created') selected="selected" @endif>เพิ่ม</option>
+                <option value="updated" @if(@request('description') == 'updated') selected="selected" @endif>แก้ไข</option>
+                <option value="deleted" @if(@request('description') == 'deleted') selected="selected" @endif>ลบ</option>
+            </select>
+
+
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
     </div>
 </div>
 
 <div class="pagination-wrapper"> 
-    {!! $logs->appends(['search' => Request::get('search')])->render() !!} 
+    {!! $logs->appends(['search' => Request::get('search'),'description' => Request::get('description')])->render() !!} 
 </div>
 
 <table class="tblist">
