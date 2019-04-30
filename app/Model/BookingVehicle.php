@@ -4,8 +4,14 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+// logsActivity
+use Spatie\Activitylog\Traits\LogsActivity;
+
 class BookingVehicle extends Model
 {
+    // logsActivity
+    use LogsActivity;
+
     /**
      * The database table used by the model.
      *
@@ -68,4 +74,30 @@ class BookingVehicle extends Model
     public function st_vehicle(){
         return $this->hasOne('App\Model\StVehicle', 'id', 'st_vehicle_id');
     }
+
+    // logsActivity
+    protected static $logAttributes = [
+        'code',
+        'gofor',
+        'number',
+        'request_date',
+        'request_time',
+        'start_date',
+        'start_time',
+        'end_date',
+        'end_time',
+        'point_place',
+        'point_time',
+        'destination',
+        'request_name',
+        'st_department_code',
+        'st_bureau_code',
+        'st_division_code',
+        'request_tel',
+        'request_email',
+        'note',
+        'status',
+        'st_vehicle_id',
+    ];
+    protected static $logOnlyDirty = true;
 }

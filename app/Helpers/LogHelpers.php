@@ -15,18 +15,12 @@ if(!function_exists('modelNameTh'))
 {
 	function modelNameTh($model){ 
 		$th = array(
-			'App\Model\StAscc'=>'ตั้งค่าแผนงาน ASCC พ.ศ.2568 (109 มาตรการ)',
-			'App\Model\StCulturalPole'=>'ตั้งค่าแผนงานเสาสังคมและวัฒนธรรมของไทย',
-			'App\Model\StNationalStrategy'=>'ตั้งค่ายุทธศาสตร์ชาติ',
-			'App\Model\StReformPlan'=>'ตั้งค่าแผนปฏิรูปประเทศ 11 ด้าน',
-			'App\Model\StEcoDevPlan'=>'ตั้งค่าแผนพัฒนาเศรษฐกิจและสังคมแห่งชาติฉบับที่ 12',
-			'App\Model\StDevGoal'=>'ตั้งค่าเป้าหมายการพัฒนาที่ยั่งยืน',
-			'App\Model\StDriveBoard'=>'ตั้งค่าคณะกรรมการขับเคลื่อนและปฏิรูปการบริหารราชการแผ่นดิน',
-			'App\Model\StIssue'=>'ตั้งค่าประเด็น',
-			'App\Model\StBranch'=>'ตั้งค่าสาขาเสาสังคม',
-			'App\User'=>'ตั้งค่าผู้ใช้งาน',
-			'App\Model\PermissionGroup'=>'ตั้งค่าสิทธิ์การใช้งาน',
-			'App\Model\Plan'=>'แผนงาน',
+			'App\Model\StVehicleType'   => 'ตั้งค่าประเภทรถ',
+			'App\Model\StDriver'        => 'ตั้งค่าพนักงานขับรถ',
+			'App\Model\StVehicle'       => 'ตั้งค่ายานพาหนะ',
+			'App\Model\StRoom'       => 'ตั้งค่าห้องประชุม',
+			'App\User'                  => 'ตั้งค่าผู้ใช้งาน',
+			'App\Model\PermissionGroup' => 'ตั้งค่าสิทธิ์การใช้งาน',
 		);
 		return @$th[$model];
 	}

@@ -4,8 +4,14 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+// logsActivity
+use Spatie\Activitylog\Traits\LogsActivity;
+
 class StDriver extends Model
 {
+    // logsActivity
+    use LogsActivity;
+
     /**
      * The database table used by the model.
      *
@@ -49,4 +55,15 @@ class StDriver extends Model
     {
         return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
     }
+
+    // logsActivity
+    protected static $logAttributes = [
+        'name',
+        'tel',
+        'status',
+        'st_department_code',
+        'st_bureau_code',
+        'st_division_code',
+    ];
+    protected static $logOnlyDirty = true;
 }

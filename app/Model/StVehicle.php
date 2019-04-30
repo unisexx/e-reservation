@@ -4,8 +4,14 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+// logsActivity
+use Spatie\Activitylog\Traits\LogsActivity;
+
 class StVehicle extends Model
 {
+    // logsActivity
+    use LogsActivity;
+
     /**
      * The database table used by the model.
      *
@@ -72,4 +78,20 @@ class StVehicle extends Model
     {
         return $this->hasOne('App\Model\StDriver', 'id', 'st_driver_id');
     }
+
+    // logsActivity
+    protected static $logAttributes = [
+        'st_vehicle_type_id',
+        'brand',
+        'seat',
+        'color',
+        'reg_number',
+        'st_driver_id',
+        'status',
+        'image',
+        'st_department_code',
+        'st_bureau_code',
+        'st_division_code',
+    ];
+    protected static $logOnlyDirty = true;
 }

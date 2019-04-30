@@ -5,12 +5,12 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 // logsActivity
-// use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class PermissionGroup extends Model
 {
     // logsActivity
-    // use LogsActivity;
+    use LogsActivity;
 
     /**
      * The database table used by the model.
