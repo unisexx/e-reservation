@@ -1,8 +1,11 @@
-@extends('layouts.admin')
+@extends(empty(request('export')) ? 'layouts.admin' : 'layouts.excel')
 
 @section('content')
 
 <h3>จองห้องประชุม</h3>
+
+@if(empty(request('export')))
+
 <div id="search">
     <div id="searchBox">
         <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
@@ -23,16 +26,31 @@
     </div>
 </div>
 
-@if(CanPerm('booking-room-create'))
-<div id="btnBox"> <a href="{{ url('/booking-room/show') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
-    <input type="button" title="export excel" value="export excel" class="btn vtip" />
-    <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+
+<div id="btnBox"> 
+    <a href="{{ url('/booking-room/show') }}">
+        <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
+    </a>
+    <?php
+        $get = '';
+        foreach (@$_GET as $key => $value) {
+            $get .= ($get) ? '&'.$key.'='.$value : $key.'='.$value;
+        }
+    ?>
+    <a href="{{ url('booking-room?export=excel&'.$get) }}">
+        <input type="button" title="export excel" value="export excel" class="btn vtip" />
+    </a>
+    @if(CanPerm('booking-room-create'))
+        <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+    @endif
 </div>
-@endif
 
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
 </div>
+
+@endif
+<!-- export -->
 
 <table class="table table-bordered table-striped sortable tblist">
     <thead>
@@ -43,29 +61,45 @@
         <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วัน เวลา ที่ต้องการใช้ห้อง</th>
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">ผู้ขอใช้ห้องประชุม</th>
         <th style="width:5%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะ</th>
+        @if(empty(request('export')))
         <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="6-0">จัดการ</th>
+        @endif
     </tr>
     </thead>
     <tbody>
     @foreach($rs as $key=>$row)
     <tr @if(($key % 2)==1) class="odd" @endif>
-        <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
+        <td>
+            @if(empty(request('export')))
+                {{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}
+            @else
+                {{ $key+1 }}
+            @endif
+        </td>
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->title }}</div>
-            {{ $row->st_room->name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="
-            <u>จำนวนคนที่รับรองได้</u> {{ $row->st_room->people }} คน<br>
-            <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
-            <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
-            <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+            {{ $row->st_room->name }} 
+            @if(empty(request('export')))
+                <img src="{{ url('images/detail.png') }}" class="vtip" title="
+                <u>จำนวนคนที่รับรองได้</u> {{ $row->st_room->people }} คน<br>
+                <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
+                <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
+                <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+            @endif
         </td>
         <td>
             <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
             <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
         </td>
-        <td>{{ $row->request_name }} <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
-        {{ $row->request_tel }} {{ $row->request_email }}" /></td>
+        <td>{{ $row->request_name }} 
+            @if(empty(request('export')))
+                <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
+                {{ $row->request_tel }} {{ $row->request_email }}" />
+            @endif
+        </td>
         <td>{{ $row->status }}</td>
+        @if(empty(request('export')))
         <td>
             @if(CanPerm('booking-room-edit'))
             <a href="{{ url('booking-room/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
@@ -84,13 +118,17 @@
             </form>
             @endif
         </td>
+        @endif
     </tr>
     @endforeach
     </tbody>
 </table>
 
+@if(empty(request('export')))
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
 </div>
+@endif
+<!-- export -->
 
 @endsection

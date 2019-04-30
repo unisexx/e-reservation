@@ -45,9 +45,24 @@ class BookingRoomController extends Controller
             });
         }
 
-        $rs = $rs->orderBy('id','desc')->paginate($perPage);
+        if (@$_GET['export'] == 'excel') {
 
-        return view('booking-room.index', compact('rs'));
+            header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+            header("Content-Disposition: attachment; filename=จองห้องประชุม_".date('Ymdhis').".xls");  //File name extension was wrong
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Cache-Control: private",false);
+
+            $rs = $rs->orderBy('id','desc')->get();
+            return view('booking-room.index', compact('rs'));
+
+        } else {
+
+            $rs = $rs->orderBy('id','desc')->paginate($perPage);
+            return view('booking-room.index', compact('rs'));
+
+        }
+
     }
 
     /**

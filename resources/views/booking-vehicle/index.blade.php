@@ -1,8 +1,11 @@
-@extends('layouts.admin')
+@extends(empty(request('export')) ? 'layouts.admin' : 'layouts.excel')
 
 @section('content')
 
 <h3>จองยานพาหนะ</h3>
+
+@if(empty(request('export')))
+
 <div id="search">
     <div id="searchBox">
         <form method="GET" action="{{ url('booking-vehicle') }}" accept-charset="UTF-8" class="form-inline" role="search">
@@ -23,16 +26,30 @@
     </div>
 </div>
 
-@if(CanPerm('booking-vehicle-create'))
-<div id="btnBox"> <a href="{{ url('/booking-vehicle/show') }}"><img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" /></a>
-    <input type="button" title="export excel" value="export excel" class="btn vtip" />
+<div id="btnBox"> 
+    <a href="{{ url('/booking-vehicle/show') }}">
+        <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
+    </a>
+    <?php
+        $get = '';
+        foreach (@$_GET as $key => $value) {
+            $get .= ($get) ? '&'.$key.'='.$value : $key.'='.$value;
+        }
+    ?>
+    <a href="{{ url('booking-vehicle?export=excel&'.$get) }}">
+        <input type="button" title="export excel" value="export excel" class="btn vtip" />
+    </a>
+    @if(CanPerm('booking-vehicle-create'))
     <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
+    @endif
 </div>
-@endif
 
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
 </div>
+
+@endif
+<!-- export -->
 
 <table class="table table-bordered table-striped sortable tblist">
     <thead>
@@ -44,13 +61,21 @@
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ / สถานที่ไป</th>
         <th style="width:10%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">ผู้ขอใช้ยานพาหนะ</th>
         <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="6-0">สถานะ</th>
+        @if(empty(request('export')))
         <th style="width:10%" class="nosort" data-sortcolumn="7" data-sortkey="7-0">จัดการ</th>
+        @endif
     </tr>
     </thead>
     <tbody>
     @foreach($rs as $key=>$row)
     <tr @if(($key % 2)==1) class="odd" @endif>
-        <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
+        <td>
+            @if(empty(request('export')))
+                {{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}
+            @else
+                {{ $key+1 }}
+            @endif
+        </td>
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->gofor }}</div>
@@ -64,9 +89,12 @@
         <td>{{ $row->point_place }} เวลา {{ date("H:i", strtotime($row->point_time)) }} น.<br><br>{{ $row->destination }}</td>
         <td>
             {{ $row->request_name }}
-            <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
+            @if(empty(request('export')))
+                <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
+            @endif
         </td>
         <td>{{ $row->status }}</td>
+        @if(empty(request('export')))
         <td>
             @if(CanPerm('booking-vehicle-edit'))
             <a href="{{ url('booking-vehicle/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
@@ -85,13 +113,16 @@
             </form>
             @endif
         </td>
+        @endif
     </tr>
     @endforeach
     </tbody>
 </table>
 
+@if(empty(request('export')))
 <div class="pagination-wrapper">
     {!! $rs->appends(['search' => Request::get('search')])->render() !!}
 </div>
+@endif
 
 @endsection
