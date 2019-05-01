@@ -6,11 +6,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Model\BookingRoom;
+use App\Model\BookingVehicle;
 
-use App\Http\Requests\BookingRoomRequest;
+use App\Http\Requests\BookingVehicleRequest;
 
-class BookingRoomController extends Controller
+class BookingVehicleFrontController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,7 +19,7 @@ class BookingRoomController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -30,14 +30,14 @@ class BookingRoomController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-view');
+        ChkPerm('booking-vehicle-view');
 
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
         $perPage = 10;
 
-        $rs = BookingRoom::select('*');
+        $rs = BookingVehicle::select('*');
 
         if (!empty($date_select)) {
             if($data_type == 'start_date'){
@@ -55,24 +55,24 @@ class BookingRoomController extends Controller
             });
         }
 
+
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=จองห้องประชุม_".date('Ymdhis').".xls");  //File name extension was wrong
+            header("Content-Disposition: attachment; filename=จองยานพาหนะ_".date('Ymdhis').".xls");  //File name extension was wrong
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Cache-Control: private",false);
 
             $rs = $rs->orderBy('id','desc')->get();
-            return view('booking-room.index', compact('rs'));
+            return view('booking-vehicle.index', compact('rs'));
 
         } else {
 
             $rs = $rs->orderBy('id','desc')->paginate($perPage);
-            return view('booking-room.index', compact('rs'));
+            return view('booking-vehicle.index', compact('rs'));
 
         }
-
     }
 
     /**
@@ -83,9 +83,9 @@ class BookingRoomController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-create', 'booking-room');
+        ChkPerm('booking-vehicle-create', 'booking-vehicle');
 
-        return view('booking-room.create');
+        return view('booking-vehicle.create');
     }
 
     /**
@@ -94,21 +94,22 @@ class BookingRoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BookingRoomRequest $request)
+    public function store(BookingVehicleRequest $request)
     {
         $requestData = $request->all();
+        $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
-        $data = BookingRoom::create($requestData);
+        $data = BookingVehicle::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
-        $rs = BookingRoom::find($data->id);
-        $rs->code = 'RR'.sprintf("%05d", $data->id);
+        $rs = BookingVehicle::find($data->id);
+        $rs->code = 'RV'.sprintf("%05d", $data->id);
         $rs->save();
         
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-vehicle');
     }
 
     /**
@@ -117,11 +118,11 @@ class BookingRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        $rs = BookingRoom::select('*');
+        $rs = BookingVehicle::select('*');
         $rs = $rs->orderBy('id','desc')->get();
-        return view('booking-room.show', compact('rs'));
+        return view('booking-vehicle-front.show', compact('rs'));
     }
 
     /**
@@ -133,10 +134,10 @@ class BookingRoomController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-edit','booking-room');
+        ChkPerm('booking-vehicle-edit','booking-vehicle');
 
-        $rs = BookingRoom::findOrFail($id);
-        return view('booking-room.edit', compact('rs'));
+        $rs = BookingVehicle::findOrFail($id);
+        return view('booking-vehicle.edit', compact('rs'));
     }
 
     /**
@@ -146,17 +147,18 @@ class BookingRoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BookingRoomRequest $request, $id)
+    public function update(BookingVehicleRequest $request, $id)
     {
         $requestData = $request->all();
+        $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
         
-        $rs = BookingRoom::findOrFail($id);
+        $rs = BookingVehicle::findOrFail($id);
         $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-vehicle');
     }
 
     /**
@@ -168,11 +170,11 @@ class BookingRoomController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-delete','booking-room');
+        ChkPerm('booking-vehicle-delete','booking-vehicle');
 
-        BookingRoom::destroy($id);
+        BookingVehicle::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-vehicle');
     }
 }

@@ -11,13 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-// หน้าแรก
+Route::get('/', function () {
+    // return view('welcome');
+    return view('booking');
+});
+
+// Booking
+Route::resource('booking-room-front', 'BookingRoomFrontController');
+Route::resource('booking-vehicle-front', 'BookingVehicleFrontController');
+
+// Dashboard
 Route::get('/home', 'HomeController@index')->name('home');
 
 // ajax

@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<h2 class="text-center">{{ config('app.name', 'Laravel') }}</h2>
+
+<div class="container" style="margin-top:30px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">

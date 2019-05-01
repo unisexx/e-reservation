@@ -10,7 +10,7 @@ use App\Model\BookingRoom;
 
 use App\Http\Requests\BookingRoomRequest;
 
-class BookingRoomController extends Controller
+class BookingRoomFrontController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,7 +19,7 @@ class BookingRoomController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -121,7 +121,7 @@ class BookingRoomController extends Controller
     {
         $rs = BookingRoom::select('*');
         $rs = $rs->orderBy('id','desc')->get();
-        return view('booking-room.show', compact('rs'));
+        return view('booking-room-front.show', compact('rs'));
     }
 
     /**
