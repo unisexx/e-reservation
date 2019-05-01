@@ -107,16 +107,18 @@ if (isset($rs->st_bureau_code)) {
         <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
     </select>
     
-    <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
-    <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
-    <a class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
-    <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
+    <span id="selectVehicleBlock">
+        <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
+        <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
+        <a class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
+        <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
+    </span>
 </div>
 
 <div class="form-group form-inline col-md-12">
     <div id="btnBoxAdd">
         <input name="input" type="submit" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-vehicle-type') }}'" class="btn btn-default" style="width:100px;" />
+        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-vehicle') }}'" class="btn btn-default" style="width:100px;" />
     </div>
 </div>
 
@@ -156,6 +158,14 @@ if (isset($rs->st_bureau_code)) {
 
 <script>
     $(document).ready(function() {
+        // เช็กสถานะ
+        chkStatus();
+
+        // กดเปลี่ยนสถานะ
+        $('body').on('change', 'select[name=status]', function() {
+            chkStatus();
+        });
+
         // ค้นหายานพาหนะ
         $('body').on('click', '#searchBtn', function() {
             $('#getData').html('<i class="fas fa-spinner fa-pulse"></i>');
@@ -181,4 +191,14 @@ if (isset($rs->st_bureau_code)) {
             $.colorbox.close();
         });
     });
+
+    // ถ้าสถานะอนุมัติ ให้เลือกยานพาหนะ, สถานะอื่น ซ่อน
+    function chkStatus(){
+        var status = $('select[name=status]').val();
+        if(status == 'อนุมัติ'){
+            $('#selectVehicleBlock').show();
+        }else{
+            $('#selectVehicleBlock').hide();
+        }
+    }
 </script>

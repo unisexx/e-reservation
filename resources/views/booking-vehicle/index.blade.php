@@ -79,7 +79,11 @@
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->gofor }}</div>
-            <div>{{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }}</div>
+            <div>
+                @if(!empty($row->st_vehicle_id))
+                    {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }}
+                @endif
+            </div>
         </td>
         <td>
             <div class="boxStartEnd"><span class="request">ขอใช้</span> {{ DB2Date($row->request_date) }} {{ date("H:i", strtotime($row->request_time)) }} น.</div>
