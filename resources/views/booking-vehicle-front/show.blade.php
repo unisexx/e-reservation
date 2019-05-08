@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            // right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            right: 'dayGridMonth,listMonth'
         },
         // defaultDate: '2019-03-12',
         locale: 'th',
