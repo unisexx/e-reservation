@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.front')
 
 @section('content')
 
@@ -13,10 +13,10 @@
 </ul>
 @endif
 
-<form method="POST" action="{{ url('booking-room') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="{{ url('booking-room-front') }}" accept-charset="UTF-8" enctype="multipart/form-data">
     {{ csrf_field() }}
 
-    @include ('booking-room.form', ['formMode' => 'create'])
+    @include ('booking-room-front.form', ['formMode' => 'create'])
 
 </form>
 

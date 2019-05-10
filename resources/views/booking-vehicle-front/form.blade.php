@@ -98,7 +98,7 @@ if (isset($rs->st_bureau_code)) {
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
-<div class="form-group form-inline col-md-12">
+<div class="form-group form-inline col-md-12" style="display:none;">
     <label>สถานะ</label>
     <select name="status" class="form-control" style="width:auto;">
         <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>

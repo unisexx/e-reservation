@@ -30,7 +30,7 @@ class BookingVehicleFrontController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-view');
+        // ChkPerm('booking-vehicle-view');
 
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
@@ -65,12 +65,12 @@ class BookingVehicleFrontController extends Controller
             header("Cache-Control: private",false);
 
             $rs = $rs->orderBy('id','desc')->get();
-            return view('booking-vehicle.index', compact('rs'));
+            return view('booking-vehicle-front.index', compact('rs'));
 
         } else {
 
             $rs = $rs->orderBy('id','desc')->paginate($perPage);
-            return view('booking-vehicle.index', compact('rs'));
+            return view('booking-vehicle-front.index', compact('rs'));
 
         }
     }
@@ -83,9 +83,9 @@ class BookingVehicleFrontController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-create', 'booking-vehicle');
+        // ChkPerm('booking-vehicle-create', 'booking-vehicle');
 
-        return view('booking-vehicle.create');
+        return view('booking-vehicle-front.create');
     }
 
     /**
@@ -109,7 +109,7 @@ class BookingVehicleFrontController extends Controller
         
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-vehicle');
+        return redirect('booking-vehicle-front/show');
     }
 
     /**
@@ -134,7 +134,7 @@ class BookingVehicleFrontController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-edit','booking-vehicle');
+        // ChkPerm('booking-vehicle-edit','booking-vehicle');
 
         $rs = BookingVehicle::findOrFail($id);
         return view('booking-vehicle.edit', compact('rs'));
@@ -158,7 +158,7 @@ class BookingVehicleFrontController extends Controller
         $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
-        return redirect('booking-vehicle');
+        return redirect('booking-vehicle-front/show');
     }
 
     /**
@@ -170,11 +170,11 @@ class BookingVehicleFrontController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-delete','booking-vehicle');
+        // ChkPerm('booking-vehicle-delete','booking-vehicle');
 
         BookingVehicle::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
-        return redirect('booking-vehicle');
+        return redirect('booking-vehicle-front/show');
     }
 }

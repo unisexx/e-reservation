@@ -5,16 +5,25 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
+    var colorEvent = {'รออนุมัติ': '#ffc107', 'อนุมัติ': '#28a745', 'ไม่อนุมัติ': '#dc3545', 'ยกเลิก': '#6c757d'};
     var initialLocaleCode = 'en';
     var localeSelectorEl = document.getElementById('locale-selector');
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+        customButtons: {
+            addBtn: {
+                text: '+ เพิ่มรายการ',
+                click: function() {
+                    window.location.href = "/booking-room-front/create";
+                }
+            }
+        },
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,listMonth'
+            right: 'dayGridMonth,listMonth addBtn'
             // right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
         },
         // defaultDate: '2019-03-12',
@@ -81,9 +90,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // },
             @foreach($rs as $key=>$row)
             {
-                title: '{{ $row->title }}',
+                title: '[{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
-                end: '{{ $row->end_date }}T{{ $row->end_time }}'
+                end: '{{ $row->end_date }}T{{ $row->end_time }}',
+                color: colorEvent["{{ $row->status }}"],
             },
             @endforeach
         ]
@@ -102,7 +112,7 @@ font-size: 12px;
 }
 
 #calendar {
-max-width: 90%;
+max-width: 900px;
 margin: 40px auto;
 padding: 0 10px;
 }

@@ -83,9 +83,9 @@ class BookingRoomFrontController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-create', 'booking-room');
+        // ChkPerm('booking-room-create', 'booking-room');
 
-        return view('booking-room.create');
+        return view('booking-room-front.create');
     }
 
     /**
@@ -108,7 +108,7 @@ class BookingRoomFrontController extends Controller
         
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-room-front/show');
     }
 
     /**
@@ -133,10 +133,10 @@ class BookingRoomFrontController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-edit','booking-room');
+        // ChkPerm('booking-room-edit','booking-room');
 
         $rs = BookingRoom::findOrFail($id);
-        return view('booking-room.edit', compact('rs'));
+        return view('booking-room-front.edit', compact('rs'));
     }
 
     /**
@@ -156,7 +156,7 @@ class BookingRoomFrontController extends Controller
         $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-room-front/show');
     }
 
     /**
@@ -168,11 +168,11 @@ class BookingRoomFrontController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-delete','booking-room');
+        // ChkPerm('booking-room-delete','booking-room');
 
         BookingRoom::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-room-front/show');
     }
 }
