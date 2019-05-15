@@ -54,7 +54,7 @@
 
             @if(CanPerm('st-room-edit'))
             <a href="{{ url('/setting/st-room/' . $item->id . '/edit') }}" title="Edit StAscc">
-                <img src="{{ url('images/edit.png') }}" width="24" height="24" style="margin-right:10px;" class="vtip" title="แก้ไขรายการนี้" />
+                <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
             </a>
             @endif
 
@@ -62,7 +62,7 @@
             <form method="POST" action="{{ url('/setting/st-room' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
-                <button type="submit" title="Delete StAscc" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none;">
+                <button type="submit" title="Delete StAscc" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
                     <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
                 </button>
             </form>
