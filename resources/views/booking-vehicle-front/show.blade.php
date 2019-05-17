@@ -96,7 +96,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 color: colorEvent["{{ $row->status }}"],
             },
             @endforeach
-        ]
+        ],
+        eventTimeFormat: { // like '14:30:00'
+            hour: '2-digit',
+            minute: '2-digit',
+            // second: '2-digit'
+        }
     });
 
     calendar.render();
