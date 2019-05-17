@@ -93,7 +93,7 @@
                         <li>ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร สำนักงานปลัดกระทรวงการพัฒนาสังคมและความมั่นคงของมนุษย์
                         </li>
                         <li><i class="fa fa-envelope" style="font-size:14px;"></i><a
-                                href="#">data.ictc@m-society.go.th</a> <i class="fa fa-phone"
+                                href="mailto:ictcsupport@m-society.go.th">ictcsupport@m-society.go.th</a> <i class="fa fa-phone"
                                 style="padding-left:20px; padding-right:5px;  font-size:18px;"></i> 0-2202-9004-5</li>
                     </ul>
                 </div>

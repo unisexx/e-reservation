@@ -30,6 +30,7 @@ Route::get('ajaxGetBureau', 'AjaxController@ajaxGetBureau');
 Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
 Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
 Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
+Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
 
 
 // ตั้งค่า

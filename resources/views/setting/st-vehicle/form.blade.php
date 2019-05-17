@@ -109,8 +109,9 @@ if (isset($rs->st_bureau_code)) {
         <td>
             <span class="form-inline">
                 <select name="status" class="form-control">
-                    <option value="พร้อมใช้">พร้อมใช้</option>
-                    <option value="ซ่อมบำรุง">ซ่อมบำรุง</option>
+                    <option value="พร้อมใช้" @if($rs->status == 'พร้อมใช้') selected='selected' @endif>พร้อมใช้</option>
+                    <option value="ซ่อมบำรุง" @if($rs->status == 'ซ่อมบำรุง') selected='selected' @endif>ซ่อมบำรุง</option>
+                    <option value="งดให้บริการ" @if($rs->status == 'งดให้บริการ') selected='selected' @endif>งดให้บริการ</option>
                 </select>
             </span>
         </td>

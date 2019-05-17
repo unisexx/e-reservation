@@ -33,7 +33,7 @@ if (isset($stroom->st_bureau_code)) {
     <tr>
         <th>ชื่อห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td>
-            <input name="name" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" required />
+            <input name="name" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" value="{{ isset($stroom->name) ? $stroom->name : old('name') }}" style="width:500px;" placeholder="ชื่อห้อง อาคาร ชั้น" required />
         </td>
     </tr>
     <tr>
@@ -44,7 +44,8 @@ if (isset($stroom->st_bureau_code)) {
     </tr>
     <tr>
         <th>อุปกรณ์ที่ติดตั้งในห้อง<span class="Txt_red_12"> *</span></th>
-        <td><input name="equipment" type="text" class="form-control {{ $errors->has('equipment') ? 'has-error' : '' }}" value="{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}" style="width:500px;" required />
+        <td>
+            <textarea name="equipment" class="form-control {{ $errors->has('equipment') ? 'has-error' : '' }}" rows="5" style="width:500px;" required>{{ isset($stroom->equipment) ? $stroom->equipment : old('equipment') }}</textarea>
         </td>
     </tr>
     <tr>
@@ -88,6 +89,8 @@ if (isset($stroom->st_bureau_code)) {
         <td>
             <label style="margin-right:20px;"><input name="fee" type="radio" value="มี" {!! (@$stroom->fee == 'มี' || empty($stroom->id)) ? 'checked="checked"' : '' !!}/> มี</label>
             <label><input name="fee" type="radio" value="ไม่มี" {!! @$stroom->fee == 'ไม่มี' ? 'checked="checked"' : '' !!}/> ไม่มี</label>
+
+            <textarea name="fee_detail" rows="5" class="form-control" id="textarea" style="width:500px;" placeholder="รายละเอียดค่าใช้จ่าย">{{ isset($stroom->fee_detail) ? $stroom->fee_detail : '' }}</textarea>
         </td>
     </tr>
     <tr>
@@ -106,3 +109,22 @@ if (isset($stroom->st_bureau_code)) {
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-room') }}'" class="btn btn-default" style="width:100px;" />
 </div>
+
+
+<script>
+$(document).ready(function(){
+    chkfee( $('input[name=fee]').val() );
+    
+    $('body').on('change', 'input[name=fee]', function() {
+        chkfee( $(this).val() );
+    });
+});
+
+function chkfee(data){
+    if( data == 'มี' ){
+        $('textarea[name=fee_detail]').show();
+    }else{
+        $('textarea[name=fee_detail]').hide();
+    }
+}
+</script>
