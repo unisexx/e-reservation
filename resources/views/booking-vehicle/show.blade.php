@@ -5,7 +5,7 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
-    var colorEvent = {'รออนุมัติ': '#ffc107', 'อนุมัติ': '#28a745', 'ไม่อนุมัติ': '#dc3545', 'ยกเลิก': '#6c757d'};
+    // var colorEvent = {'รออนุมัติ': '#ffc107', 'อนุมัติ': '#28a745', 'ไม่อนุมัติ': '#dc3545', 'ยกเลิก': '#6c757d'};
     var initialLocaleCode = 'en';
     var localeSelectorEl = document.getElementById('locale-selector');
     var calendarEl = document.getElementById('calendar');
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: '[{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}',
-                color: colorEvent["{{ $row->status }}"],
+                color: '{{ colorStatus($row->status) }}',
             },
             @endforeach
         ],

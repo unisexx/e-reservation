@@ -1,8 +1,9 @@
 <?php
 
-if(!function_exists('get_division_name_select'))
+if(!function_exists('colorStatus'))
 {
-	function get_division_name_select($division_code){ 
-		
+	function colorStatus($status_txt){ 
+		$color = array("รออนุมัติ"=>"#ffc107", "อนุมัติ"=>"#28a745", "ไม่อนุมัติ"=>"#dc3545", "ยกเลิก"=>"#6c757d");
+		return $color[$status_txt];
 	}
 }

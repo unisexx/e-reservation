@@ -32,12 +32,19 @@ class BookingVehicleController extends Controller
         // ตรวจสอบ permission
         ChkPerm('booking-vehicle-view');
 
+        $st_vehicle_type_id = $request->get('st_vehicle_type_id');
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
         $perPage = 10;
 
         $rs = BookingVehicle::select('*');
+
+        if (!empty($st_vehicle_type_id)) {
+            $rs = $rs->whereHas('st_vehicle', function($q) use ($st_vehicle_type_id){
+                        $q->where('st_vehicle_type_id', $st_vehicle_type_id);
+                    });
+        }
 
         if (!empty($date_select)) {
             if($data_type == 'start_date'){
@@ -50,8 +57,14 @@ class BookingVehicleController extends Controller
         if (!empty($keyword)) {
             $rs = $rs->where(function($q) use ($keyword){
                 $q->where('code', 'LIKE', "%$keyword%")
-                    ->orWhere('title', 'LIKE', "%$keyword%")
-                    ->orWhere('request_name', 'LIKE', "%$keyword%");
+                    ->orWhere('gofor', 'LIKE', "%$keyword%")
+                    ->orWhereHas('st_vehicle', function($q) use ($keyword){
+                        $q->where('brand', 'LIKE', "%$keyword%")
+                        ->orWhere('color', 'LIKE', "%$keyword%")
+                        ->orWhere('reg_number', 'LIKE', "%$keyword%")->orWhereHas('st_driver', function($q) use ($keyword){
+                            $q->where('name', 'LIKE', "%$keyword%");
+                        });
+                    });
             });
         }
 

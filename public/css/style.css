@@ -131,26 +131,26 @@ img {
 
 .request {
     display: inline-block;
-    width: 45px;
+    width: 70px;
     border: 1px dotted #CCC;
     padding: 5px;
-    background-color: #FFC
+    background-color: #f1f1f1
 }
 
 .start {
     display: inline-block;
-    width: 45px;
+    width: 70px;
     border: 1px dotted #CCC;
     padding: 5px;
-    background-color: #E1FFF0
+    background-color: #f1f1f1
 }
 
 .end {
     display: inline-block;
-    width: 45px;
+    width: 70px;
     border: 1px dotted #CCC;
     padding: 5px;
-    background-color: #FFECF2
+    background-color: #f1f1f1
 }
 
 .topicMeeting {
