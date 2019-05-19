@@ -42,6 +42,7 @@ Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');
 Route::resource('setting/st-driver', 'Setting\\StDriverController');
 
 // จองห้องประชุม
+Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
 Route::resource('booking-room', 'BookingRoomController');
 
 // จองยานพาหนะ

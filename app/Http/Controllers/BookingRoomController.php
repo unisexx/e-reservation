@@ -10,6 +10,8 @@ use App\Model\BookingRoom;
 
 use App\Http\Requests\BookingRoomRequest;
 
+use Mail;
+
 class BookingRoomController extends Controller
 {
     /**
@@ -108,7 +110,7 @@ class BookingRoomController extends Controller
         
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-room');
+        return redirect('booking-room/summary/'.$rs->id);
     }
 
     /**
@@ -153,7 +155,25 @@ class BookingRoomController extends Controller
         $requestData['end_date'] = Date2DB($request->end_date);
         
         $rs = BookingRoom::findOrFail($id);
+
+        $email = 0;
+        if($rs->status != $requestData['status']){
+            $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
+        }
+
         $rs->update($requestData);
+
+        // ฟอร์มอีเมล์
+        if($email == 1){
+            
+            Mail::send([], [], function ($message) use ($rs) {
+            $message->to($rs->request_email)
+                ->subject('อัพเดทสถานะการจองห้องประชุม')
+                ->setBody('สถานะการจองห้องประชุม: '.$rs->status , 'text/html'); // for HTML rich messages
+            });
+
+        }
+        //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
         return redirect('booking-room');
@@ -174,5 +194,17 @@ class BookingRoomController extends Controller
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
         return redirect('booking-room');
+    }
+
+    /**
+     * custom method by เดียร์ ชริลแมว
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function summary($id)
+    {
+        $rs = BookingRoom::findOrFail($id);
+        return view('booking-room.summary', compact('rs'));
     }
 }
