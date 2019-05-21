@@ -10,6 +10,8 @@ use App\Model\BookingVehicle;
 
 use App\Http\Requests\BookingVehicleRequest;
 
+use Mail;
+
 class BookingVehicleController extends Controller
 {
     /**
@@ -168,7 +170,25 @@ class BookingVehicleController extends Controller
         $requestData['end_date'] = Date2DB($request->end_date);
         
         $rs = BookingVehicle::findOrFail($id);
+
+        $email = 0;
+        if($rs->status != $requestData['status']){
+            $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
+        }
+
         $rs->update($requestData);
+
+        // ฟอร์มอีเมล์
+        if($email == 1){
+            
+            Mail::send([], [], function ($message) use ($rs) {
+            $message->to($rs->request_email)
+                ->subject('อัพเดทสถานะการจองยานพาหนะ')
+                ->setBody('สถานะการจองยานพาหนะ: '.$rs->status , 'text/html'); // for HTML rich messages
+            });
+
+        }
+        //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
         return redirect('booking-vehicle');

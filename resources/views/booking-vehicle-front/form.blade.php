@@ -98,19 +98,18 @@ if (isset($rs->st_bureau_code)) {
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
-<div class="form-group form-inline col-md-12" style="display:none;">
+<div class="form-group form-inline col-md-12">
     <label>สถานะ</label>
-    <select name="status" class="form-control" style="width:auto;">
+    <select name="status" class="form-control" style="width:auto;" readonly>
         <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-        <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+        <!-- <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
         <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-        <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
+        <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option> -->
     </select>
     
     <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
     <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
-    <a class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
-    <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
+    <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
 </div>
 
 <div class="form-group form-inline col-md-12">
@@ -130,7 +129,7 @@ if (isset($rs->st_bureau_code)) {
             <div id="searchBox">
                 <form class="form-inline">
                     <input id="searchTxt" type="text" class="form-control" style="width:400px; display:inline;" placeholder="ชื่อพนักงานขับรถ / รายละเอียดรถ" />
-                    <button id="searchBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+                    <button id="searchBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
                 </form>
             </div>
         </div>
@@ -156,6 +155,11 @@ if (isset($rs->st_bureau_code)) {
 
 <script>
     $(document).ready(function() {
+        // โชว์รายการยานพาหนะตอนกดปุ่มเลือกห้องประชุม
+        $('#openCbox').click(function(){
+            $('#searchBtn').trigger('click');
+        });
+
         // ค้นหายานพาหนะ
         $('body').on('click', '#searchBtn', function() {
             $('#getData').html('<i class="fas fa-spinner fa-pulse"></i>');

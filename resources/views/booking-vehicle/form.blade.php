@@ -38,23 +38,29 @@ if (isset($rs->st_bureau_code)) {
     น.
 </div>
 
-<div class="form-group form-inline col-md-12">
-    <label>วันที่ไป<span class="Txt_red_12"> *</span> / วันที่กลับ<span class="Txt_red_12"> *</span></label>
+<div class="form-group form-inline col-md-6">
+    <label>วันที่ไป<span class="Txt_red_12"> *</span></label>
     <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" />
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" />
     น.
-    /
+</div>
+<div class="form-group form-inline col-md-6">
+    <label>วันที่กลับ<span class="Txt_red_12"> *</span></label>
     <input name="end_date" type="text" class="form-control datepicker fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" />
     <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" />
-    น
+    น.
 </div>
 
 <div class="form-group form-inline col-md-12">
-    <label>จุดขึ้นรถ<span class="Txt_red_12"> *</span></label>
+    <label>สถานที่ขึ้นรถ<span class="Txt_red_12"> *</span></label>
     <div style="margin-bottom:5px;">
-        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
-        <input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
+        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;"> 
+        เวลา<input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
     </div>
+</div>
+
+<div class="form-group form-inline col-md-12">
+    <label>สถานที่ไป<span class="Txt_red_12"> *</span></label>
     <input name="destination" type="text" class="form-control {{ $errors->has('destination') ? 'has-error' : '' }}" placeholder="สถานที่ไป" value="{{ isset($rs->destination) ? $rs->destination : old('destination') }}" style="width:400px;">
 </div>
 
@@ -98,21 +104,25 @@ if (isset($rs->st_bureau_code)) {
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
+
 <div class="form-group form-inline col-md-12">
-    <label>สถานะ</label>
-    <select name="status" class="form-control" style="width:auto;">
-        <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-        <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
-        <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-        <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
-    </select>
-    
-    <span id="selectVehicleBlock">
-        <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
-        <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
-        <a class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
-        <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
-    </span>
+<fieldset>
+    <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+        <label>สถานะ</label>
+        <select name="status" class="form-control" style="width:auto;">
+            <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('รออนุมัติ') }}">รออนุมัติ</option>
+            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('อนุมัติ') }}">อนุมัติ</option>
+            <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('ไม่อนุมัติ') }}">ไม่อนุมัติ</option>
+            <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}} style="color:{{ colorStatus('ยกเลิก') }}">ยกเลิก</option>
+        </select>
+        
+        <span id="selectVehicleBlock">
+            <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
+            <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
+            <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
+            <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
+        </span>
+    </fieldset>
 </div>
 
 <div class="form-group form-inline col-md-12">
@@ -132,7 +142,7 @@ if (isset($rs->st_bureau_code)) {
             <div id="searchBox">
                 <form class="form-inline">
                     <input id="searchTxt" type="text" class="form-control" style="width:400px; display:inline;" placeholder="ชื่อพนักงานขับรถ / รายละเอียดรถ" />
-                    <button id="searchBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+                    <button id="searchBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
                 </form>
             </div>
         </div>
@@ -159,11 +169,16 @@ if (isset($rs->st_bureau_code)) {
 <script>
     $(document).ready(function() {
         // เช็กสถานะ
-        chkStatus();
+        // chkStatus();
 
         // กดเปลี่ยนสถานะ
-        $('body').on('change', 'select[name=status]', function() {
-            chkStatus();
+        // $('body').on('change', 'select[name=status]', function() {
+        //     chkStatus();
+        // });
+
+        // โชว์รายการยานพาหนะตอนกดปุ่มเลือกห้องประชุม
+        $('#openCbox').click(function(){
+            $('#searchBtn').trigger('click');
         });
 
         // ค้นหายานพาหนะ

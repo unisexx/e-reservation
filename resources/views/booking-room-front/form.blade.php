@@ -24,7 +24,7 @@ if (isset($rs->st_bureau_code)) {
 
     <input id="tmpStRoomName" type="text" class="form-control {{ $errors->has('st_room_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : '' }}" required >
     <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
-    <a class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
+    <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
 </div>
 
 
@@ -137,6 +137,11 @@ if (isset($rs->st_bureau_code)) {
 
 <script>
     $(document).ready(function() {
+        // โชว์รายการห้องประชุมตอนกดปุ่มเลือกห้องประชุม
+        $('#openCbox').click(function(){
+            $('#searchRoomBtn').trigger('click');
+        });
+
         // ค้นหาห้องประชุม
         $('body').on('click', '#searchRoomBtn', function() {
             $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');

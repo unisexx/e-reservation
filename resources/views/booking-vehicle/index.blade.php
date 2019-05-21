@@ -69,7 +69,7 @@
         <th style="width:3%" class="nosort" data-sortcolumn="0" data-sortkey="0-0">ลำดับ</th>
         <th style="width:5%" class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
         <th style="width:25%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
-        <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
+        <th style="width:18%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
         <th style="width:10%" class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
