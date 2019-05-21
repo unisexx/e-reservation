@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+        plugins: [ 'dayGrid', 'list' ],
+        buttonText: {
+            list:   'รายการ',
+            prev:   'เดือนก่อนหน้า',
+            next:   'เดือนถัดไป',
+        },
         customButtons: {
             addBtn: {
                 text: '+ เพิ่มรายการ',
@@ -29,68 +34,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // defaultDate: '2019-03-12',
         locale: 'th',
         buttonIcons: false, // show the prev/next text
-        weekNumbers: true,
+        weekNumbers: false,
         navLinks: true, // can click day/week names to navigate views
         // editable: true,
         eventLimit: true, // allow "more" link when too many events
         events: [
-            // {
-            //     title: 'All Day Event',
-            //     start: '2019-03-01'
-            // },
-            // {
-            //     title: 'Long Event',
-            //     start: '2019-03-07',
-            //     end: '2019-03-10'
-            // },
-            // {
-            //     groupId: 999,
-            //     title: 'Repeating Event',
-            //     start: '2019-03-09T16:00:00'
-            // },
-            // {
-            //     groupId: 999,
-            //     title: 'Repeating Event',
-            //     start: '2019-03-16T16:00:00'
-            // },
-            // {
-            //     title: 'Conference',
-            //     start: '2019-03-11',
-            //     end: '2019-03-13'
-            // },
-            // {
-            //     title: 'Meeting',
-            //     start: '2019-03-12T10:30:00',
-            //     end: '2019-03-12T12:30:00'
-            // },
-            // {
-            //     title: 'Lunch',
-            //     start: '2019-03-12T12:00:00'
-            // },
-            // {
-            //     title: 'Meeting',
-            //     start: '2019-03-12T14:30:00'
-            // },
-            // {
-            //     title: 'Happy Hour',
-            //     start: '2019-03-12T17:30:00'
-            // },
-            // {
-            //     title: 'Dinner',
-            //     start: '2019-03-12T20:00:00'
-            // },
-            // {
-            //     title: 'Birthday Party',
-            //     start: '2019-03-13T07:00:00'
-            // },
-            // {
-            //     title: 'Click for Google',
-            //     url: 'http://google.com/',
-            //     start: '2019-03-28'
-            // },
             @foreach($rs as $key=>$row)
             {
-                title: '[{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
+                shortTitle: '[{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
+                title: '({{ $row->status }})\n {{ $row->gofor }}\nรายละเอียดรถ: {{ @$row->st_vehicle->st_vehicle_type->name }} {{ @$row->st_vehicle->brand }} {{ @$row->st_vehicle->seat }} ที่นั่ง {{ @$row->st_vehicle->color }} ทะเบียน {{ @$row->st_vehicle->reg_number }}\nสถานที่ขึ้นรถ: {{ $row->point_place }} เวลา {{ $row->point_time }}\nสถานที่ไป: {{ $row->destination }}',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}',
                 color: colorEvent["{{ $row->status }}"],
@@ -101,6 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
             hour: '2-digit',
             minute: '2-digit',
             // second: '2-digit'
+        },
+        eventRender: function(info) {
+            // console.log(info.view.type);
+            console.log(info.el.childNodes);
+            // console.log(info.event.extendedProps.description);
+            
+            $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
         }
     });
 
@@ -117,9 +76,19 @@ font-size: 12px;
 }
 
 #calendar {
-max-width: 900px;
+max-width: 90%;
 margin: 40px auto;
 padding: 0 10px;
+}
+
+.fc-addBtn-button{
+    color: #fff !important;
+    background-color: #5cb85c !important;
+    border-color: #4cae4c !important;
+}
+
+.fc-day-grid-event .fc-content{
+    white-space: normal;
 }
 </style>
 
