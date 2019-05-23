@@ -40,7 +40,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>วันที่ไป<span class="Txt_red_12"> *</span> / วันที่กลับ<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : DB2Date($_GET['start_date']) }}" style="width:120px;" />
+    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" />
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" />
     น.
     /
