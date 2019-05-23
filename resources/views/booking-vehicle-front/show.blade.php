@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             @foreach($rs as $key=>$row)
             {
                 shortTitle: '[{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
-                title: '({{ $row->status }})\n{{ $row->gofor }}\nรายละเอียดรถ: {{ @$row->st_vehicle->st_vehicle_type->name }} {{ @$row->st_vehicle->brand }} {{ @$row->st_vehicle->seat }} ที่นั่ง {{ @$row->st_vehicle->color }} ทะเบียน {{ @$row->st_vehicle->reg_number }}\nสถานที่ขึ้นรถ: {{ $row->point_place }} เวลา {{ $row->point_time }}\nสถานที่ไป: {{ $row->destination }}',
+                title: 'สถานะ: {{ $row->status }}\n{{ $row->gofor }}\nรายละเอียดรถ: {{ @$row->st_vehicle->st_vehicle_type->name }} {{ @$row->st_vehicle->brand }} {{ @$row->st_vehicle->seat }} ที่นั่ง {{ @$row->st_vehicle->color }} ทะเบียน {{ @$row->st_vehicle->reg_number }}\nสถานที่ขึ้นรถ: {{ $row->point_place }} เวลา {{ $row->point_time }}\nสถานที่ไป: {{ $row->destination }}',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}',
                 color: "{{ colorStatus($row->status) }}",
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
         },
         eventClick: function(info) {
-            alert('Event: ' + info.event.title);
+            alert(info.event.title);
             // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
             // alert('View: ' + info.view.type);
 
