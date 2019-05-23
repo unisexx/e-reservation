@@ -38,23 +38,29 @@ if (isset($rs->st_bureau_code)) {
     น.
 </div>
 
-<div class="form-group form-inline col-md-12">
-    <label>วันที่ไป<span class="Txt_red_12"> *</span> / วันที่กลับ<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" />
+<div class="form-group form-inline col-md-6">
+    <label>วันที่ไป<span class="Txt_red_12"> *</span></label>
+    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" />
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" />
     น.
-    /
+</div>
+<div class="form-group form-inline col-md-6">
+    <label>วันที่กลับ<span class="Txt_red_12"> *</span></label>
     <input name="end_date" type="text" class="form-control datepicker fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" />
     <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" />
-    น
+    น.
 </div>
 
 <div class="form-group form-inline col-md-12">
-    <label>จุดขึ้นรถ<span class="Txt_red_12"> *</span></label>
+    <label>สถานที่ขึ้นรถ<span class="Txt_red_12"> *</span></label>
     <div style="margin-bottom:5px;">
-        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
-        <input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
+        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;"> 
+        เวลา<input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
     </div>
+</div>
+
+<div class="form-group form-inline col-md-12">
+    <label>สถานที่ไป<span class="Txt_red_12"> *</span></label>
     <input name="destination" type="text" class="form-control {{ $errors->has('destination') ? 'has-error' : '' }}" placeholder="สถานที่ไป" value="{{ isset($rs->destination) ? $rs->destination : old('destination') }}" style="width:400px;">
 </div>
 

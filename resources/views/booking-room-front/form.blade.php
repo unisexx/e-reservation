@@ -35,7 +35,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span> / จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
+    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
     น.
     -
@@ -98,7 +98,7 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <div id="btnBoxAdd">
-    <input name="input" type="submit" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
+    <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-vehicle-type') }}'" class="btn btn-default" style="width:100px;" />
 </div>
 
@@ -113,6 +113,14 @@ if (isset($rs->st_bureau_code)) {
             <div id="searchBox">
                 <form class="form-inline">
                     <input id="searchTxt" type="text" class="form-control" style="width:400px; display:inline;" placeholder="ชื่อห้องประชุม" />
+
+                    <select id="searchDepartment" class="selectpicker" data-live-search="true" title="กรม">
+                        <option value="">+ กรม +</option>
+                        @foreach($st_departments as $item)
+                            <option value="{{ $item->code }}">{{ $item->title }}</option>
+                        @endforeach
+                    </select>
+
                     <button id="searchRoomBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
                 </form>
             </div>
@@ -147,15 +155,16 @@ if (isset($rs->st_bureau_code)) {
             $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');
 
             $.ajax({
-                    url: '{{ url("ajaxGetRoom") }}',
-                    data: {
-                        search: $("#searchTxt").val(),
-                    }
-                })
-                .done(function(data) {
-                    // console.log(data);
-                    $('#getRoomData').html(data);
-                });
+                url: '{{ url("ajaxGetRoom") }}',
+                data: {
+                    search: $("#searchTxt").val(),
+                    depertment_code: $("#searchDepartment").val(),
+                }
+            })
+            .done(function(data) {
+                // console.log(data);
+                $('#getRoomData').html(data);
+            });
         });
 
         // กดปุ่มเลือกห้องประชุม
@@ -166,5 +175,41 @@ if (isset($rs->st_bureau_code)) {
             // ปิด colorbox
             $.colorbox.close();
         });
+
+        $("#submitFormBtn").click(function(){
+            chkOverlap();
+        });
     });
+
+    // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
+    // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
+    function chkOverlap(){
+        $.ajax({
+                url: '{{ url("ajaxRoomChkOverlap") }}',
+                data: {
+                    start_date: $('input[name=start_date]').val(),
+                    start_time: $('input[name=start_time]').val(),
+                    end_date: $('input[name=end_date]').val(),
+                    end_time: $('input[name=end_time]').val(),
+                    st_room_id: $('input[name=st_room_id]').val(),
+                    id: "{{ @$rs->id }}",
+                }
+            })
+            .done(function(data) {
+                console.log(data);
+                if( data == 'เหลื่อม' ){
+                    var r = confirm("ช่วงเวลาการจองของท่าน ซ้อนกับรายการจองอื่น ท่านต้องการยืนยันการจองนี้หรือไม่");
+                    if (r == true) { // คลิกตกลง
+                        // txt = "You pressed OK!";
+                        $('form').submit();
+                    } else { // คลิกยกเลิก
+                        // txt = "You pressed Cancel!";
+                        $('input[name=start_time]').focus();
+                        $('input[name=start_time]').css('border-color','#a94442');
+                    }
+                }else if(data == 'ไม่เหลื่อม'){
+                    $('form').submit();
+                }
+            });
+    }
 </script>
