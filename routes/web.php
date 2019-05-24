@@ -33,6 +33,7 @@ Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
 Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
 Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
+Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');
 
 
 // ตั้งค่า

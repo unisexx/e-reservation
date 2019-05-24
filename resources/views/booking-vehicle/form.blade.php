@@ -127,7 +127,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <div id="btnBoxAdd">
-        <input name="input" type="submit" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
+        <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
         <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-vehicle') }}'" class="btn btn-default" style="width:100px;" />
     </div>
 </div>
@@ -205,6 +205,10 @@ if (isset($rs->st_bureau_code)) {
             // ปิด colorbox
             $.colorbox.close();
         });
+
+        $("#submitFormBtn").click(function(){
+            chkOverlap();
+        });
     });
 
     // ถ้าสถานะอนุมัติ ให้เลือกยานพาหนะ, สถานะอื่น ซ่อน
@@ -215,5 +219,37 @@ if (isset($rs->st_bureau_code)) {
         }else{
             $('#selectVehicleBlock').hide();
         }
+    }
+
+    // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
+    // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
+    function chkOverlap(){
+        $.ajax({
+                url: '{{ url("ajaxVehicleChkOverlap") }}',
+                data: {
+                    start_date: $('input[name=start_date]').val(),
+                    start_time: $('input[name=start_time]').val(),
+                    end_date: $('input[name=end_date]').val(),
+                    end_time: $('input[name=end_time]').val(),
+                    st_vehicle_id: $('input[name=st_vehicle_id]').val(),
+                    id: "{{ @$rs->id }}",
+                }
+            })
+            .done(function(data) {
+                console.log(data);
+                if( data == 'เหลื่อม' ){
+                    var r = confirm("ช่วงเวลาการจองของท่าน ซ้อนกับรายการจองอื่น ท่านต้องการยืนยันการจองนี้หรือไม่");
+                    if (r == true) { // คลิกตกลง
+                        // txt = "You pressed OK!";
+                        $('form').submit();
+                    } else { // คลิกยกเลิก
+                        // txt = "You pressed Cancel!";
+                        $('input[name=start_time]').focus();
+                        $('input[name=start_time]').css('border-color','#a94442');
+                    }
+                }else if(data == 'ไม่เหลื่อม'){
+                    $('form').submit();
+                }
+            });
     }
 </script>
