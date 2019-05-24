@@ -122,9 +122,8 @@ class BookingVehicleController extends Controller
         $rs->code = 'RV'.sprintf("%05d", $data->id);
         $rs->save();
         
-
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-vehicle');
+        return redirect('booking-vehicle/summary/'.$rs->id);
     }
 
     /**
@@ -209,5 +208,17 @@ class BookingVehicleController extends Controller
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
         return redirect('booking-vehicle');
+    }
+
+    /**
+     * custom method by เดียร์ ชริลแมว
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function summary($id)
+    {
+        $rs = BookingVehicle::findOrFail($id);
+        return view('booking-vehicle.summary', compact('rs'));
     }
 }

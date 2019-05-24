@@ -106,9 +106,8 @@ class BookingRoomFrontController extends Controller
         $rs->code = 'RR'.sprintf("%05d", $data->id);
         $rs->save();
         
-
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-room-front/show');
+        return redirect('booking-room-front/summary/'.$rs->id);
     }
 
     /**
@@ -174,5 +173,17 @@ class BookingRoomFrontController extends Controller
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
         return redirect('booking-room-front/show');
+    }
+
+    /**
+     * custom method by เดียร์ ชริลแมว
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function summary($id)
+    {
+        $rs = BookingRoom::findOrFail($id);
+        return view('booking-room-front.summary', compact('rs'));
     }
 }

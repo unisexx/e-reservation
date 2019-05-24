@@ -19,6 +19,8 @@ Route::get('/', function () {
 });
 
 // Booking
+Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
+Route::get('booking-vehicle-front/summary/{id}', 'BookingVehicleFrontController@summary');
 Route::resource('booking-room-front', 'BookingRoomFrontController');
 Route::resource('booking-vehicle-front', 'BookingVehicleFrontController');
 
@@ -46,6 +48,7 @@ Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
 Route::resource('booking-room', 'BookingRoomController');
 
 // จองยานพาหนะ
+Route::get('booking-vehicle/summary/{id}', 'BookingVehicleController@summary');
 Route::resource('booking-vehicle', 'BookingVehicleController');
 
 // log
