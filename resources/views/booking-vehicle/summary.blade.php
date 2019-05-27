@@ -34,19 +34,19 @@
 </tr>
 <tr>
     <th>วันที่ขอใช้</th>
-    <td>{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '-' }} เวลา {{ isset($rs->request_time) ? date("g:i", strtotime($rs->request_time)) : '-' }} น.</td>
+    <td>{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '-' }} เวลา {{ isset($rs->request_time) ? date("H:i", strtotime($rs->request_time)) : '-' }} น.</td>
 </tr>
 <tr>
     <th>วันที่ไป</th>
-    <td>{{ isset($rs->start_date) ? DB2Date($rs->start_date) : '-' }} เวลา {{ isset($rs->start_time) ? date("g:i", strtotime($rs->start_time)) : '-' }} น.</td>
+    <td>{{ isset($rs->start_date) ? DB2Date($rs->start_date) : '-' }} เวลา {{ isset($rs->start_time) ? date("H:i", strtotime($rs->start_time)) : '-' }} น.</td>
 </tr>
 <tr>
     <th>วันที่กลับ</th>
-    <td>{{ isset($rs->end_date) ? DB2Date($rs->end_date) : '-' }} เวลา {{ isset($rs->end_time) ? date("g:i", strtotime($rs->end_time)) : '-' }} น.</td>
+    <td>{{ isset($rs->end_date) ? DB2Date($rs->end_date) : '-' }} เวลา {{ isset($rs->end_time) ? date("H:i", strtotime($rs->end_time)) : '-' }} น.</td>
 </tr>
 <tr>
     <th>สถานที่ขึ้นรถ / เวลา</th>
-    <td>{{ isset($rs->point_place) ? $rs->point_place : '-' }} เวลา {{ isset($rs->point_time) ? date("g:i", strtotime($rs->point_time)) : '-' }} น.</td>
+    <td>{{ isset($rs->point_place) ? $rs->point_place : '-' }} เวลา {{ isset($rs->point_time) ? date("H:i", strtotime($rs->point_time)) : '-' }} น.</td>
 </tr>
 <tr>
     <th>สถานที่ไป</th>
