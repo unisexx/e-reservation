@@ -79,6 +79,11 @@ class StVehicle extends Model
         return $this->hasOne('App\Model\StDriver', 'id', 'st_driver_id');
     }
 
+    public function bookingVehicle()
+    {
+        return $this->hasMany('App\Model\BookingVehicle', 'st_vehicle_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'st_vehicle_type_id',

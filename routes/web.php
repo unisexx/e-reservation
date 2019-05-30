@@ -54,3 +54,8 @@ Route::resource('booking-vehicle', 'BookingVehicleController');
 
 // log
 Route::resource('log', 'LogController');
+
+// รายงาน
+Route::get('report1', 'ReportController@report1');
+Route::get('report2', 'ReportController@report2');
+
