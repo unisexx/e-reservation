@@ -2,15 +2,15 @@
 
 @section('content')
 
-<h3>จองห้องประชุม</h3>
+<h3>จองทรัพยากร</h3>
 
 @if(empty(request('export')))
 
 <div id="search">
     <div id="searchBox">
-        <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
+        <form method="GET" action="{{ url('booking-resource') }}" accept-charset="UTF-8" class="form-inline" role="search">
 
-            <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อการประชุม / ผู้ขอใช้ห้องประชุม" name="search" value="{{ request('search') }}">
+            <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อ / ผู้ขอใช้" name="search" value="{{ request('search') }}">
 
             <select name="date_type" class="form-control">
                 <option value="start_date" @if(request('date_type') == 'start_date') selected @endif>วันที่เริ่ม</option>
@@ -28,7 +28,7 @@
 
 
 <div id="btnBox"> 
-    <a href="{{ url('/booking-room/show') }}">
+    <a href="{{ url('/booking-resource/show') }}">
         <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
     </a>
     <?php
@@ -37,11 +37,11 @@
             $get .= ($get) ? '&'.$key.'='.$value : $key.'='.$value;
         }
     ?>
-    <a href="{{ url('booking-room?export=excel&'.$get) }}">
+    <a href="{{ url('booking-resource?export=excel&'.$get) }}">
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
-    @if(CanPerm('booking-room-create'))
-        <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+    @if(CanPerm('booking-resource-create'))
+        <input type="button" title="จองทรัพยากร" value="จองทรัพยากร" onclick="document.location='{{ url('/booking-resource/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
 
@@ -57,9 +57,9 @@
     <tr>
         <th style="width:5%" class="nosort" data-sortcolumn="0" data-sortkey="0-0">ลำดับ</th>
         <th style="width:10%" class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
-        <th style="width:30%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">หัวข้อการประชุม / ห้องประชุม</th>
-        <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วัน เวลา ที่ต้องการใช้ห้อง</th>
-        <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">ผู้ขอใช้ห้องประชุม</th>
+        <th style="width:30%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">หัวข้อ</th>
+        <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วัน เวลา ที่ต้องการใช้</th>
+        <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">ผู้ขอใช้</th>
         <th style="width:5%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะ</th>
         @if(empty(request('export')))
         <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="6-0">จัดการ</th>
@@ -79,14 +79,6 @@
         <td nowrap="nowrap">{{ $row->code }}</td>
         <td>
             <div class="topicMeeting">{{ $row->title }}</div>
-            {{ $row->st_room->name }} 
-            @if(empty(request('export')))
-                <img src="{{ url('images/detail.png') }}" class="vtip" title="
-                <u>จำนวนคนที่รับรองได้</u> {{ $row->st_room->people }} คน<br>
-                <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
-                <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
-                <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
-            @endif
         </td>
         <td>
             <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
@@ -101,15 +93,15 @@
         <td>{{ $row->status }}</td>
         @if(empty(request('export')))
         <td>
-            @if(CanPerm('booking-room-edit'))
-            <a href="{{ url('booking-room/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
+            @if(CanPerm('booking-resource-edit'))
+            <a href="{{ url('booking-resource/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
             </a>
             @endif
             
             
-            @if(CanPerm('booking-room-delete'))
-            <form method="POST" action="{{ url('booking-room' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
+            @if(CanPerm('booking-resource-delete'))
+            <form method="POST" action="{{ url('booking-resource' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
                 {{ method_field('DELETE') }}
                 {{ csrf_field() }}
                 <button type="submit" title="ลบรายการนี้" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">

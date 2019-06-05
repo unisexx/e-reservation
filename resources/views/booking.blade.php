@@ -94,7 +94,7 @@
                         </li>
                         <li><i class="fa fa-envelope" style="font-size:14px;"></i><a
                                 href="mailto:ictcsupport@m-society.go.th">ictcsupport@m-society.go.th</a> <i class="fa fa-phone"
-                                style="padding-left:20px; padding-right:5px;  font-size:18px;"></i> 0-2202-9004-5</li>
+                                style="padding-left:20px; padding-right:5px;  font-size:18px;"></i> 0-2202-9001</li>
                     </ul>
                 </div>
                 <div class="col-md-5 text-right copyright">

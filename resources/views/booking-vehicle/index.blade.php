@@ -57,7 +57,7 @@
 </div>
 
 <div class="pagination-wrapper">
-    {!! $rs->appends(['search' => Request::get('search')])->render() !!}
+    {!! $rs->appends(@$_GET)->render() !!} 
 </div>
 
 @endif
@@ -139,7 +139,7 @@
 
 @if(empty(request('export')))
 <div class="pagination-wrapper">
-    {!! $rs->appends(['search' => Request::get('search')])->render() !!}
+    {!! $rs->appends(@$_GET)->render() !!} 
 </div>
 @endif
 
