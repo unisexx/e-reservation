@@ -19,7 +19,7 @@
         <th>เปิด/ปิด</th>
         <td>
             <input name="status" type="hidden" value="0" checked="chedked" />
-            <input name="status" type="checkbox" id="status" checked value="1" {!! (@$rs->status == 1 ||
+            <input name="status" type="checkbox" id="status" value="1" {!! (@$rs->status == 1 ||
             empty($rs->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>

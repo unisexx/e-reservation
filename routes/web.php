@@ -20,9 +20,13 @@ Route::get('/', function () {
 
 // Booking
 Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
-Route::get('booking-vehicle-front/summary/{id}', 'BookingVehicleFrontController@summary');
 Route::resource('booking-room-front', 'BookingRoomFrontController');
+
+Route::get('booking-vehicle-front/summary/{id}', 'BookingVehicleFrontController@summary');
 Route::resource('booking-vehicle-front', 'BookingVehicleFrontController');
+
+Route::get('booking-resource-front/summary/{id}', 'BookingResourceFrontController@summary');
+Route::resource('booking-resource-front', 'BookingResourceFrontController');
 
 // Dashboard
 Route::get('/home', 'HomeController@index')->name('home');
@@ -34,6 +38,7 @@ Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
 Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
 Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');
+Route::get('ajaxResourceChkOverlap', 'AjaxController@ajaxResourceChkOverlap');
 
 
 // ตั้งค่า

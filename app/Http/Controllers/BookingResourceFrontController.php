@@ -10,9 +10,9 @@ use App\Model\BookingResource;
 
 use App\Http\Requests\BookingResourceRequest;
 
-use Mail;
+// use Mail;
 
-class BookingResourceController extends Controller
+class BookingResourceFrontController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -21,7 +21,7 @@ class BookingResourceController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -32,7 +32,7 @@ class BookingResourceController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-resource-view');
+        // ChkPerm('booking-resource-view');
 
         $keyword = $request->get('search');
         $st_resource_id = $request->get('st_resource_id');
@@ -90,9 +90,9 @@ class BookingResourceController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-resource-create', 'booking-resource');
+        // ChkPerm('booking-resource-create', 'booking-resource');
 
-        return view('booking-resource.create');
+        return view('booking-resource-front.create');
     }
 
     /**
@@ -115,7 +115,7 @@ class BookingResourceController extends Controller
         
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-resource/summary/'.$rs->id);
+        return redirect('booking-resource-front/summary/'.$rs->id);
     }
 
     /**
@@ -128,7 +128,7 @@ class BookingResourceController extends Controller
     {
         $rs = BookingResource::select('*');
         $rs = $rs->orderBy('id','desc')->get();
-        return view('booking-resource.show', compact('rs'));
+        return view('booking-resource-front.show', compact('rs'));
     }
 
     /**
@@ -140,7 +140,7 @@ class BookingResourceController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-resource-edit','booking-resource');
+        // ChkPerm('booking-resource-edit','booking-resource');
 
         $rs = BookingResource::findOrFail($id);
         return view('booking-resource.edit', compact('rs'));
@@ -193,7 +193,7 @@ class BookingResourceController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-resource-delete','booking-resource');
+        // ChkPerm('booking-resource-delete','booking-resource');
 
         BookingResource::destroy($id);
 
@@ -210,6 +210,6 @@ class BookingResourceController extends Controller
     public function summary($id)
     {
         $rs = BookingResource::findOrFail($id);
-        return view('booking-resource.summary', compact('rs'));
+        return view('booking-resource-front.summary', compact('rs'));
     }
 }

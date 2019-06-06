@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.front')
 
 @section('content')
 
@@ -14,10 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
             prev:   'เดือนก่อนหน้า',
             next:   'เดือนถัดไป',
         },
+        customButtons: {
+            addBtn: {
+                text: '+ เพิ่มรายการ',
+                click: function() {
+                    window.location.href = "/booking-resource-front/create";
+                }
+            }
+        },
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,listMonth'
+            right: 'dayGridMonth,listMonth addBtn'
         },
         // defaultDate: '2019-03-12',
         locale: 'th',
@@ -26,6 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks: true, // can click day/week names to navigate views
         // editable: true,
         eventLimit: false, // allow "more" link when too many events
+        selectable: true,
+        selectMirror: true,
+        select: function(arg) {
+            // console.log(arg.startStr);
+            window.location.href = "/booking-resource-front/create?start_date="+arg.startStr;
+        },
         events: [
             @foreach($rs as $key=>$row)
             {
@@ -79,11 +93,6 @@ padding: 0 10px;
 </style>
 
 <h3>จองทรัพยากร</h3>
-
-<div id="btnBox">
- <a href="{{ url('booking-resource') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>
-</div>
-<br clear="all">
 
 <div id='calendar'></div>
 

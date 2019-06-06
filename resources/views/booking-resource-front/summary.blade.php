@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.front')
 
 @section('content')
 
@@ -37,7 +37,7 @@
 </table>
 
 <div id="btnBoxAdd">
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-resource') }}'" class="btn btn-default" style="width:100px;" />
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-resource-front/show') }}'" class="btn btn-default" style="width:100px;" />
 </div>
 
 @endsection

@@ -65,7 +65,7 @@ class BookingResource extends Model
         return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
     }
 
-    public function st_resource()
+    public function stResource()
     {
         return $this->hasOne('App\Model\StResource', 'id', 'st_resource_id');
     }

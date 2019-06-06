@@ -10,6 +10,7 @@ use App\Model\StRoom;
 use App\Model\StVehicle;
 use App\Model\BookingRoom;
 use App\Model\BookingVehicle;
+use App\Model\BookingResource;
 
 class AjaxController extends Controller
 {
@@ -114,6 +115,36 @@ class AjaxController extends Controller
 
         $rs = BookingVehicle::select('id')
                 ->where('st_vehicle_id',$st_vehicle_id)
+                ->where(function($q) use ($start_date,$end_date){
+                    $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date,$start_date,$end_date,$end_date]);
+                })
+                ->where(function($q) use ($start_time,$end_time){
+                    $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time,$start_time,$end_time,$end_time]);
+                });
+
+        if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
+            $rs = $rs->where('id','<>',$id);
+        }
+                
+        $rs = $rs->get();
+        
+        if($rs->count() >= 1){
+            return 'เหลื่อม';
+        }else{
+            return 'ไม่เหลื่อม';
+        }
+    }
+
+    public function ajaxResourceChkOverlap(){
+        $st_resource_id = $_GET['st_resource_id'];
+        $start_date = Date2DB($_GET['start_date']);
+        $end_date = Date2DB($_GET['end_date']);
+        $start_time = $_GET['start_time'];
+        $end_time = $_GET['end_time'];
+        $id = $_GET['id'];
+
+        $rs = BookingResource::select('id')
+                ->where('st_resource_id',$st_resource_id)
                 ->where(function($q) use ($start_date,$end_date){
                     $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date,$start_date,$end_date,$end_date]);
                 })

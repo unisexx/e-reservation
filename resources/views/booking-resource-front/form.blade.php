@@ -36,7 +36,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
+    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
     น.
     -
@@ -85,22 +85,10 @@ if (isset($rs->st_bureau_code)) {
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
-<div class="form-group form-inline col-md-12">
-<fieldset>
-    <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
-        <label>สถานะ</label>
-        <select name="status" class="form-control" style="width:auto;">
-            <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
-            <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-            <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
-        </select>
-    </fieldset>
-</div>
-
 <div id="btnBoxAdd">
+    <input type="hidden" name="status" value="รออนุมัติ">
     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-room') }}'" class="btn btn-default" style="width:100px;" />
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-resource-front/show') }}'" class="btn btn-default" style="width:100px;" />
 </div>
 
 <script>

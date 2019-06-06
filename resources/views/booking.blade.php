@@ -47,7 +47,7 @@
             <div class="container">
 
                 <div class="row animatedParent">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="animated rotateInDownLeft">
                             <div class="service-box">
                                 <div class="service-icon">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="animated rotateInDownLeft slow">
                             <div class="service-box">
                                 <div class="service-icon">
@@ -71,6 +71,20 @@
                                     <h5>จองยานพาหนะ</h5>
                                     <div class="divider-header"></div>
                                     <a href="booking-vehicle-front/show" class="btn btn-skin">booking</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="animated rotateInDownLeft">
+                            <div class="service-box">
+                                <div class="service-icon">
+                                    <img src="images/resource.png">
+                                </div>
+                                <div class="service-desc">
+                                    <h5>จองทรัพยากร</h5>
+                                    <div class="divider-header"></div>
+                                    <a href="booking-resource-front/show" class="btn btn-skin">booking</a>
                                 </div>
                             </div>
                         </div>
