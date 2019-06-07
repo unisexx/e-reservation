@@ -27,7 +27,7 @@ if (isset($stroom->st_bureau_code)) {
             @if(isset($stroom->image))
             <img src="{{ url('uploads/room/'.$stroom->image) }}" width="90">
             @endif
-            <input type="file" name="image" />
+            <input type="file" name="image[]" multiple />
         </td>
     </tr>
     <tr>

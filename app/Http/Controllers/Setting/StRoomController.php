@@ -70,12 +70,23 @@ class StRoomController extends Controller
         $requestData = $request->all();
         
         // ไฟล์แนบ
-        if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
+        // if ($request->hasFile('image')) {
+        //     $imageName = time().'.'.request()->image->getClientOriginalExtension();
+        //     request()->image->move(public_path('uploads/room/'), $imageName);
 
-            $requestData['image'] = $imageName;
+        //     $requestData['image'] = $imageName;
+        // }
+
+        // ไฟล์แนบหลายไฟล์
+        $image=array();
+        if($files=$request->file('image')){
+            foreach($files as $file){
+                $name = time().'.'.$file->getClientOriginalExtension();
+                $file->move('uploads/room/',$name);
+                $image[]=$name;
+            }
         }
+        $requestData['image'] = implode("|",$image);
         
         StRoom::create($requestData);
 
@@ -127,12 +138,23 @@ class StRoomController extends Controller
         $requestData = $request->all();
 
         // ไฟล์แนบ
-        if ($request->hasFile('image')) {
-            $imageName = time().'.'.request()->image->getClientOriginalExtension();
-            request()->image->move(public_path('uploads/room/'), $imageName);
+        // if ($request->hasFile('image')) {
+        //     $imageName = time().'.'.request()->image->getClientOriginalExtension();
+        //     request()->image->move(public_path('uploads/room/'), $imageName);
 
-            $requestData['image'] = $imageName;
+        //     $requestData['image'] = $imageName;
+        // }
+
+        // ไฟล์แนบหลายไฟล์
+        $image=array();
+        if($files=$request->file('image')){
+            foreach($files as $file){
+                $name = time().'.'.$file->getClientOriginalExtension();
+                $file->move('uploads/room/',$name);
+                $image[]=$name;
+            }
         }
+        $requestData['image'] = implode("|",$image);
         
         $stroom = StRoom::findOrFail($id);
         $stroom->update($requestData);
