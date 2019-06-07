@@ -115,6 +115,7 @@ class BookingVehicleController extends Controller
         $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
+        $requestData['request_time'] = date("H:i");
         $data = BookingVehicle::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน

@@ -73,7 +73,7 @@
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
         <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
         <th style="width:10%" class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
-        <th style="width:5%" class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
+        <th style="width:10%" class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
         @if(empty(request('export')))
         <th style="width:10%" class="nosort" data-sortcolumn="7" data-sortkey="8-0">จัดการ</th>
         @endif
@@ -111,7 +111,7 @@
                 <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
             @endif
         </td>
-        <td><span style="color:{{ colorStatus($row->status) }}; font-weight:bold;">{{ $row->status }}</span></td>
+        <td><span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span></td>
         @if(empty(request('export')))
         <td>
             @if(CanPerm('booking-vehicle-edit'))
@@ -142,5 +142,13 @@
     {!! $rs->appends(@$_GET)->render() !!} 
 </div>
 @endif
+
+<h5><b>ความหมายสีสถานะ</b></h5>
+<ul class="list-unstyled">
+    <li><span style="background-color:{{ colorStatus('รออนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> รออนุมัติ</li>
+    <li><span style="background-color:{{ colorStatus('อนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> อนุมัติ</li>
+    <li><span style="background-color:{{ colorStatus('ไม่อนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> ไม่อนุมัติ</li>
+    <li><span style="background-color:{{ colorStatus('ยกเลิก') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> ยกเลิก</li>
+</ul>
 
 @endsection

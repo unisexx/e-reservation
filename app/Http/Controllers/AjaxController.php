@@ -58,18 +58,18 @@ class AjaxController extends Controller
 
     public function ajaxGetVehicle()
     {
-        $rs = StVehicle::where('status', 'พร้อมใช้')
-                ->where('brand', 'like', '%' . $_GET['search'] . '%')
-                ->orWhere('seat', 'like', '%' . $_GET['search'] . '%')
-                ->orWhere('color', 'like', '%' . $_GET['search'] . '%')
-                ->orWhere('reg_number', 'like', '%' . $_GET['search'] . '%')
-                ->orWhereHas('st_driver',function($q){
-                    $q->where('name', 'like', '%' . $_GET['search'] . '%');
-                })
-                ->orWhereHas('st_vehicle_type',function($q){
-                    $q->where('name', 'like', '%' . $_GET['search'] . '%');
-                })
-                ->orderBy('id', 'asc')->get();
+        $rs = StVehicle::where('status', 'พร้อมใช้')->where(function($q){
+                    $q->where('brand', 'like', '%' . $_GET['search'] . '%')
+                    ->orWhere('seat', 'like', '%' . $_GET['search'] . '%')
+                    ->orWhere('color', 'like', '%' . $_GET['search'] . '%')
+                    ->orWhere('reg_number', 'like', '%' . $_GET['search'] . '%')
+                    ->orWhereHas('st_driver',function($q){
+                        $q->where('name', 'like', '%' . $_GET['search'] . '%');
+                    })
+                    ->orWhereHas('st_vehicle_type',function($q){
+                        $q->where('name', 'like', '%' . $_GET['search'] . '%');
+                    });
+                })->orderBy('id', 'asc')->get();
 
         // dd($rs);
         return view('ajax.ajaxGetVehicle', compact('rs'));

@@ -32,20 +32,20 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <div class="form-group form-inline col-md-12">
-    <label>วันที่ขอใช้<span class="Txt_red_12"> *</span></label>
+    <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
     <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : old('request_date') }}" style="width:120px;" />
-    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : old('request_time') }}" style="width:70px;" />
+    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : old('request_time') }}" style="width:70px;" readonly />
     น.
 </div>
 
 <div class="form-group form-inline col-md-6">
-    <label>วันที่ไป<span class="Txt_red_12"> *</span></label>
+    <label>วันที่จะไป (ขอใช้)<span class="Txt_red_12"> *</span></label>
     <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" />
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" />
     น.
 </div>
 <div class="form-group form-inline col-md-6">
-    <label>วันที่กลับ<span class="Txt_red_12"> *</span></label>
+    <label>วันที่จะกลับ<span class="Txt_red_12"> *</span></label>
     <input name="end_date" type="text" class="form-control datepicker fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" />
     <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" />
     น.
@@ -224,6 +224,12 @@ if (isset($rs->st_bureau_code)) {
     // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
     function chkOverlap(){
+        if(chkEndDateTime() == false){
+            alert('วันเวลาที่จะกลับห้ามน้อยกว่าวันเวลาที่จะไป');
+            $('input[name=end_date]').focus();
+            return false;
+        }
+        
         $.ajax({
                 url: '{{ url("ajaxVehicleChkOverlap") }}',
                 data: {
@@ -251,5 +257,25 @@ if (isset($rs->st_bureau_code)) {
                     $('form').submit();
                 }
             });
+    }
+
+    // เช็กวันที่กลับน้อยกว่าวันที่ไปหรือไม่
+    function chkEndDateTime(){
+        startDate = $('input[name=start_date]').val()+' '+$('input[name=start_time]').val();
+        endDate = $('input[name=end_date]').val()+' '+$('input[name=end_time]').val();
+        // console.log(startDate);
+        // console.log(endDate);
+        // console.log(toTimestamp(startDate));
+        // console.log(toTimestamp(endDate));
+
+        // ถ้า start_date น้อยกว่า  end_date
+        if(startDate > endDate){
+            return false;
+        }
+    }
+
+    function toTimestamp(strDate){
+        var datum = Date.parse(strDate);
+        return datum/1000;
     }
 </script>
