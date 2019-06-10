@@ -145,10 +145,10 @@
 
 <h5><b>ความหมายสีสถานะ</b></h5>
 <ul class="list-unstyled">
-    <li><span style="background-color:{{ colorStatus('รออนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> รออนุมัติ</li>
-    <li><span style="background-color:{{ colorStatus('อนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> อนุมัติ</li>
-    <li><span style="background-color:{{ colorStatus('ไม่อนุมัติ') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> ไม่อนุมัติ</li>
-    <li><span style="background-color:{{ colorStatus('ยกเลิก') }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px; margin-right:10px;"> </span> ยกเลิก</li>
+    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('รออนุมัติ') }};"> </span> รออนุมัติ</li>
+    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('อนุมัติ') }};"> </span> อนุมัติ</li>
+    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ</li>
+    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ยกเลิก') }};"> </span> ยกเลิก</li>
 </ul>
 
 @endsection

@@ -106,4 +106,5 @@ class ReportController extends Controller
 
         return view('report.report2', compact('rs'));
     }
+
 }

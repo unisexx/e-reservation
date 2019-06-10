@@ -906,3 +906,14 @@ span.red {
 table a:hover{
     text-decoration:none !important;
 }
+
+.fc-content{
+    font-size:14px;
+}
+
+.fc-event-dot {
+    display: inline-block;
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 15px !important;
+}
