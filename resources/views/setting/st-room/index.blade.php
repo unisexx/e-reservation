@@ -27,7 +27,7 @@
 <table class="tblist">
     <tr>
         <th>ลำดับ</th>
-        <th>ภาพห้องประชุม</th>
+        <th style="width:20%">ภาพห้องประชุม</th>
         <th style="width:20%">ชื่อห้องประชุม</th>
         <th style="width:30%">รายละเอียด</th>
         <th>สถานะ</th>
@@ -36,7 +36,16 @@
     @foreach($stroom as $key=>$item)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}</td>
-        <td>@if($item->image) <img src="{{ url('uploads/room/'.$item->image) }}" width="90"> @endif</td>
+        <td>
+            @if($item->image)
+                @php 
+                    $images = (explode("|",$item->image));
+                @endphp
+                @foreach($images as $image)
+                    <img src="{{ url('uploads/room/'.$image) }}" width="90"> 
+                @endforeach
+            @endif
+        </td>
         <td>{{ $item->name }}</td>
         <td>
             <div>จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>

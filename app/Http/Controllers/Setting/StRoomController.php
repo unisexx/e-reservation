@@ -78,15 +78,17 @@ class StRoomController extends Controller
         // }
 
         // ไฟล์แนบหลายไฟล์
-        $image=array();
-        if($files=$request->file('image')){
-            foreach($files as $file){
-                $name = time().'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/room/',$name);
-                $image[]=$name;
+        if ($request->hasFile('image')) {
+            $image=array();
+            if($files=$request->file('image')){
+                foreach($files as $key=>$file){
+                    $name = time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/room/',$name);
+                    $image[]=$name;
+                }
             }
+            $requestData['image'] = implode("|",$image);
         }
-        $requestData['image'] = implode("|",$image);
         
         StRoom::create($requestData);
 
@@ -146,15 +148,17 @@ class StRoomController extends Controller
         // }
 
         // ไฟล์แนบหลายไฟล์
-        $image=array();
-        if($files=$request->file('image')){
-            foreach($files as $file){
-                $name = time().'.'.$file->getClientOriginalExtension();
-                $file->move('uploads/room/',$name);
-                $image[]=$name;
+        if ($request->hasFile('image')) {
+            $image=array();
+            if($files=$request->file('image')){
+                foreach($files as $key=>$file){
+                    $name = time().'_'.$key.'.'.$file->getClientOriginalExtension();
+                    $file->move('uploads/room/',$name);
+                    $image[]=$name;
+                }
             }
+            $requestData['image'] = implode("|",$image);
         }
-        $requestData['image'] = implode("|",$image);
         
         $stroom = StRoom::findOrFail($id);
         $stroom->update($requestData);

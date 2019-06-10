@@ -22,10 +22,17 @@ if (isset($stroom->st_bureau_code)) {
 
 <table class="tbadd">
     <tr class="{{ $errors->has('image') ? 'has-error' : '' }}">
-        <th>ภาพห้องประชุม<span class="Txt_red_12"> *</span></th>
+        <th>ภาพห้องประชุม (เลือกได้หลายภาพ)<span class="Txt_red_12"> *</span></th>
         <td>
-            @if(isset($stroom->image))
-            <img src="{{ url('uploads/room/'.$stroom->image) }}" width="90">
+            @if(!empty($stroom->image))
+                <div style="margin-bottom:10px;">
+                    @php 
+                        $images = (explode("|",$stroom->image));
+                    @endphp
+                    @foreach($images as $image)
+                        <img src="{{ url('uploads/room/'.$image) }}" width="90">
+                    @endforeach
+                </div>
             @endif
             <input type="file" name="image[]" multiple />
         </td>
