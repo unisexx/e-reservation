@@ -1,7 +1,16 @@
 @foreach($rs as $key=>$item)
 <tr @if(($key % 2)==1) class="odd" @endif>
     <td>{{ $key+1 }}</td>
-    <td>@if($item->image) <img src="{{ url('uploads/room/'.$item->image) }}" width="90"> @endif</td>
+    <td>
+        @if($item->image)
+            @php 
+                $images = (explode("|",$item->image));
+            @endphp
+            @foreach($images as $image)
+                <img src="{{ url('uploads/room/'.$image) }}" width="90"> 
+            @endforeach
+        @endif
+    </td>
     <td>{{ $item->name }}</td>
     <td>
         <div>จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
