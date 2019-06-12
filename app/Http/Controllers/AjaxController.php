@@ -164,4 +164,10 @@ class AjaxController extends Controller
             return 'ไม่เหลื่อม';
         }
     }
+
+    public function ajaxGetBookingRoom(){
+        $data['rs'] = BookingRoom::where('code', $_GET['search'])->first();
+
+        return $data['rs'];
+    }
 }

@@ -274,13 +274,13 @@ Docs & License: https://fullcalendar.io/
             }, '<td class="' + (this.calendar.theme.getClass('tableListHeading') ||
                 this.calendar.theme.getClass('widgetHeader')) + '" colspan="3">' +
                 (mainFormat ?
-                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
+                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-main' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) + ' ' + core.htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
                     ) :
                     '') +
-                (altFormat ?
-                    core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
-                    ) :
-                    '') +
+                // (altFormat ?
+                //     core.buildGotoAnchorHtml(this, dayDate, { 'class': 'fc-list-heading-alt' }, core.htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
+                //     ) :
+                //     '') +
                 '</td>');
         };
         return ListView;

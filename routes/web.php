@@ -39,6 +39,7 @@ Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
 Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');
 Route::get('ajaxResourceChkOverlap', 'AjaxController@ajaxResourceChkOverlap');
+Route::get('ajaxGetBookingRoom', 'AjaxController@ajaxGetBookingRoom');
 
 
 // ตั้งค่า

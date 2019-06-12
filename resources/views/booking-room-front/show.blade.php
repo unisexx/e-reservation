@@ -59,7 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
             $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
         },
         eventClick: function(info) {
-            alert(info.event.title);
+            // alert(info.event.title);
+            $.colorbox({html:info.event.title.replace(/\n/g, "<br />")});
         }
     });
 
@@ -93,6 +94,39 @@ padding: 0 10px;
 </style>
 
 <h3>จองห้องประชุม</h3>
+
+<div id="search">
+    <div id="searchBox">
+        <form accept-charset="UTF-8" class="form-inline" role="search">
+
+            <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
+
+            <button id="searchRoomBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('#searchRoomBtn').click(function(){
+        $.ajax({
+            url: '{{ url("ajaxGetBookingRoom") }}',
+            data: {
+                search: $("#searchTxt").val(),
+            }
+        })
+        .done(function(data) {
+            if(data.id){
+                var url = '{{ url('booking-room-front/summary') }}' + '/' + data.id;
+                $.colorbox({href:url,open:true});
+            }else{
+                $.colorbox({html:" ไม่พบรหัสการจองนี้ในระบบ "});
+            }
+        });
+    });
+});
+</script>
 
 <div id='calendar'></div>
 
