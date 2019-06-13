@@ -58,6 +58,13 @@
     </div>
 </div>
 
+<?php
+    $get = '';
+    foreach (@$_GET as $key => $value) {
+        $get .= ($get) ? '&'.$key.'='.$value : $key.'='.$value;
+    }
+?>
+
 <table class="table table-bordered table-striped">
     <thead>
     <tr>
@@ -77,9 +84,11 @@
             {{ $row->bureau->title }} >
             {{ $row->division->title }} -->
         </td>
-        <td>{{ $row->name }}</td>
+        <td><a href="{{ url('report1_detail?st_room_id='.$row->id.'&'.$get) }}">{{ $row->name }}</a></td>
         <td>
             <?php 
+                $st_room_id = $row->id;
+
                 $start_date = request('start_date');
                 $end_date = request('end_date');
                 
@@ -93,10 +102,30 @@
                     $row = $row->bookingRoom;
                 }
             ?>
-            <div>รออนุมัติ [{{ $row->where('status','รออนุมัติ')->count() }}]</div>
-            <div>อนุมัติ [{{ $row->where('status','อนุมัติ')->count() }}]</div>
-            <div>ไม่อนุมัติ [{{ $row->where('status','ไม่อนุมัติ')->count() }}]</div>
-            <div>ยกเลิก [{{ $row->where('status','ยกเลิก')->count() }}]</div>
+            <div>
+                รออนุมัติ 
+                <a href="{{ url('report1_detail?st_room_id='.$st_room_id.'&status=รออนุมัติ&'.$get) }}">
+                    [{{ $row->where('status','รออนุมัติ')->count() }}]
+                </a>
+            </div>
+            <div>
+                อนุมัติ 
+                <a href="{{ url('report1_detail?st_room_id='.$st_room_id.'&status=อนุมัติ&'.$get) }}">
+                    [{{ $row->where('status','อนุมัติ')->count() }}]
+                </a>
+            </div>
+            <div>
+                ไม่อนุมัติ 
+                <a href="{{ url('report1_detail?st_room_id='.$st_room_id.'&status=ไม่อนุมัติ&'.$get) }}">
+                    [{{ $row->where('status','ไม่อนุมัติ')->count() }}]
+                </a>
+            </div>
+            <div>
+                ยกเลิก 
+                <a href="{{ url('report1_detail?st_room_id='.$st_room_id.'&status=ยกเลิก&'.$get) }}">
+                    [{{ $row->where('status','ยกเลิก')->count() }}]
+                </a>
+            </div>
         </td>
     </tr>
     @endforeach
