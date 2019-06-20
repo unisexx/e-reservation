@@ -1,4 +1,7 @@
 <?php
+$currDate = date("Y-m-d");
+$currTime = date("H:i:s");
+
 $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
 
 if (old('st_department_code')) {
@@ -23,7 +26,7 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>ไปเพื่อ<span class="Txt_red_12"> *</span></label>
-    <input name="gofor" type="text" class="form-control {{ $errors->has('gofor') ? 'has-error' : '' }}" style="width:600px;" value="{{ isset($rs->gofor) ? $rs->gofor : old('gofor') }}"/>
+    <input name="gofor" type="text" class="form-control {{ $errors->has('gofor') ? 'has-error' : '' }}" style="width:600px;" value="{{ isset($rs->gofor) ? $rs->gofor : old('gofor') }}" />
 </div>
 
 <div class="form-group form-inline col-md-6">
@@ -33,8 +36,8 @@ if (isset($rs->st_bureau_code)) {
 
 <div class="form-group form-inline col-md-12">
     <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
-    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : old('request_date') }}" style="width:120px;" />
-    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : old('request_time') }}" style="width:70px;" readonly />
+    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
+    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : '' }} {{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
     น.
 </div>
 
@@ -54,7 +57,7 @@ if (isset($rs->st_bureau_code)) {
 <div class="form-group form-inline col-md-12">
     <label>สถานที่ขึ้นรถ<span class="Txt_red_12"> *</span></label>
     <div style="margin-bottom:5px;">
-        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;"> 
+        <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
         เวลา<input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
     </div>
 </div>
@@ -69,14 +72,14 @@ if (isset($rs->st_bureau_code)) {
     <div style="margin-bottom:5px;">
         <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;">
 
-        <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" >
+        <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>
             @foreach($st_departments as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
         </select>
 
-        <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" >
+        <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
             <option value="">+ สำนัก +</option>
             @if(old('st_department_code') || isset($rs->st_department_code))
             @foreach($st_bureaus as $item)
@@ -85,7 +88,7 @@ if (isset($rs->st_bureau_code)) {
             @endif
         </select>
 
-        <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" >
+        <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
             <option value="">+ กลุ่ม +</option>
             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
             @foreach($st_divisions as $item)
@@ -106,8 +109,8 @@ if (isset($rs->st_bureau_code)) {
 
 
 <div class="form-group form-inline col-md-12">
-<fieldset>
-    <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+    <fieldset>
+        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
         <label>สถานะ</label>
         <select name="status" class="form-control" style="width:auto;">
             <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('รออนุมัติ') }}">รออนุมัติ</option>
@@ -115,7 +118,7 @@ if (isset($rs->st_bureau_code)) {
             <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('ไม่อนุมัติ') }}">ไม่อนุมัติ</option>
             <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}} style="color:{{ colorStatus('ยกเลิก') }}">ยกเลิก</option>
         </select>
-        
+
         <span id="selectVehicleBlock">
             <input id="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @endif">
             <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
@@ -177,7 +180,7 @@ if (isset($rs->st_bureau_code)) {
         // });
 
         // โชว์รายการยานพาหนะตอนกดปุ่มเลือกห้องประชุม
-        $('#openCbox').click(function(){
+        $('#openCbox').click(function() {
             $('#searchBtn').trigger('click');
         });
 
@@ -206,30 +209,30 @@ if (isset($rs->st_bureau_code)) {
             $.colorbox.close();
         });
 
-        $("#submitFormBtn").click(function(){
+        $("#submitFormBtn").click(function() {
             chkOverlap();
         });
     });
 
     // ถ้าสถานะอนุมัติ ให้เลือกยานพาหนะ, สถานะอื่น ซ่อน
-    function chkStatus(){
+    function chkStatus() {
         var status = $('select[name=status]').val();
-        if(status == 'อนุมัติ'){
+        if (status == 'อนุมัติ') {
             $('#selectVehicleBlock').show();
-        }else{
+        } else {
             $('#selectVehicleBlock').hide();
         }
     }
 
     // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
-    function chkOverlap(){
-        if(chkEndDateTime() == false){
+    function chkOverlap() {
+        if (chkEndDateTime() == false) {
             alert('วันเวลาที่จะกลับห้ามน้อยกว่าวันเวลาที่จะไป');
             $('input[name=end_date]').focus();
             return false;
         }
-        
+
         $.ajax({
                 url: '{{ url("ajaxVehicleChkOverlap") }}',
                 data: {
@@ -243,7 +246,7 @@ if (isset($rs->st_bureau_code)) {
             })
             .done(function(data) {
                 console.log(data);
-                if( data == 'เหลื่อม' ){
+                if (data == 'เหลื่อม') {
                     var r = confirm("ช่วงเวลาการจองของท่าน ซ้อนกับรายการจองอื่น ท่านต้องการยืนยันการจองนี้หรือไม่");
                     if (r == true) { // คลิกตกลง
                         // txt = "You pressed OK!";
@@ -251,31 +254,31 @@ if (isset($rs->st_bureau_code)) {
                     } else { // คลิกยกเลิก
                         // txt = "You pressed Cancel!";
                         $('input[name=start_time]').focus();
-                        $('input[name=start_time]').css('border-color','#a94442');
+                        $('input[name=start_time]').css('border-color', '#a94442');
                     }
-                }else if(data == 'ไม่เหลื่อม'){
+                } else if (data == 'ไม่เหลื่อม') {
                     $('form').submit();
                 }
             });
     }
 
     // เช็กวันที่กลับน้อยกว่าวันที่ไปหรือไม่
-    function chkEndDateTime(){
-        startDate = $('input[name=start_date]').val()+' '+$('input[name=start_time]').val();
-        endDate = $('input[name=end_date]').val()+' '+$('input[name=end_time]').val();
+    function chkEndDateTime() {
+        startDate = $('input[name=start_date]').val() + ' ' + $('input[name=start_time]').val();
+        endDate = $('input[name=end_date]').val() + ' ' + $('input[name=end_time]').val();
         // console.log(startDate);
         // console.log(endDate);
         // console.log(toTimestamp(startDate));
         // console.log(toTimestamp(endDate));
 
         // ถ้า start_date น้อยกว่า  end_date
-        if(startDate > endDate){
+        if (startDate > endDate) {
             return false;
         }
     }
 
-    function toTimestamp(strDate){
+    function toTimestamp(strDate) {
         var datum = Date.parse(strDate);
-        return datum/1000;
+        return datum / 1000;
     }
 </script>
