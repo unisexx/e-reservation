@@ -19,7 +19,7 @@
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 
-                @if(CanPerm('booking-resource-view'))<li><a href="{{ url('/booking-resource') }}"><img src="{{ url('images/booking_rt.png') }}" width="32" height="32" /> จองทรัพยากร</a></li>@endif
+                @if(CanPerm('booking-resource-view'))<li><a href="{{ url('/booking-resource') }}"><img src="{{ url('images/booking_rt.png') }}" width="32" height="32" /> จองทรัพยกรอื่นๆ</a></li>@endif
 
                 <?php
                     if(CanPerm('report-1-view') || CanPerm('report-2-view') || CanPerm('log-view')):

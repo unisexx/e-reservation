@@ -78,7 +78,7 @@ padding: 0 10px;
 }
 </style>
 
-<h3>จองทรัพยากร</h3>
+<h3>จองทรัพยกรอื่นๆ</h3>
 
 <div id="btnBox">
  <a href="{{ url('booking-resource') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>

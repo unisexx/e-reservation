@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองทรัพยากร</h3>
+<h3>จองทรัพยกรอื่นๆ</h3>
 
 @if(empty(request('export')))
 
@@ -53,7 +53,7 @@
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     @if(CanPerm('booking-resource-create'))
-        <input type="button" title="จองทรัพยากร" value="จองทรัพยากร" onclick="document.location='{{ url('/booking-resource/create') }}'" class="btn btn-success vtip" />
+        <input type="button" title="จองทรัพยกรอื่นๆ" value="จองทรัพยกรอื่นๆ" onclick="document.location='{{ url('/booking-resource/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
 

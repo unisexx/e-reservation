@@ -2,9 +2,9 @@
 
 @section('content')
 
-<h3>จองทรัพยากร</h3>
+<h3>จองทรัพยกรอื่นๆ</h3>
 
-สรุปรายละเอียดการจองทรัพยากร
+สรุปรายละเอียดการจองทรัพยกรอื่นๆ
 <table class="table table-striped table-bordered">
 <tr>
     <th>ทรัพยากร</th>

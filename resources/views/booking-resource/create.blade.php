@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองทรัพยากร (เพิ่ม / แก้ไข)</h3>
+<h3>จองทรัพยกรอื่นๆ (เพิ่ม / แก้ไข)</h3>
 
 @if ($errors->any())
 <ul class="alert alert-danger list-unstyled">
