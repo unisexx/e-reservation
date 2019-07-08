@@ -2,6 +2,10 @@
 
 @section('content')
 
+<div id="btnBox">
+ <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+</div>
+
 <h3>จองห้องประชุม (เพิ่ม / แก้ไข)</h3>
 
 @if ($errors->any())

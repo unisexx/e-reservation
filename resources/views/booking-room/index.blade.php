@@ -21,8 +21,6 @@
 
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
-
-
     </div>
 </div>
 
@@ -44,6 +42,8 @@
     <input type="button" title="จองห้องประชุม" value="จองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
+
+@include('include._color_status')
 
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}
@@ -128,14 +128,6 @@
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}
 </div>
-
-<h5><b>ความหมายสีสถานะ</b></h5>
-<ul class="list-unstyled">
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('รออนุมัติ') }};"> </span> รออนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('อนุมัติ') }};"> </span> อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ยกเลิก') }};"> </span> ยกเลิก</li>
-</ul>
 @endif
 <!-- export -->
 

@@ -93,6 +93,10 @@
     }
 </style>
 
+<div id="btnBox">
+ <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+</div>
+
 <h3>จองห้องประชุม</h3>
 
 <div id="search">
@@ -118,8 +122,7 @@
                 })
                 .done(function(data) {
                     if (data.id) {
-                        var url = '{{ url('
-                        booking - room - front / summary ') }}' + '/' + data.id;
+                        var url = '{{ url("booking-room-front/summary") }}' + '/' + data.id;
                         $.colorbox({
                             href: url,
                             open: true
@@ -134,14 +137,9 @@
     });
 </script>
 
+@include('include._color_status')
+
 <div id='calendar'></div>
 
-<h5><b>ความหมายสีสถานะ</b></h5>
-<ul class="list-unstyled">
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('รออนุมัติ') }};"> </span> รออนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('อนุมัติ') }};"> </span> อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ยกเลิก') }};"> </span> ยกเลิก</li>
-</ul>
 
 @endsection

@@ -917,4 +917,5 @@ table a:hover{
     width: 20px !important;
     height: 20px !important;
     border-radius: 15px !important;
+    vertical-align: bottom;
 }

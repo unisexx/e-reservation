@@ -90,16 +90,14 @@
     }
 </style>
 
+<div id="btnBox">
+ <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+</div>
+
 <h3>จองทรัพยกรอื่นๆ</h3>
 
-<div id='calendar'></div>
+@include('include._color_status')
 
-<h5><b>ความหมายสีสถานะ</b></h5>
-<ul class="list-unstyled">
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('รออนุมัติ') }};"> </span> รออนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('อนุมัติ') }};"> </span> อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ยกเลิก') }};"> </span> ยกเลิก</li>
-</ul>
+<div id='calendar'></div>
 
 @endsection

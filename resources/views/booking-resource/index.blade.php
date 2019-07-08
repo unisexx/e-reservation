@@ -57,6 +57,8 @@ $st_resource = App\Model\StResource::where('status', '1')->orderBy('id', 'asc')-
     @endif
 </div>
 
+@include('include._color_status')
+
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}
 </div>
@@ -134,14 +136,6 @@ $st_resource = App\Model\StResource::where('status', '1')->orderBy('id', 'asc')-
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}
 </div>
-
-<h5><b>ความหมายสีสถานะ</b></h5>
-<ul class="list-unstyled">
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('รออนุมัติ') }};"> </span> รออนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('อนุมัติ') }};"> </span> อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ</li>
-    <li><span class="fc-event-dot" style="background-color:{{ colorStatus('ยกเลิก') }};"> </span> ยกเลิก</li>
-</ul>
 @endif
 <!-- export -->
 

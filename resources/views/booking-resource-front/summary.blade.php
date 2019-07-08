@@ -2,6 +2,10 @@
 
 @section('content')
 
+<div id="btnBox">
+ <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+</div>
+
 <h3>จองทรัพยกรอื่นๆ</h3>
 
 สรุปรายละเอียดการจองทรัพยกรอื่นๆ

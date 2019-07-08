@@ -85,6 +85,8 @@ padding: 0 10px;
 </div>
 <br clear="all">
 
+@include('include._color_status')
+
 <div id='calendar'></div>
 
 @endsection
