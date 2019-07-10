@@ -25,9 +25,25 @@
 
 <table class="tbadd">
     <tr>
+        <th>คำนำหน้าชื่อ<span class="Txt_red_12"> *</span></th>
+        <td><input name="prefix" type="text" class="form-control {{ $errors->has('prefix') ? 'has-error' : '' }}" id="prefix" value="{{ isset($user->prefix) ? $user->prefix : ''}}" style="width:400px;" required/></td>
+    </tr>
+    <tr>
+        <th>ชื่อตัว<span class="Txt_red_12"> *</span></th>
+        <td><input name="givename" type="text" class="form-control {{ $errors->has('givename') ? 'has-error' : '' }}" id="givename" value="{{ isset($user->givename) ? $user->givename : ''}}" style="width:400px;" required/></td>
+    </tr>
+    <tr>
+        <th>ชื่อรอง</th>
+        <td><input name="middlename" type="text" class="form-control {{ $errors->has('middlename') ? 'has-error' : '' }}" id="middlename" value="{{ isset($user->middlename) ? $user->middlename : ''}}" style="width:400px;"/></td>
+    </tr>
+    <tr>
+        <th>ชื่อสกุล<span class="Txt_red_12"> *</span></th>
+        <td><input name="familyname" type="text" class="form-control {{ $errors->has('familyname') ? 'has-error' : '' }}" id="familyname" value="{{ isset($user->familyname) ? $user->familyname : ''}}" style="width:400px;" required/></td>
+    </tr>
+    <!-- <tr>
         <th>ชื่อ-สกุลผู้ใช้งาน<span class="Txt_red_12"> *</span></th>
         <td><input name="name" type="text" class="form-control {{ $errors->has('name') ? 'has-error' : '' }}" id="name" value="{{ isset($user->name) ? $user->name : ''}}" style="width:400px;" required/></td>
-    </tr>
+    </tr> -->
     <tr>
         <th>เลขบัตรประชาชน<span class="Txt_red_12"> *</span></th>
         <td><input name="idcard" type="text" class="form-control fidcard {{ $errors->has('idcard') ? 'has-error' : '' }}" id="idcard" value="{{ isset($user->idcard) ? $user->idcard : ''}}" style="width:400px;" required/></td>

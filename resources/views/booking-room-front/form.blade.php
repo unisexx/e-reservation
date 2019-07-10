@@ -184,6 +184,12 @@ if (isset($rs->st_bureau_code)) {
     // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
     function chkOverlap(){
+        if (chkEndDateTime() == false) {
+            alert('วันเวลาที่ต้องการใช้ห้องประชุมห้ามน้อยกว่าวันเวลาเริ่มใช้');
+            $('input[name=end_date]').focus();
+            return false;
+        }
+        
         $.ajax({
                 url: '{{ url("ajaxRoomChkOverlap") }}',
                 data: {
@@ -211,5 +217,25 @@ if (isset($rs->st_bureau_code)) {
                     $('form').submit();
                 }
             });
+    }
+
+    // เช็กวันที่กลับน้อยกว่าวันที่ไปหรือไม่
+    function chkEndDateTime() {
+        startDate = $('input[name=start_date]').val() + ' ' + $('input[name=start_time]').val();
+        endDate = $('input[name=end_date]').val() + ' ' + $('input[name=end_time]').val();
+        // console.log(startDate);
+        // console.log(endDate);
+        // console.log(toTimestamp(startDate));
+        // console.log(toTimestamp(endDate));
+
+        // ถ้า start_date น้อยกว่า  end_date
+        if (startDate > endDate) {
+            return false;
+        }
+    }
+
+    function toTimestamp(strDate) {
+        var datum = Date.parse(strDate);
+        return datum / 1000;
     }
 </script>

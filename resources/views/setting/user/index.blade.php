@@ -36,7 +36,7 @@
     @foreach($user as $key=>$item)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($user->currentPage() - 1 ) * $user->perPage() ) + $loop->iteration }}</td>
-        <td>{{ $item->name }}</td>
+        <td>{{ $item->prefix }} {{ $item->givename }} {{ $item->familyname }}</td>
         <td>
             {{ $item->department->title }} >
             {{ $item->bureau->title }} >

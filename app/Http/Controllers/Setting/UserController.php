@@ -67,7 +67,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'                => 'required',
+            // 'name'                => 'required',
             'idcard'              => 'required',
             'st_department_code'  => 'required',
             'st_bureau_code'      => 'required',
@@ -76,8 +76,11 @@ class UserController extends Controller
             'email'               => 'required|unique:users',
             'password'            => 'required',
             'confirm_password'    => 'same:password',
+            'prefix'              => 'required',
+            'givename'            => 'required',
+            'familyname'          => 'required',
 		], [
-            'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
+            // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
             'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
             'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
@@ -88,6 +91,9 @@ class UserController extends Controller
             'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'prefix.required'              => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
@@ -145,7 +151,7 @@ class UserController extends Controller
     {
         
         $this->validate($request, [
-            'name'                => 'required',
+            // 'name'                => 'required',
             'idcard'              => 'required',
             'st_department_code'  => 'required',
             'permission_group_id' => 'required',
@@ -154,8 +160,11 @@ class UserController extends Controller
             'st_department_code'  => 'required',
             'st_bureau_code'      => 'required',
             'st_division_code'    => 'required',
+            'prefix'              => 'required',
+            'givename'            => 'required',
+            'familyname'          => 'required',
 		], [
-            'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
+            // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
             'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
             'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
@@ -165,6 +174,9 @@ class UserController extends Controller
             'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'prefix.required'              => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
