@@ -55,7 +55,7 @@
                     </ul>
                 </li>
                 <?php endif;?>
-                <li><a href="{{ url('/user/form') }}" class="vtip" title="{{ @Auth::user()->prefix }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }} [{{ @Auth::user()->permission_group->title }}]"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
+                <li><a href="{{ url('#') }}" class="vtip" title="{{ @Auth::user()->prefix }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }} [{{ @Auth::user()->permission_group->title }}]"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
                 <li>
                     <a class="" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <!-- {{ __('Logout') }} -->
