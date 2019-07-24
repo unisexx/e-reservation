@@ -112,7 +112,7 @@
                     </ul>
                 </div>
                 <div class="col-md-5 text-right copyright">
-                    Copyright © 2018 กระทรวงการพัฒนาสังคมและความมั่นคงของมนุษย์ <br> Terms & Conditons | Privacy Policy
+                    Copyright © 2019 Version 1.0 กระทรวงการพัฒนาสังคมและความมั่นคงของมนุษย์ <br> Terms & Conditons | Privacy Policy
                 </div>
             </div>
         </div>
