@@ -38,9 +38,9 @@
         <td>{{ (($user->currentPage() - 1 ) * $user->perPage() ) + $loop->iteration }}</td>
         <td>{{ $item->prefix }} {{ $item->givename }} {{ $item->familyname }}</td>
         <td>
-            {{ $item->department->title }} >
-            {{ $item->bureau->title }} >
-            {{ $item->division->title }}
+            {{ @$item->department->title }} >
+            {{ @$item->bureau->title }} >
+            {{ @$item->division->title }}
         </td>
         <td>{{ @$item->permission_group->title }}</td>
         <td>{{ $item->email }}</td>
