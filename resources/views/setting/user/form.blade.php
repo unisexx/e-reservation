@@ -53,14 +53,14 @@
         <td>
             <div class="form-inline">
 
-                <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
+                <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$user->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
 
-                <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
+                <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($user->st_department_code))
                     @foreach($st_bureaus as $item)
@@ -69,7 +69,7 @@
                     @endif
                 </select>
 
-                <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
+                <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม" required>
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($user->st_bureau_code))
                     @foreach($st_divisions as $item)
