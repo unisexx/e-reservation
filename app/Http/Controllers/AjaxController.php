@@ -12,6 +12,8 @@ use App\Model\BookingRoom;
 use App\Model\BookingVehicle;
 use App\Model\BookingResource;
 
+use Auth;
+
 class AjaxController extends Controller
 {
     /**
@@ -43,6 +45,13 @@ class AjaxController extends Controller
     {
         $rs = StRoom::select('*')->where('status', '1');
 
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
+
         if (!empty($_GET['search'])) {
             $rs = $rs->where('name', 'like', '%' . $_GET['search'] . '%');
         }
@@ -58,7 +67,16 @@ class AjaxController extends Controller
 
     public function ajaxGetVehicle()
     {
-        $rs = StVehicle::where('status', 'พร้อมใช้')->where(function($q){
+        $rs = StVehicle::select('*')->where('status', 'พร้อมใช้');
+
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
+
+        $rs = $rs->where(function($q){
                     $q->where('brand', 'like', '%' . $_GET['search'] . '%')
                     ->orWhere('seat', 'like', '%' . $_GET['search'] . '%')
                     ->orWhere('color', 'like', '%' . $_GET['search'] . '%')
@@ -69,7 +87,9 @@ class AjaxController extends Controller
                     ->orWhereHas('st_vehicle_type',function($q){
                         $q->where('name', 'like', '%' . $_GET['search'] . '%');
                     });
-                })->orderBy('id', 'asc')->get();
+                });
+
+        $rs = $rs->orderBy('id', 'asc')->get();
 
         // dd($rs);
         return view('ajax.ajaxGetVehicle', compact('rs'));

@@ -10,6 +10,7 @@ use App\Model\BookingRoom;
 
 use App\Http\Requests\BookingRoomRequest;
 
+use Auth;
 use Mail;
 
 class BookingRoomController extends Controller
@@ -40,6 +41,16 @@ class BookingRoomController extends Controller
         $perPage = 10;
 
         $rs = BookingRoom::select('*');
+
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         * เห็นเฉพาะห้องที่อยู่ในสังกัดของตัวเอง
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->whereHas('st_room', function($q){
+                $q->where('st_division_code',Auth::user()->st_division_code);
+            });
+        }
 
         if (!empty($date_select)) {
             if($data_type == 'start_date'){
