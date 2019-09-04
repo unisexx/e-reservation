@@ -36,13 +36,15 @@
     @foreach($stroom as $key=>$item)
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}</td>
-        <td>
+        <td class="imgGroup">
             @if($item->image)
                 @php 
                     $images = (explode("|",$item->image));
                 @endphp
-                @foreach($images as $image)
-                    <img src="{{ url('uploads/room/'.$image) }}" width="90"> 
+                @foreach($images as $key=>$image)
+                <a class="colorbox" data-rel="group_{{$item->id}}" href="{{ url('uploads/room/'.$image) }}" title="{{ $item->name }}">
+                    <img src="{{ url('uploads/room/'.$image) }}" width="90" @if($key > 0) style="display:none;" @endif>
+                </a>
                 @endforeach
             @endif
         </td>
@@ -85,4 +87,16 @@
     {!! $stroom->appends(['search' => Request::get('search')])->render() !!}
 </div>
 
+
+<script>
+$(document).ready(function(){
+    $('.colorbox').colorbox({
+        rel:function() {        
+            return $(this).data('rel');
+        },
+        width:"75%", 
+        height:"75%",
+    });
+});
+</script>
 @endsection
