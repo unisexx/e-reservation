@@ -114,7 +114,7 @@ class AjaxController extends Controller
         $end_time = $_GET['end_time'];
         $id = $_GET['id'];
 
-        $rs = BookingVehicle::select('id')
+        $rs = BookingVehicle::select('*')
                 ->where('st_vehicle_id',$st_vehicle_id)
                 ->where(function($q) use ($start_date,$end_date){
                     $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date,$start_date,$end_date,$end_date]);
@@ -130,7 +130,7 @@ class AjaxController extends Controller
         $rs = $rs->get();
         
         if($rs->count() >= 1){
-            return 'เหลื่อม';
+            return view('ajax.ajaxVehicleChkOverlap', compact('rs'));
         }else{
             return 'ไม่เหลื่อม';
         }
@@ -144,7 +144,7 @@ class AjaxController extends Controller
         $end_time = $_GET['end_time'];
         $id = $_GET['id'];
 
-        $rs = BookingResource::select('id')
+        $rs = BookingResource::select('*')
                 ->where('st_resource_id',$st_resource_id)
                 ->where(function($q) use ($start_date,$end_date){
                     $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date,$start_date,$end_date,$end_date]);
@@ -160,7 +160,7 @@ class AjaxController extends Controller
         $rs = $rs->get();
         
         if($rs->count() >= 1){
-            return 'เหลื่อม';
+            return view('ajax.ajaxResourceChkOverlap', compact('rs'));
         }else{
             return 'ไม่เหลื่อม';
         }

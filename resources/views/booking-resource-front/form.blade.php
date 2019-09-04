@@ -114,19 +114,11 @@ if (isset($rs->st_bureau_code)) {
                 }
             })
             .done(function(data) {
-                console.log(data);
-                if( data == 'เหลื่อม' ){
-                    var r = confirm("ช่วงเวลาการจองของท่าน ซ้อนกับรายการจองอื่น ท่านต้องการยืนยันการจองนี้หรือไม่");
-                    if (r == true) { // คลิกตกลง
-                        // txt = "You pressed OK!";
-                        $('form').submit();
-                    } else { // คลิกยกเลิก
-                        // txt = "You pressed Cancel!";
-                        $('input[name=start_time]').focus();
-                        $('input[name=start_time]').css('border-color','#a94442');
-                    }
-                }else if(data == 'ไม่เหลื่อม'){
+                if( data == 'ไม่เหลื่อม' ){
                     $('form').submit();
+                }else{
+                    $('#getDupData').html(data);
+                    $.colorbox({inline:true, width:"95%", height:"95%", open:true, href:"#inline_dup" }); 
                 }
             });
     }
@@ -147,5 +139,46 @@ $('.fdate').each(function(k, v) {
     }); //.attr('readonly',true);
     $(this).attr('placeholder', (!$(this).attr('placeholder') ? 'วัน/เดือน/ปี' : $(this).attr('placeholder')));
     $(this).after(' <img src="{{url('images/calendar.png')}}" alt="" width="24" height="24" /> ');
+});
+</script>
+
+
+<!-- This contains the hidden content for inline calls ห้องประชุม-->
+<div style='display:none'>
+    <div id='inline_dup' style='padding:5px; background:#fff;'>
+        <h3 style="margin:0 0 25px 0; padding:0; color:#636">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
+
+        <table class="tblist">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>รหัสการจอง</th>
+                    <th>ทรัพยากร</th>
+                    <th>หัวข้อ</th>
+                    <th>วัน เวลา ที่ต้องการใช้</th>
+                    <th>ผู้ขอใช้</th>
+                    <th>สถานะ</th>
+                </tr>
+            </thead>
+            <tbody id="getDupData">
+                <!-- chkOverlap Data Here -->
+            </tbody>
+        </table>
+
+        <div id="btnBoxAdd">
+            <input id="confirmSubmitBtn" name="input" type="button" title="ยืนยันการจอง" value="ยืนยันการจอง" class="btn btn-primary" style="width:100px;" />
+            <input id="cboxCloseBtn" name="input" type="button" title="ยกเลิก" value="ยกเลิก" class="btn btn-secondary" style="width:100px;" />
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('body').on('click', '#confirmSubmitBtn', function() {
+        $('form').submit();
+    });
+    $('body').on('click', '#cboxCloseBtn', function() {
+        $.colorbox.close();
+    });
 });
 </script>

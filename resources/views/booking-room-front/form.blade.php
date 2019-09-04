@@ -176,7 +176,8 @@ $(document).ready(function() {
         $.colorbox.close();
     });
 
-    $("#submitFormBtn").click(function(){
+    $('body').on('click', '#submitFormBtn', function(e){
+        e.preventDefault();
         chkOverlap();
     });
 });
@@ -228,7 +229,7 @@ $('.fdate').each(function(k, v) {
 <!-- This contains the hidden content for inline calls ห้องประชุม-->
 <div style='display:none'>
     <div id='inline_dup' style='padding:5px; background:#fff;'>
-        <h3 style="margin:0; padding:0; color:#636">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
+        <h3 style="margin:0 0 25px 0; padding:0; color:#636">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
 
         <table class="tblist">
             <thead>
