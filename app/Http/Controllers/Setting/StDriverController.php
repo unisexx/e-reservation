@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Model\StDriver;
 use Illuminate\Http\Request;
 
+use Auth;
+
 class StDriverController extends Controller
 {
     /**
@@ -34,7 +36,6 @@ class StDriverController extends Controller
         $st_department_code = $request->get('st_department_code');
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
-        $perPage = 10;
 
         $rs = StDriver::select('*');
 
@@ -54,7 +55,14 @@ class StDriverController extends Controller
             $rs = $rs->where('name', 'LIKE', "%$keyword%");
         }
 
-        $rs = $rs->orderBy('id','desc')->paginate($perPage);
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
+
+        $rs = $rs->orderBy('id','desc')->paginate(10);
 
 
         return view('setting.st-driver.index', compact('rs'));

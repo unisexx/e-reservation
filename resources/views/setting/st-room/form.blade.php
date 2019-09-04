@@ -63,30 +63,48 @@ if (isset($stroom->st_bureau_code)) {
                 <input name="res_tel" type="text" class="form-control {{ $errors->has('res_tel') ? 'has-error' : '' }}" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" required />
             </div>
 
-            <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
-                <option value="">+ กรม +</option>
-                @foreach($st_departments as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$stroom->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-            </select>
+            @if(CanPerm('access-self'))
 
-            <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
-                <option value="">+ สำนัก +</option>
-                @if(old('st_department_code') || isset($stroom->st_department_code))
-                @foreach($st_bureaus as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$stroom->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-                @endif
-            </select>
+                <select name="st_department_code" class="form-control" title="กรม" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_department_code }}" selected>{{ @Auth::user()->department->title }}</option>
+                </select>
 
-            <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
-                <option value="">+ กลุ่ม +</option>
-                @if(old('st_bureau_code') || isset($stroom->st_bureau_code))
-                @foreach($st_divisions as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$stroom->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-                @endif
-            </select>
+                <select name="st_bureau_code" class="form-control" title="สำนัก" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_bureau_code }}" selected>{{ @Auth::user()->bureau->title }}</option>
+                </select>
+
+                <select name="st_division_code" class="form-control" title="กลุ่ม" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_division_code }}" selected>{{ @Auth::user()->division->title }}</option>
+                </select>
+
+            @elseif(CanPerm('access-all'))
+
+                <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
+                    <option value="">+ กรม +</option>
+                    @foreach($st_departments as $item)
+                    <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$stroom->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                </select>
+
+                <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
+                    <option value="">+ สำนัก +</option>
+                    @if(old('st_department_code') || isset($stroom->st_department_code))
+                    @foreach($st_bureaus as $item)
+                    <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$stroom->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
+                <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
+                    <option value="">+ กลุ่ม +</option>
+                    @if(old('st_bureau_code') || isset($stroom->st_bureau_code))
+                    @foreach($st_divisions as $item)
+                    <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$stroom->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
+            @endif
 
 
         </td>

@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\StRoomRequest;
 
+use Auth;
+
 class StRoomController extends Controller
 {
     /**
@@ -33,14 +35,21 @@ class StRoomController extends Controller
         ChkPerm('st-room-view');
 
         $keyword = $request->get('search');
-        $perPage = 10;
+
+        $rs = StRoom::select('*');
 
         if (!empty($keyword)) {
-            $stroom = StRoom::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $stroom = StRoom::latest()->paginate($perPage);
+            $rs = $rs->where('name', 'LIKE', "%$keyword%");
         }
+
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
+
+        $stroom = $rs->orderBy('id','desc')->paginate(10);
 
         return view('setting.st-room.index', compact('stroom'));
     }
