@@ -83,8 +83,7 @@ class AjaxController extends Controller
         $end_time = $_GET['end_time'];
         $id = $_GET['id'];
 
-        $rs = BookingRoom::select('id')
-                ->where('st_room_id',$st_room_id)
+        $rs = BookingRoom::select('*')->where('st_room_id',$st_room_id)
                 ->where(function($q) use ($start_date,$end_date){
                     $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date,$start_date,$end_date,$end_date]);
                 })
@@ -97,9 +96,11 @@ class AjaxController extends Controller
         }
                 
         $rs = $rs->get();
+
+        // dump($rs);
         
         if($rs->count() >= 1){
-            return 'เหลื่อม';
+            return view('ajax.ajaxRoomChkOverlap', compact('rs'));
         }else{
             return 'ไม่เหลื่อม';
         }

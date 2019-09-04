@@ -34,13 +34,13 @@ if (isset($rs->st_bureau_code)) {
     <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
 </div>
 
-<div class="form-group form-inline col-md-12">
+<div class="form-group form-inline col-md-12 input-daterange">
     <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
+    <input name="start_date" type="text" class="form-control fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
     น.
     -
-    <input name="end_date" type="text" class="form-control datepicker fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+    <input name="end_date" type="text" class="form-control fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
     <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" required/>
     น.
 </div>
@@ -102,12 +102,6 @@ if (isset($rs->st_bureau_code)) {
     // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
     function chkOverlap(){
-        if (chkEndDateTime() == false) {
-            alert('วันเวลาที่ต้องการใช้ห้ามน้อยกว่าวันเวลาที่จะเริ่มใช้');
-            $('input[name=end_date]').focus();
-            return false;
-        }
-        
         $.ajax({
                 url: '{{ url("ajaxResourceChkOverlap") }}',
                 data: {
@@ -136,24 +130,22 @@ if (isset($rs->st_bureau_code)) {
                 }
             });
     }
+</script>
 
-    // เช็กวันที่กลับน้อยกว่าวันที่ไปหรือไม่
-    function chkEndDateTime() {
-        startDate = $('input[name=start_date]').val() + ' ' + $('input[name=start_time]').val();
-        endDate = $('input[name=end_date]').val() + ' ' + $('input[name=end_time]').val();
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(toTimestamp(startDate));
-        // console.log(toTimestamp(endDate));
-
-        // ถ้า start_date น้อยกว่า  end_date
-        if (startDate > endDate) {
-            return false;
-        }
-    }
-
-    function toTimestamp(strDate) {
-        var datum = Date.parse(strDate);
-        return datum / 1000;
-    }
+<script>
+$('.input-daterange').datepicker({
+    inputs: $('.fdate'),
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: 'th-th',
+    clearBtn: true,
+});
+$('.fdate').each(function(k, v) {
+    $(this).addClass('form-control').css({
+        'display': 'inline-block',
+        'width': '120px'
+    }); //.attr('readonly',true);
+    $(this).attr('placeholder', (!$(this).attr('placeholder') ? 'วัน/เดือน/ปี' : $(this).attr('placeholder')));
+    $(this).after(' <img src="{{url('images/calendar.png')}}" alt="" width="24" height="24" /> ');
+});
 </script>

@@ -15,7 +15,7 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ เพิ่มรายการ',
+                    text: '+ ขอจองห้องประชุม',
                     click: function() {
                         window.location.href = "/booking-room-front/create";
                     }

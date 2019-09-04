@@ -15,7 +15,7 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ เพิ่มรายการ',
+                    text: '+ ขอจองทรัพยากร',
                     click: function() {
                         window.location.href = "/booking-resource-front/create";
                     }
