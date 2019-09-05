@@ -112,6 +112,10 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <div class="form-group form-inline col-md-12">
+    {!! NoCaptcha::display() !!}
+</div>
+
+<div class="form-group form-inline col-md-12">
     <div id="btnBoxAdd">
         <input type="hidden" name="status" value="รออนุมัติ">
         <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />

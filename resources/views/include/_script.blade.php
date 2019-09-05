@@ -36,6 +36,9 @@
 <script src="{{ url('js/bootstrap-sortable.js') }}"></script>
 <script src="{{ url('js/moment.min.js') }}"></script>
 
+<!-- Google recaptcha Api -->
+<script src="//www.google.com/recaptcha/api.js"></script>
+
 <!-- Colorbox jquery -->
 <script src="{{ url('js/jquery.colorbox.js') }}"></script>
 <link media="screen" rel="stylesheet" href="{{ url('css/colorbox.css') }}" />

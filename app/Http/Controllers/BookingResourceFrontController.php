@@ -101,8 +101,39 @@ class BookingResourceFrontController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BookingResourceRequest $request)
-    {
+    public function store(Request $request)
+    {   
+        $this->validate($request, [
+            'st_resource_id'       => 'required',
+            'title'                => 'required',
+            'start_date'           => 'required',
+            'start_time'           => 'required',
+            'end_date'             => 'required',
+            'end_time'             => 'required',
+            'request_name'         => 'required',
+            'request_tel'          => 'required',
+            'request_email'        => 'required',
+            'st_department_code'   => 'required',
+            'st_bureau_code'       => 'required',
+            'st_division_code'     => 'required',
+            'g-recaptcha-response' => 'required|captcha',
+		], [
+            'st_resource_id.required'       => 'เลือกทรัพยากร ห้ามเป็นค่าว่าง',
+            'title.required'                => 'ชื่อเรื่อง / หัวข้อการประชุม ห้ามเป็นค่าว่าง',
+            'start_date.required'           => 'วันที่เริ่มใช้ห้องประชุม ห้ามเป็นค่าว่าง',
+            'start_time.required'           => 'เวลาที่เริ่มใช้ห้องประชุม ห้ามเป็นค่าว่าง',
+            'end_date.required'             => 'วันที่สิ้นสุดใช้ห้องประชุม ห้ามเป็นค่าว่าง',
+            'end_time.required'             => 'เวลาที่สิ้นสุดใช้ห้องประชุม ห้ามเป็นค่าว่าง',
+            'request_name.required'         => 'ชื่อผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'request_tel.required'          => 'เบอร์ติดต่อผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'request_email.required'        => 'อีเมล์ผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_department_code.required'   => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required'       => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_division_code.required'     => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'g-recaptcha-response.required' => 'กรุณายืนยันตัวตน ฉันไม่ใช่โปรแกรมอัติโนมัติ',
+            'g-recaptcha-response.captcha'  => 'ระบบยืนยันตัวตนผิดพลาด!!! กรุณาติดต่อแอดมิน',
+        ]);
+        
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
