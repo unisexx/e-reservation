@@ -31,13 +31,23 @@ class StResource extends Model
      *
      * @var array
      */
-    protected $fillable = ['code','name','status'];
+    protected $fillable = [
+        'name', 
+        'code', 
+        'status', 
+        'st_department_code', 
+        'st_bureau_code', 
+        'st_division_code',
+    ];
 
     // logsActivity
     protected static $logAttributes = [
         'name', 
         'code', 
         'status', 
+        'st_department_code', 
+        'st_bureau_code', 
+        'st_division_code',
     ];
     protected static $logOnlyDirty = true;
 }

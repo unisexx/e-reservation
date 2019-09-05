@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\StVehicleRequest;
 
+use Auth;
+
 class StVehicleController extends Controller
 {
     /**
@@ -34,7 +36,6 @@ class StVehicleController extends Controller
 
         $st_vehicle_type_id = $request->get('st_vehicle_type_id');
         $keyword = $request->get('search');
-        $perPage = 10;
 
         $rs = StVehicle::select('*');
 
@@ -46,14 +47,16 @@ class StVehicleController extends Controller
             $rs = $rs->where('brand', 'LIKE', "%$keyword%");
         }
 
-        $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
 
-        // if (!empty($keyword)) {
-        //     $rs = StVehicle::where('name', 'LIKE', "%$keyword%")
-        //         ->latest()->paginate($perPage);
-        // } else {
-        //     $rs = StVehicle::latest()->paginate($perPage);
-        // }
+        $rs = $rs->orderBy('id', 'desc')->paginate(10);
+
+
 
         return view('setting.st-vehicle.index', compact('rs'));
     }

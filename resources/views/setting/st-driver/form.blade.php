@@ -33,6 +33,22 @@ if (isset($rs->st_bureau_code)) {
         <td>
             <div class="form-inline">
 
+            @if(CanPerm('access-self'))
+
+                <select name="st_department_code" class="form-control" title="กรม" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_department_code }}" selected>{{ @Auth::user()->department->title }}</option>
+                </select>
+
+                <select name="st_bureau_code" class="form-control" title="สำนัก" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_bureau_code }}" selected>{{ @Auth::user()->bureau->title }}</option>
+                </select>
+
+                <select name="st_division_code" class="form-control" title="กลุ่ม" required readonly style="width:auto; display:inline;">
+                    <option value="{{ @Auth::user()->st_division_code }}" selected>{{ @Auth::user()->division->title }}</option>
+                </select>
+
+            @elseif(CanPerm('access-all'))
+
                 <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
@@ -57,6 +73,8 @@ if (isset($rs->st_bureau_code)) {
                     @endforeach
                     @endif
                 </select>
+
+            @endif
 
             </div>
         </td>

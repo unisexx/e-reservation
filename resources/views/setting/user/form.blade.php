@@ -26,19 +26,19 @@
 <table class="tbadd">
     <tr>
         <th>คำนำหน้าชื่อ<span class="Txt_red_12"> *</span></th>
-        <td><input name="prefix" type="text" class="form-control {{ $errors->has('prefix') ? 'has-error' : '' }}" id="prefix" value="{{ isset($user->prefix) ? $user->prefix : ''}}" style="width:400px;" required/></td>
+        <td><input name="prefix" type="text" class="form-control {{ $errors->has('prefix') ? 'has-error' : '' }}" id="prefix" value="{{ isset($user->prefix) ? $user->prefix : old('prefix') }}" style="width:400px;" required/></td>
     </tr>
     <tr>
         <th>ชื่อตัว<span class="Txt_red_12"> *</span></th>
-        <td><input name="givename" type="text" class="form-control {{ $errors->has('givename') ? 'has-error' : '' }}" id="givename" value="{{ isset($user->givename) ? $user->givename : ''}}" style="width:400px;" required/></td>
+        <td><input name="givename" type="text" class="form-control {{ $errors->has('givename') ? 'has-error' : '' }}" id="givename" value="{{ isset($user->givename) ? $user->givename : old('givename') }}" style="width:400px;" required/></td>
     </tr>
     <tr>
         <th>ชื่อรอง</th>
-        <td><input name="middlename" type="text" class="form-control {{ $errors->has('middlename') ? 'has-error' : '' }}" id="middlename" value="{{ isset($user->middlename) ? $user->middlename : ''}}" style="width:400px;"/></td>
+        <td><input name="middlename" type="text" class="form-control {{ $errors->has('middlename') ? 'has-error' : '' }}" id="middlename" value="{{ isset($user->middlename) ? $user->middlename : old('middlename') }}" style="width:400px;"/></td>
     </tr>
     <tr>
         <th>ชื่อสกุล<span class="Txt_red_12"> *</span></th>
-        <td><input name="familyname" type="text" class="form-control {{ $errors->has('familyname') ? 'has-error' : '' }}" id="familyname" value="{{ isset($user->familyname) ? $user->familyname : ''}}" style="width:400px;" required/></td>
+        <td><input name="familyname" type="text" class="form-control {{ $errors->has('familyname') ? 'has-error' : '' }}" id="familyname" value="{{ isset($user->familyname) ? $user->familyname : old('familyname') }}" style="width:400px;" required/></td>
     </tr>
     <!-- <tr>
         <th>ชื่อ-สกุลผู้ใช้งาน<span class="Txt_red_12"> *</span></th>
@@ -46,7 +46,7 @@
     </tr> -->
     <tr>
         <th>เลขบัตรประชาชน<span class="Txt_red_12"> *</span></th>
-        <td><input name="idcard" type="text" class="form-control fidcard {{ $errors->has('idcard') ? 'has-error' : '' }}" id="idcard" value="{{ isset($user->idcard) ? $user->idcard : ''}}" style="width:400px;" required/></td>
+        <td><input name="idcard" type="text" class="form-control fidcard {{ $errors->has('idcard') ? 'has-error' : '' }}" id="idcard" value="{{ isset($user->idcard) ? $user->idcard : old('idcard') }}" style="width:400px;" required/></td>
     </tr>
     <tr>
         <th>หน่วยงาน<span class="Txt_red_12"> *</span></th>
@@ -84,10 +84,10 @@
     <tr>
         <th>อีเมล์<span class="Txt_red_12"> *</span> / หมายเลขติดต่อ</th>
         <td><span class="form-inline">
-                <input name="email" type="text" class="form-control {{ $errors->has('email') ? 'has-error' : '' }}" id="email" value="{{ isset($user->email) ? $user->email : ''}}" placeholder="อีเมล์"
+                <input name="email" type="text" class="form-control {{ $errors->has('email') ? 'has-error' : '' }}" id="email" value="{{ isset($user->email) ? $user->email : old('email') }}" placeholder="อีเมล์"
                     style="width:300px;" required/>
                 /
-                <input name="tel" type="text" class="form-control" id="tel" value="{{ isset($user->tel) ? $user->tel : ''}}" placeholder="เบอร์ติดต่อ"
+                <input name="tel" type="text" class="form-control" id="tel" value="{{ isset($user->tel) ? $user->tel : old('tel') }}" placeholder="เบอร์ติดต่อ"
                     style="width:300px;" />
             </span> </span></td>
     </tr>
@@ -97,7 +97,7 @@
                 <select name="permission_group_id" class="form-control {{ $errors->has('permission_group_id') ? 'has-error' : '' }}" style="width:auto;" required>
                     <option value="">เลือกสิทธิ์การใช้งาน</option>
                     @foreach($permission_groups as $item)
-                        <option value="{{ $item->id }}" @if($item->id == @$user->permission_group_id) selected="selected" @endif>{{ $item->title }}</option>
+                        <option value="{{ $item->id }}" @if($item->id == @old('permission_group_id')) selected="selected" @endif @if($item->id == @$user->permission_group_id) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
             </span></td>

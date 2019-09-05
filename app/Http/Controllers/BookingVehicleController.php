@@ -10,6 +10,7 @@ use App\Model\BookingVehicle;
 
 use App\Http\Requests\BookingVehicleRequest;
 
+use Auth;
 use Mail;
 
 class BookingVehicleController extends Controller
@@ -41,6 +42,16 @@ class BookingVehicleController extends Controller
         $perPage = 10;
 
         $rs = BookingVehicle::select('*');
+
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         * เห็นเฉพาะยานพาหนะที่อยู่ในสังกัดของตัวเอง
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->whereHas('st_vehicle', function($q){
+                $q->where('st_division_code',Auth::user()->st_division_code);
+            });
+        }
 
         if (!empty($st_vehicle_type_id)) {
             $rs = $rs->whereHas('st_vehicle', function($q) use ($st_vehicle_type_id){

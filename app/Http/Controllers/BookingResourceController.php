@@ -10,6 +10,7 @@ use App\Model\BookingResource;
 
 use App\Http\Requests\BookingResourceRequest;
 
+use Auth;
 use Mail;
 
 class BookingResourceController extends Controller
@@ -41,6 +42,16 @@ class BookingResourceController extends Controller
         $perPage = 10;
 
         $rs = BookingResource::select('*');
+
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         * เห็นเฉพาะทรัพยากรที่อยู่ในสังกัดของตัวเอง
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->whereHas('stResource', function($q){
+                $q->where('st_division_code',Auth::user()->st_division_code);
+            });
+        }
 
         if (!empty($st_resource_id)) {
             $rs = $rs->where('st_resource_id',$st_resource_id);

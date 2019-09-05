@@ -20,6 +20,8 @@
         <form method="GET" action="{{ url('/setting/st-driver') }}" accept-charset="UTF-8" class="form-inline" role="search">
             <input type="text" class="form-control" style="width:350px;" placeholder="ชื่อพนักงานขับ" name="search" value="{{ request('search') }}">
 
+            @if(CanPerm('access-all'))
+
             <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
                 <option value="">+ กรม +</option>
                 @foreach($st_departments as $item)
@@ -45,11 +47,8 @@
                 @endif
             </select>
 
-            <!-- <select name="lunch2" class="selectpicker" id="lunch" title="หน่วยงาน" data-live-search="true">
-                <option>-- ทุกหน่วยงาน --</option>
-                <option>[06102008001] กองยุทธศาสตร์และแผนงาน ฝ่ายบริหารทั่วไป</option>
-                <option>[06102011001] ศูนย์เทคโนโลยีสารสนเทศและการสื่อสาร ฝ่ายบริหารทั่วไป</option>
-            </select> -->
+            @endif
+            
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
 

@@ -8,7 +8,15 @@
 
 <?php
 // ทรัพยากร
-$st_resource = App\Model\StResource::where('status', '1')->orderBy('id', 'asc')->get();
+// $st_resource = App\Model\StResource::where('status', '1')->orderBy('id', 'asc')->get();
+$q = App\Model\StResource::select('*')->where('status', '1');
+/**
+ * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+ */
+if (CanPerm('access-self')) {
+    $q = $q->where('st_division_code',Auth::user()->st_division_code);
+}
+$st_resource = $q->orderBy('id','desc')->get();
 ?>
 
 <div id="search">

@@ -33,13 +33,13 @@ if (isset($rs->st_bureau_code)) {
     <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อห้องประชุม" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
 </div>
 
-<div class="form-group form-inline col-md-12">
+<div class="form-group form-inline col-md-12 input-daterange">
     <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span> / จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control datepicker fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
+    <input name="start_date" type="text" class="form-control fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
     <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
     น.
     -
-    <input name="end_date" type="text" class="form-control datepicker fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+    <input name="end_date" type="text" class="form-control fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
     <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" required/>
     น
     /
@@ -144,98 +144,123 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <script>
-    $(document).ready(function() {
-        // โชว์รายการห้องประชุมตอนกดปุ่มเลือกห้องประชุม
-        $('#openCbox').click(function(){
-            $('#searchRoomBtn').trigger('click');
-        });
+$(document).ready(function() {
+    // โชว์รายการห้องประชุมตอนกดปุ่มเลือกห้องประชุม
+    $('#openCbox').click(function(){
+        $('#searchRoomBtn').trigger('click');
+    });
 
-        // ค้นหาห้องประชุม
-        $('body').on('click', '#searchRoomBtn', function() {
-            $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');
+    // ค้นหาห้องประชุม
+    $('body').on('click', '#searchRoomBtn', function() {
+        $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');
 
-            $.ajax({
-                url: '{{ url("ajaxGetRoom") }}',
-                data: {
-                    search: $("#searchTxt").val(),
-                    depertment_code: $("#searchDepartment").val(),
-                }
-            })
-            .done(function(data) {
-                // console.log(data);
-                $('#getRoomData').html(data);
-            });
-        });
-
-        // กดปุ่มเลือกห้องประชุม
-        $('body').on('click', '.selectRoomBtn', function() {
-            // alert($(this).data('room-id'));
-            $('#tmpStRoomName').val($(this).data('room-name'));
-            $('input[name=st_room_id]').val($(this).data('room-id'));
-            // ปิด colorbox
-            $.colorbox.close();
-        });
-
-        $("#submitFormBtn").click(function(){
-            chkOverlap();
+        $.ajax({
+            url: '{{ url("ajaxGetRoom") }}',
+            data: {
+                search: $("#searchTxt").val(),
+                depertment_code: $("#searchDepartment").val(),
+            }
+        })
+        .done(function(data) {
+            // console.log(data);
+            $('#getRoomData').html(data);
         });
     });
 
-    // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
-    // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
-    function chkOverlap(){
-        if (chkEndDateTime() == false) {
-            alert('วันเวลาที่ต้องการใช้ห้องประชุมห้ามน้อยกว่าวันเวลาเริ่มใช้');
-            $('input[name=end_date]').focus();
-            return false;
+    // กดปุ่มเลือกห้องประชุม
+    $('body').on('click', '.selectRoomBtn', function() {
+        // alert($(this).data('room-id'));
+        $('#tmpStRoomName').val($(this).data('room-name'));
+        $('input[name=st_room_id]').val($(this).data('room-id'));
+        // ปิด colorbox
+        $.colorbox.close();
+    });
+
+    $('body').on('click', '#submitFormBtn', function(e){
+        e.preventDefault();
+        chkOverlap();
+    });
+});
+
+// เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
+// ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
+function chkOverlap(){
+    $.ajax({
+        url: '{{ url("ajaxRoomChkOverlap") }}',
+        data: {
+            start_date: $('input[name=start_date]').val(),
+            start_time: $('input[name=start_time]').val(),
+            end_date: $('input[name=end_date]').val(),
+            end_time: $('input[name=end_time]').val(),
+            st_room_id: $('input[name=st_room_id]').val(),
+            id: "{{ @$rs->id }}",
         }
-        
-        $.ajax({
-                url: '{{ url("ajaxRoomChkOverlap") }}',
-                data: {
-                    start_date: $('input[name=start_date]').val(),
-                    start_time: $('input[name=start_time]').val(),
-                    end_date: $('input[name=end_date]').val(),
-                    end_time: $('input[name=end_time]').val(),
-                    st_room_id: $('input[name=st_room_id]').val(),
-                    id: "{{ @$rs->id }}",
-                }
-            })
-            .done(function(data) {
-                console.log(data);
-                if( data == 'เหลื่อม' ){
-                    var r = confirm("ช่วงเวลาการจองของท่าน ซ้อนกับรายการจองอื่น ท่านต้องการยืนยันการจองนี้หรือไม่");
-                    if (r == true) { // คลิกตกลง
-                        // txt = "You pressed OK!";
-                        $('form').submit();
-                    } else { // คลิกยกเลิก
-                        // txt = "You pressed Cancel!";
-                        $('input[name=start_time]').focus();
-                        $('input[name=start_time]').css('border-color','#a94442');
-                    }
-                }else if(data == 'ไม่เหลื่อม'){
-                    $('form').submit();
-                }
-            });
-    }
-
-    // เช็กวันที่กลับน้อยกว่าวันที่ไปหรือไม่
-    function chkEndDateTime() {
-        startDate = $('input[name=start_date]').val() + ' ' + $('input[name=start_time]').val();
-        endDate = $('input[name=end_date]').val() + ' ' + $('input[name=end_time]').val();
-        // console.log(startDate);
-        // console.log(endDate);
-        // console.log(toTimestamp(startDate));
-        // console.log(toTimestamp(endDate));
-
-        // ถ้า start_date น้อยกว่า  end_date
-        if (startDate > endDate) {
-            return false;
+    })
+    .done(function(data) {
+        if( data == 'ไม่เหลื่อม' ){
+            $('form').submit();
+        }else{
+            $('#getDupData').html(data);
+            $.colorbox({inline:true, width:"95%", height:"95%", open:true, href:"#inline_dup" }); 
         }
-    }
+    });
+}
+</script>
 
-    function toTimestamp(strDate) {
-        var datum = Date.parse(strDate);
-        return datum / 1000;
-    }
+
+<script>
+$('.input-daterange').datepicker({
+    inputs: $('.fdate'),
+    format: 'dd/mm/yyyy',
+    autoclose: true,
+    language: 'th-th',
+    clearBtn: true,
+});
+$('.fdate').each(function(k, v) {
+    $(this).addClass('form-control').css({
+        'display': 'inline-block',
+        'width': '120px'
+    }); //.attr('readonly',true);
+    $(this).attr('placeholder', (!$(this).attr('placeholder') ? 'วัน/เดือน/ปี' : $(this).attr('placeholder')));
+    $(this).after(' <img src="{{url('images/calendar.png')}}" alt="" width="24" height="24" /> ');
+});
+</script>
+
+<!-- This contains the hidden content for inline calls ห้องประชุม-->
+<div style='display:none'>
+    <div id='inline_dup' style='padding:5px; background:#fff;'>
+        <h3 style="margin:0 0 25px 0; padding:0; color:#636">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
+
+        <table class="tblist">
+            <thead>
+                <tr>
+                    <th>ลำดับ</th>
+                    <th>รหัสการจอง</th>
+                    <th>หัวข้อการประชุม / ห้องประชุม</th>
+                    <th>วัน เวลา ที่ต้องการใช้ห้อง</th>
+                    <th>ผู้ขอใช้ห้องประชุม</th>
+                    <th>สถานะ</th>
+                </tr>
+            </thead>
+            <tbody id="getDupData">
+                <!-- chkOverlap Data Here -->
+            </tbody>
+        </table>
+
+        <div id="btnBoxAdd">
+            <input id="confirmSubmitBtn" name="input" type="button" title="ยืนยันการจอง" value="ยืนยันการจอง" class="btn btn-primary" style="width:100px;" />
+            <input id="cboxCloseBtn" name="input" type="button" title="ยกเลิก" value="ยกเลิก" class="btn btn-secondary" style="width:100px;" />
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function(){
+    $('body').on('click', '#confirmSubmitBtn', function() {
+        $('form').submit();
+    });
+    $('body').on('click', '#cboxCloseBtn', function() {
+        $.colorbox.close();
+    });
+});
 </script>

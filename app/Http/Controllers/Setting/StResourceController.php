@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Model\StResource;
 use Illuminate\Http\Request;
 
+use Auth;
+
 class StResourceController extends Controller
 {
     /**
@@ -31,7 +33,6 @@ class StResourceController extends Controller
         // ChkPerm('st-resource-view');
 
         $keyword = $request->get('search');
-        $perPage = 10;
 
         $rs = StResource::select('*');
 
@@ -39,7 +40,14 @@ class StResourceController extends Controller
             $rs = $rs->where('name', 'LIKE', "%$keyword%");
         }
 
-        $rs = $rs->orderBy('id','desc')->paginate($perPage);
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+         */
+        if (CanPerm('access-self')) {
+            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        }
+
+        $rs = $rs->orderBy('id','desc')->paginate(10);
 
 
         return view('setting.st-resource.index', compact('rs'));

@@ -919,3 +919,11 @@ table a:hover{
     border-radius: 15px !important;
     vertical-align: bottom;
 }
+
+.fc-button{
+    font-size: 1.3em !important;
+}
+
+.fc-event{
+    box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px hsla(0,0%,60%,.4) !important;
+}

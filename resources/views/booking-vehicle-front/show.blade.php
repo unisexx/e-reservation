@@ -15,7 +15,7 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ เพิ่มรายการ',
+                    text: '+ ขอจองยานพาหนะ',
                     click: function() {
                         window.location.href = "/booking-vehicle-front/create";
                     }
