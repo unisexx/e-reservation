@@ -48,8 +48,10 @@ class AjaxController extends Controller
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
          */
-        if (CanPerm('access-self')) {
-            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        if(!Auth::guest()){
+            if (CanPerm('access-self')) {
+                $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+            }
         }
 
         if (!empty($_GET['search'])) {
@@ -72,8 +74,10 @@ class AjaxController extends Controller
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
          */
-        if (CanPerm('access-self')) {
-            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+        if(!Auth::guest()){
+            if (CanPerm('access-self')) {
+                $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+            }
         }
 
         $rs = $rs->where(function($q){
