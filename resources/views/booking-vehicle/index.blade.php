@@ -52,7 +52,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     @if(CanPerm('booking-vehicle-create'))
-    <input type="button" title="จองยานพาหนะ" value="จองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="+ ขอจองยานพาหนะ" value="+ ขอจองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
 
