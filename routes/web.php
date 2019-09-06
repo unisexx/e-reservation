@@ -59,7 +59,7 @@ Route::resource('booking-room', 'BookingRoomController');
 Route::get('booking-vehicle/summary/{id}', 'BookingVehicleController@summary');
 Route::resource('booking-vehicle', 'BookingVehicleController');
 
-// จองทรัพยกรอื่นๆ
+// จองทรัพยากรอื่นๆ
 Route::get('booking-resource/summary/{id}', 'BookingResourceController@summary');
 Route::resource('booking-resource', 'BookingResourceController');
 

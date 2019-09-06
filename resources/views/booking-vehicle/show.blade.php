@@ -45,7 +45,10 @@ document.addEventListener('DOMContentLoaded', function() {
             $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
         },
         eventClick: function(info) {
-            alert(info.event.title);
+            $.colorbox({
+                    html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
+                    width: "50%",
+                });
         }
     });
 

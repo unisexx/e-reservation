@@ -82,7 +82,7 @@
                                     <img src="images/resource.png">
                                 </div>
                                 <div class="service-desc">
-                                    <h5>จองทรัพยกรอื่นๆ</h5>
+                                    <h5>จองทรัพยากรอื่นๆ</h5>
                                     <div class="divider-header"></div>
                                     <a href="booking-resource-front/show" class="btn btn-skin">booking</a>
                                 </div>

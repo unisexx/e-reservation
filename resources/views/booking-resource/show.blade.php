@@ -45,7 +45,10 @@ document.addEventListener('DOMContentLoaded', function() {
             $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
         },
         eventClick: function(info) {
-            alert(info.event.title);
+            $.colorbox({
+                    html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
+                    width: "50%",
+                });
         }
     });
 
@@ -78,7 +81,7 @@ padding: 0 10px;
 }
 </style>
 
-<h3>จองทรัพยกรอื่นๆ</h3>
+<h3>จองทรัพยากรอื่นๆ</h3>
 
 <div id="btnBox">
  <a href="{{ url('booking-resource') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>

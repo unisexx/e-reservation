@@ -76,7 +76,7 @@ class BookingResourceController extends Controller
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=จองทรัพยกรอื่นๆ_".date('Ymdhis').".xls");  //File name extension was wrong
+            header("Content-Disposition: attachment; filename=จองทรัพยากรอื่นๆ_".date('Ymdhis').".xls");  //File name extension was wrong
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Cache-Control: private",false);

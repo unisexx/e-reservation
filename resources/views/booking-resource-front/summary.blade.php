@@ -6,9 +6,9 @@
  <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองทรัพยกรอื่นๆ</h3>
+<h3>จองทรัพยากรอื่นๆ</h3>
 
-สรุปรายละเอียดการจองทรัพยกรอื่นๆ
+สรุปรายละเอียดการจองทรัพยากรอื่นๆ
 <table class="table table-striped table-bordered">
 <tr>
     <th>ทรัพยากร</th>

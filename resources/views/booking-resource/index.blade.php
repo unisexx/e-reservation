@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองทรัพยกรอื่นๆ</h3>
+<h3>จองทรัพยากรอื่นๆ</h3>
 
 @if(empty(request('export')))
 
@@ -61,7 +61,7 @@ $st_resource = $q->orderBy('id','desc')->get();
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     @if(CanPerm('booking-resource-create'))
-    <input type="button" title="+ ขอจองทรัพยกร" value="+ ขอจองทรัพยกร" onclick="document.location='{{ url('/booking-resource/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="+ ขอจองทรัพยากร" value="+ ขอจองทรัพยากร" onclick="document.location='{{ url('/booking-resource/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
 
