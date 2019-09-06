@@ -59,7 +59,8 @@
             eventClick: function(info) {
                 // alert(info.event.title);
                 $.colorbox({
-                    html: info.event.title.replace(/\n/g, "<br />")
+                    html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
+                    width: "50%",
                 });
             }
         });

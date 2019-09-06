@@ -62,7 +62,10 @@
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
             },
             eventClick: function(info) {
-                alert(info.event.title);
+                $.colorbox({
+                    html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
+                    width: "50%",
+                });
                 // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                 // alert('View: ' + info.view.type);
 
