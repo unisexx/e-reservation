@@ -183,7 +183,8 @@ class BookingVehicleController extends Controller
         $rs = BookingVehicle::findOrFail($id);
 
         $email = 0;
-        if($rs->status != $requestData['status']){
+        $rs->status = $requestData['status'];
+        if ($rs->isDirty('status')) {
             $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
         }
 
@@ -195,7 +196,14 @@ class BookingVehicleController extends Controller
             Mail::send([], [], function ($message) use ($rs) {
             $message->to($rs->request_email)
                 ->subject('อัพเดทสถานะการจองยานพาหนะ')
-                ->setBody('สถานะการจองยานพาหนะ: '.$rs->status , 'text/html'); // for HTML rich messages
+                ->setBody(
+                    'รหัสการจอง: '.$rs->code.'<br>'.
+                    'ไปเพื่อ: '.$rs->gofor.'<br>'.
+                    'จุดขึ้นรถ: '.$rs->point_place.'<br>'.
+                    'สถานที่ไป: '.$rs->destination.'<br>'.
+                    'สถานะการจอง: '.$rs->status.'<br><br>'.
+                    'สามารถดูรายละเอียดการจองได้ที่: <a href="'.url('booking-vehicle/show').'" target="_blank">http://msobooking.m-society.go.th/</a>'
+                    , 'text/html'); // for HTML rich messages
             });
 
         }

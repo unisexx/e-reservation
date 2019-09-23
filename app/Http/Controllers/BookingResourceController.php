@@ -173,7 +173,8 @@ class BookingResourceController extends Controller
         $rs = BookingResource::findOrFail($id);
 
         $email = 0;
-        if($rs->status != $requestData['status']){
+        $rs->status = $requestData['status'];
+        if ($rs->isDirty('status')) {
             $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
         }
 
@@ -184,8 +185,14 @@ class BookingResourceController extends Controller
             
             Mail::send([], [], function ($message) use ($rs) {
             $message->to($rs->request_email)
-                ->subject('อัพเดทสถานะการจองห้องประชุม')
-                ->setBody('สถานะการจองห้องประชุม: '.$rs->status , 'text/html'); // for HTML rich messages
+                ->subject('อัพเดทสถานะการจองทรัพยากร')
+                ->setBody(
+                    'รหัสการจอง: '.$rs->code.'<br>'.
+                    'ทรัพยากร: '.$rs->stResource->name.'<br>'.
+                    'หัวข้อ: '.$rs->title.'<br>'.
+                    'สถานะการจอง: '.$rs->status.'<br><br>'.
+                    'สามารถดูรายละเอียดการจองได้ที่: <a href="'.url('booking-resource-front/show').'" target="_blank">http://msobooking.m-society.go.th/</a>'
+                    , 'text/html'); // for HTML rich messages
             });
 
         }
