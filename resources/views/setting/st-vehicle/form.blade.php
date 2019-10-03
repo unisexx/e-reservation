@@ -2,9 +2,6 @@
 // ประเภทรถ
 $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id', 'asc')->get();
 
-// พนักงานขับ
-$st_drivers = App\Model\StDriver::where('status', '1')->orderBy('id', 'asc')->get();
-
 // หน่วยงานที่รับผิดชอบ
 $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
 
@@ -115,9 +112,7 @@ if (isset($rs->st_bureau_code)) {
         <td>
             <span class="form-inline">
                 <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
-                    @foreach($st_drivers as $row)
-                    <option value="{{$row->id}}">{{$row->name}} {{$row->tel}}</option>
-                    @endforeach
+                <option value="">+ พนักงานขับรถ +</option>
                 </select>
             </span>
         </td>
@@ -139,3 +134,37 @@ if (isset($rs->st_bureau_code)) {
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-vehicle') }}'" class="btn btn-default" style="width:100px;" />
 </div>
+
+<script>
+$(document).ready(function(){
+    getDriver();
+    $('body').on('change', 'select[name=st_department_code]', function() {
+        getDriver();
+    });
+    $('body').on('change', 'select[name=st_bureau_code]', function() {
+        getDriver();
+    });
+    $('body').on('change', 'select[name=st_division_code]', function() {
+        getDriver();
+    });
+});
+
+function getDriver(){
+    if( $('select[name=st_department_code]').val() != ''){
+        $('select[name=st_driver_id]').empty();
+        $.ajax({
+            url: '{{ url("ajaxGetDriver") }}',
+            data: {
+                st_department_code: $('select[name=st_department_code]').val(),
+                st_bureau_code: $('select[name=st_bureau_code]').val(),
+                st_division_code: $('select[name=st_division_code]').val()
+            }
+        })
+        .done(function(data) {
+            $.map(data, function(i) {
+                $('select[name=st_driver_id]').append('<option value="' + i.id + '">' + i.name + '</option>');
+            });
+        });
+    }
+}
+</script>

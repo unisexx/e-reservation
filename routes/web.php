@@ -9,7 +9,7 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Auth::routes();
 
@@ -40,7 +40,7 @@ Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
 Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');
 Route::get('ajaxResourceChkOverlap', 'AjaxController@ajaxResourceChkOverlap');
 Route::get('ajaxGetBookingRoom', 'AjaxController@ajaxGetBookingRoom');
-
+Route::get('ajaxGetDriver', 'AjaxController@ajaxGetDriver');
 
 // ตั้งค่า
 Route::resource('setting/user', 'Setting\\UserController');
@@ -71,4 +71,3 @@ Route::get('report1', 'ReportController@report1');
 Route::get('report1_detail', 'ReportController@report1_detail');
 Route::get('report2', 'ReportController@report2');
 Route::get('report2_detail', 'ReportController@report2_detail');
-
