@@ -50,9 +50,9 @@
         </td>
         <td>{{ $item->name }}</td>
         <td>
-            <div>จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
-            <div>อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
-            <div>
+            <div style="margin-bottom:10px;">จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
+            <div style="margin-bottom:10px;">อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
+            <div style="margin-bottom:10px;">
                 ผู้รับผิดชอบห้องประชุม : {{ !empty($item->res_name) ? $item->res_name : "-" }}
                 {{ !empty($item->st_department_code) ? $item->department->title : "-" }}
                 {{ !empty($item->st_bureau_code) ? $item->bureau->title : "-" }}

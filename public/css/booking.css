@@ -846,6 +846,9 @@ footer {
     background-size: 100% 100%;
     position: relative;
 	background-color: #f9f9f9;
+	position: fixed;
+    left: 0;
+    bottom: 0;
 }
 
 footer {

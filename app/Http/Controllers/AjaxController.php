@@ -60,6 +60,10 @@ class AjaxController extends Controller
             $rs = $rs->where('st_department_code', $_GET['depertment_code']);
         }
 
+        if (!empty($_GET['bureau_code'])) {
+            $rs = $rs->where('st_bureau_code', $_GET['bureau_code']);
+        }
+
         $rs = $rs->orderBy('id', 'asc')->get();
 
         return view('ajax.ajaxGetRoom', compact('rs'));
@@ -90,6 +94,14 @@ class AjaxController extends Controller
                     $q->where('name', 'like', '%' . $_GET['search'] . '%');
                 });
         });
+
+        if (!empty($_GET['depertment_code'])) {
+            $rs = $rs->where('st_department_code', $_GET['depertment_code']);
+        }
+
+        if (!empty($_GET['bureau_code'])) {
+            $rs = $rs->where('st_bureau_code', $_GET['bureau_code']);
+        }
 
         $rs = $rs->orderBy('id', 'asc')->get();
 

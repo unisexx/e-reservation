@@ -43,6 +43,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <th>ลำดับ</th>
         <th>ภาพยานพาหนะ</th>
         <th>ประเภท / ยี่ห้อ / ที่นั่ง / สี / เลขทะเบียน</th>
+        <th>หน่วยงานที่รับผิดชอบ</th>
         <th>พนักงานขับวันนี้</th>
         <th>สถานะ</th>
         <th>จัดการ</th>
@@ -52,10 +53,14 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
         <td>@if($row->image) <img src="{{ url('uploads/vehicle/'.$row->image) }}" width="90"> @endif</td>
         <td>{{$row->st_vehicle_type->name}} {{$row->brand}} {{!empty($row->seat)?$row->seat:'-'}} ที่นั่ง สี{{$row->color}} ทะเบียน {{$row->reg_number}}</td>
+        <td>
+            {{ $row->department->title }} >
+            {{ $row->bureau->title }} >
+            {{ $row->division->title }}
+        </td>
         <td>{{$row->st_driver->name}} {{$row->st_driver->tel}}</td>
         <td>{{$row->status}}</td>
         <td>
-
             @if(CanPerm('st-vehicle-edit'))
             <a href="{{ url('/setting/st-vehicle/' . $row->id . '/edit') }}" title="Edit StAscc">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />

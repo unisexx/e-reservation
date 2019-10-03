@@ -125,6 +125,15 @@ if (isset($rs->st_bureau_code)) {
                         @endforeach
                     </select>
 
+                    <select id="searchBureau" class="selectpicker" data-live-search="true" title="สำนัก">
+                        <option value="">+ สำนัก +</option>
+                        @if(old('st_department_code') || isset($rs->st_department_code))
+                        @foreach($st_bureaus as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+
                     <button id="searchRoomBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
                 </form>
             </div>
@@ -146,6 +155,30 @@ if (isset($rs->st_bureau_code)) {
         </table>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('body').on('change', '#searchDepartment', function() {
+        getBureau($(this).val());
+    });
+});
+
+function getBureau($st_department_code) {
+    $('#searchBureau').empty().selectpicker('refresh');
+
+    $.ajax({
+        method: "GET",
+        url: "{{ url('ajaxGetBureau') }}",
+        data: {
+            st_department_code: $st_department_code,
+        }
+    }).done(function(data) {
+        $.map(data, function(i) {
+            $('#searchBureau').append('<option value="' + i.code + '">' + i.title + '</option>');
+        });
+        $('#searchBureau').selectpicker('refresh');
+    });
+}
+</script>
 
 <script>
 $(document).ready(function() {
@@ -163,6 +196,7 @@ $(document).ready(function() {
             data: {
                 search: $("#searchTxt").val(),
                 depertment_code: $("#searchDepartment").val(),
+                bureau_code: $("#searchBureau").val(),
             }
         })
         .done(function(data) {
