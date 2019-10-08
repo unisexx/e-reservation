@@ -176,11 +176,11 @@ if (isset($rs->st_bureau_code)) {
 <script>
 $(document).ready(function() {
     $('body').on('change', '#searchDepartment', function() {
-        getBureau($(this).val());
+        getBureauCbox($(this).val());
     });
 });
 
-function getBureau($st_department_code) {
+function getBureauCbox($st_department_code) {
     $('#searchBureau').empty().selectpicker('refresh');
 
     $.ajax({
