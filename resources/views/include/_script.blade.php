@@ -294,3 +294,63 @@
 <script src="{{ url('js/fullcalendar-4.0.1/packages/daygrid/main.js') }}"></script>
 <script src="{{ url('js/fullcalendar-4.0.1/packages/timegrid/main.js') }}"></script>
 <script src="{{ url('js/fullcalendar-4.0.1/packages/list/main.js') }}"></script>
+
+
+<!-- เช็กเวลาที่เริ่ม - สิ้นสุด -->
+<script>
+$(document).ready(function(){
+    chkTime();
+    $('body').on('change', '.chkTime select,.chkTime input', function(){
+        chkTime();
+    });
+});
+
+function chkTime(){
+    sDateEle = $("#sDate");
+    sHourEle = $("#sHour");
+    sMinuteEle = $("#sMinute");
+    eDateEle = $("#eDate");
+    eHourEle = $("#eHour");
+    eMinuteEle = $("#eMinute");
+
+    // ถ้าวันที่เริ่ม - สิ้นสุดมีค่าเท่ากัน ให้คำนวนเวลา
+    a = thToTimeStamp(sDateEle.val());
+    b = thToTimeStamp(eDateEle.val());
+    // console.log(sDateEle.val());
+    // console.log(eDateEle.val());
+    // console.log(a);
+    // console.log(b);
+    if(a == b){
+
+        // ถ้านาทีที่เริ่ม - สิ้นสุดมีค่าเท่ากัน ให้คำนวนเวลา
+        if(parseInt(sHourEle.val()) == parseInt(eHourEle.val())){
+
+            // ถ้านาทีที่เริ่ม มีค่ามากกว่า ชั่วโมงที่สิ้นสุด ให้ปรับ นาทีที่สิ้นสุดมีค่าเท่ากับนาทีที่เริ่ม
+            if(parseInt(sMinuteEle.val()) > parseInt(eMinuteEle.val())){
+                eMinuteEle.val( sMinuteEle.val() ).selectpicker('refresh');
+            }
+
+        // ถ้าชั่วโมงที่เริ่ม มีค่ามากกว่า ชั่วโมงที่สิ้นสุด ให้ปรับ ชั่วโมงที่สิ้นสุดมีค่าเท่ากับชั่วโมงที่เริ่ม
+        }else if( parseInt(sHourEle.val()) > parseInt(eHourEle.val()) ){
+            eHourEle.val( sHourEle.val() ).selectpicker('refresh');
+
+            // ถ้านาทีที่เริ่ม มีค่ามากกว่า ชั่วโมงที่สิ้นสุด ให้ปรับ นาทีที่สิ้นสุดมีค่าเท่ากับนาทีที่เริ่ม
+            if(parseInt(sMinuteEle.val()) > parseInt(eMinuteEle.val())){
+                eMinuteEle.val( sMinuteEle.val() ).selectpicker('refresh');
+            }
+        }
+
+    }
+
+    // อัพเดท input start_time , end_time 
+    $('[name=start_time]').val( sHourEle.val()+":"+sMinuteEle.val() );
+    $('[name=end_time]').val( eHourEle.val()+":"+eMinuteEle.val() );
+}
+
+// แปลงวันไทยเป็น timestamp
+function thToTimeStamp(thDate){
+    // แปลงให้เป็นปี ค.ศ. ก่อน
+    var dateArray = thDate.split("/");
+    return new Date((parseInt(dateArray[2])-543), dateArray[1], dateArray[0]).getTime();
+}
+</script>

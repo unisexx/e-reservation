@@ -33,16 +33,42 @@ if (isset($rs->st_bureau_code)) {
     <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อห้องประชุม" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
 </div>
 
-<div class="form-group form-inline col-md-12 input-daterange">
-    <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span> / จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control fdate {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
-    <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
+<div class="form-group form-inline col-md-12 input-daterange chkTime">
+    <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label>
+    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
+    <select id="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getHour() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
+    :
+    <select id="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getMinute() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
     น.
-    -
-    <input name="end_date" type="text" class="form-control fdate {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" required/>
-    น
-    /
+    <span style="margin:0 15px;">ถึง</span>
+    <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+    <select id="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getHour() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
+    :
+    <select id="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getMinute() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
+    น.
+
+    <input type="hidden" name="start_time" value="00:00">
+    <input type="hidden" name="end_time" value="00:00">
+</div>
+
+<div class="form-group form-inline col-md-12 input-daterange">
+    <label>จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
     <input name="number" type="number" min="1" class="form-control {{ $errors->has('number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" style="width:100px;" required>
     คน
 </div>
@@ -248,13 +274,13 @@ function chkOverlap(){
 
 <script>
 $('.input-daterange').datepicker({
-    inputs: $('.fdate'),
+    inputs: $('.range-date'),
     format: 'dd/mm/yyyy',
     autoclose: true,
     language: 'th-th',
     clearBtn: true,
 });
-$('.fdate').each(function(k, v) {
+$('.range-date').each(function(k, v) {
     $(this).addClass('form-control').css({
         'display': 'inline-block',
         'width': '120px'

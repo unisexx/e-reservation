@@ -41,22 +41,69 @@ if (isset($rs->st_bureau_code)) {
     น.
 </div>
 
-<div class="form-group form-inline col-md-12 input-daterange">
+<div class="form-group form-inline col-md-12 input-daterange chkTime">
     <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-    <input name="start_date" type="text" class="form-control fdate range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
-    <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/>
+    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
+    <select id="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getHour() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
+    :
+    <select id="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getMinute() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
     น.
-    -
-    <input name="end_date" type="text" class="form-control fdate range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" required/>
+    <span style="margin:0 15px;">ถึง</span>
+    <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+    <select id="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getHour() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
+    :
+    <select id="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getMinute() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+    </select>
     น.
+
+    <input type="hidden" name="start_time" value="00:00">
+    <input type="hidden" name="end_time" value="00:00">
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>สถานที่ขึ้นรถ<span class="Txt_red_12"> *</span></label>
     <div style="margin-bottom:5px;">
         <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
-        เวลา<input name="point_time" type="text" class="form-control ftime {{ $errors->has('point_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}" style="width:70px;" /> น.
+        เวลา
+
+        <select id="pHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        @foreach(getHour() as $item)
+        <option value="{{ $item }}">{{ $item }}</option>
+        @endforeach
+        </select>
+        :
+        <select id="pMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+            @foreach(getMinute() as $item)
+            <option value="{{ $item }}">{{ $item }}</option>
+            @endforeach
+        </select>
+        น.
+
+        <input name="point_time" type="hidden" value="00:00"/>
+        <script>
+            $(document).ready(function(){
+                $('[name=point_time]').val( $("#pHour").val()+":"+$("#pMinute").val() );
+
+                $('body').on('change', '#pHour,#pMinute', function(){
+                    $('[name=point_time]').val( $("#pHour").val()+":"+$("#pMinute").val() );
+                });
+            });
+        </script>
     </div>
 </div>
 
