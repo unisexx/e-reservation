@@ -2,9 +2,8 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 // logsActivity
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -22,12 +21,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password','idcard', 'st_department_code', 'st_bureau_code', 'st_division_code', 'permission_group_id','tel','status','prefix','givename','middlename','familyname'
+        'email', 'password', 'idcard', 'st_department_code', 'st_bureau_code', 'st_division_code', 'permission_group_id', 'tel', 'status', 'prefix', 'givename', 'middlename', 'familyname', 'st_prefix_code',
     ];
 
     // logsActivity
     // column ที่ทำการเก็บ log
-    protected static $logAttributes = ['email', 'password','idcard', 'st_department_code', 'st_bureau_code', 'st_division_code', 'permission_group_id','tel','status','prefix','givename','middlename','familyname'];
+    protected static $logAttributes = ['email', 'password', 'idcard', 'st_department_code', 'st_bureau_code', 'st_division_code', 'permission_group_id', 'tel', 'status', 'prefix', 'givename', 'middlename', 'familyname', 'st_prefix_code'];
 
     // เก็บ log เฉพาะฟิลด์ที่มีการเปลี่ยนแปลง ในกรณีที่มีการแก้ไขข้อมูล
     protected static $logOnlyDirty = true;
@@ -69,5 +68,10 @@ class User extends Authenticatable
     public function permission_group()
     {
         return $this->hasOne('App\Model\PermissionGroup', 'id', 'permission_group_id');
+    }
+
+    public function prefix()
+    {
+        return $this->hasOne('App\Model\StPrefix', 'code', 'st_prefix_code');
     }
 }

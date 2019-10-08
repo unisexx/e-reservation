@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\User;
-use App\Model\UserBranch;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -20,7 +17,7 @@ class UserController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -68,37 +65,37 @@ class UserController extends Controller
     {
         $this->validate($request, [
             // 'name'                => 'required',
-            'idcard'              => 'required',
-            'st_department_code'  => 'required',
-            'st_bureau_code'      => 'required',
-            'st_division_code'    => 'required',
+            'st_prefix_code' => 'required',
+            'idcard' => 'required',
+            'st_department_code' => 'required',
+            'st_bureau_code' => 'required',
+            'st_division_code' => 'required',
             'permission_group_id' => 'required',
-            'email'               => 'required|unique:users',
-            'password'            => 'required',
-            'confirm_password'    => 'same:password',
-            'prefix'              => 'required',
-            'givename'            => 'required',
-            'familyname'          => 'required',
-		], [
+            'email' => 'required|unique:users',
+            'password' => 'required',
+            'confirm_password' => 'same:password',
+            'givename' => 'required',
+            'familyname' => 'required',
+        ], [
             // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
-            'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
-            'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
+            'st_prefix_code.required' => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'idcard.required' => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
+            'st_department_code.required' => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
-            'email.required'               => 'อีเมล์ ห้ามเป็นค่าว่าง',
-            'email.unique'                 => 'อีเมล์นี้ถูกใช้แล้ว',
-            'password.required'            => 'Password ห้ามเป็นค่าว่าง',
-            'confirm_password.same'        => 'Confirm Password ต้องเหมือนกับ Password',
-            'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'prefix.required'              => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
-            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
-            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'email.required' => 'อีเมล์ ห้ามเป็นค่าว่าง',
+            'email.unique' => 'อีเมล์นี้ถูกใช้แล้ว',
+            'password.required' => 'Password ห้ามเป็นค่าว่าง',
+            'confirm_password.same' => 'Confirm Password ต้องเหมือนกับ Password',
+            'st_department_code.required' => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required' => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_division_code.required' => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'givename.required' => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required' => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
 
-        if($requestData['password']) {
+        if ($requestData['password']) {
             $requestData['password'] = bcrypt($request->password);
         }
 
@@ -149,39 +146,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
         $this->validate($request, [
             // 'name'                => 'required',
-            'idcard'              => 'required',
-            'st_department_code'  => 'required',
+            'st_prefix_code' => 'required',
+            'idcard' => 'required',
+            'st_department_code' => 'required',
             'permission_group_id' => 'required',
-            'email'               => 'required|unique:users,email,'.$id.',id',
-            'confirm_password'    => 'same:password',
-            'st_department_code'  => 'required',
-            'st_bureau_code'      => 'required',
-            'st_division_code'    => 'required',
-            'prefix'              => 'required',
-            'givename'            => 'required',
-            'familyname'          => 'required',
-		], [
+            'email' => 'required|unique:users,email,' . $id . ',id',
+            'confirm_password' => 'same:password',
+            'st_department_code' => 'required',
+            'st_bureau_code' => 'required',
+            'st_division_code' => 'required',
+            'givename' => 'required',
+            'familyname' => 'required',
+        ], [
             // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
-            'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
-            'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
+            'st_prefix_code.required' => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'idcard.required' => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
+            'st_department_code.required' => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
-            'email.required'               => 'อีเมล์ ห้ามเป็นค่าว่าง',
-            'email.unique'                 => 'อีเมล์นี้ถูกใช้แล้ว',
-            'confirm_password.same'        => 'Confirm Password ต้องเหมือนกับ Password',
-            'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'prefix.required'              => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
-            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
-            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'email.required' => 'อีเมล์ ห้ามเป็นค่าว่าง',
+            'email.unique' => 'อีเมล์นี้ถูกใช้แล้ว',
+            'confirm_password.same' => 'Confirm Password ต้องเหมือนกับ Password',
+            'st_department_code.required' => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required' => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_division_code.required' => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'givename.required' => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required' => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
-        
-        if($requestData['password']) {
+
+        if ($requestData['password']) {
             $requestData['password'] = bcrypt($request->password);
         } else {
             unset($requestData['password']);
