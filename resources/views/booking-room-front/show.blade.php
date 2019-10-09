@@ -2,6 +2,10 @@
 
 @section('content')
 
+<?php
+    $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
+?>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -104,43 +108,23 @@
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
 
+            <select name="st_room_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
+                <option value="">+ ห้องประชุม +</option>
+                @foreach($st_rooms as $item)
+                    <option value="{{ $item->id }}" @if(request('st_room_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                @endforeach
+            </select>
+
             <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
 
-            <button id="searchRoomBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+            <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
 
         </form>
     </div>
 </div>
 
-<script>
-    $(document).ready(function() {
-        $('#searchRoomBtn').click(function() {
-            $.ajax({
-                    url: '{{ url("ajaxGetBookingRoom") }}',
-                    data: {
-                        search: $("#searchTxt").val(),
-                    }
-                })
-                .done(function(data) {
-                    if (data.id) {
-                        var url = '{{ url("booking-room-front/summary") }}' + '/' + data.id;
-                        $.colorbox({
-                            href: url,
-                            open: true
-                        });
-                    } else {
-                        $.colorbox({
-                            html: " ไม่พบรหัสการจองนี้ในระบบ "
-                        });
-                    }
-                });
-        });
-    });
-</script>
-
 @include('include._color_status')
 
 <div id='calendar'></div>
-
 
 @endsection

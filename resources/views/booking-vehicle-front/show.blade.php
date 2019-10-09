@@ -2,6 +2,10 @@
 
 @section('content')
 
+<?php
+    $st_vehicles = App\Model\StVehicle::where('status', 'พร้อมใช้')->orderBy('id', 'asc')->get();
+?>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -108,6 +112,27 @@
 </div>
 
 <h3>จองยานพาหนะ</h3>
+
+<div id="search">
+    <div id="searchBox">
+        <form accept-charset="UTF-8" class="form-inline" role="search">
+
+            <select name="st_vehicle_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ยานพาหนะ +">
+                <option value="">+ ยานพาหนะ +</option>
+                @foreach($st_vehicles as $item)
+                    <option value="{{ $item->id }}" @if(request('st_vehicle_id') == $item->id) selected="selected" @endif>
+                        {{ @$item->st_vehicle_type->name }} {{ @$item->brand }} {{ !empty(@$item->seat) ? @$item->seat : '-' }} ที่นั่ง สี{{ @$item->color }} ทะเบียน {{ @$item->reg_number }}
+                    </option>
+                @endforeach
+            </select>
+
+            <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
+
+            <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+
+        </form>
+    </div>
+</div>
 
 @include('include._color_status')
 

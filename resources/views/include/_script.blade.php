@@ -25,7 +25,7 @@
 <script src="{{ url('js/bootstrap.min.js') }}"></script>
 
 
-<link rel="stylesheet" href="{{ url('css/style.css') }}">
+<link rel="stylesheet" href="{{ url('css/style.css?v=1') }}">
 <link rel="stylesheet" href="{{ url('css/bootstrap-select.css') }}">
 <script src="{{ url('js/bootstrap-select.js') }}"></script>
 

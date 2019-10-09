@@ -2,6 +2,10 @@
 
 @section('content')
 
+<?php
+    $st_resources = App\Model\StResource::where('status', 1)->orderBy('name', 'asc')->get();
+?>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
@@ -98,6 +102,25 @@
 </div>
 
 <h3>จองทรัพยากรอื่นๆ</h3>
+
+<div id="search">
+    <div id="searchBox">
+        <form accept-charset="UTF-8" class="form-inline" role="search">
+
+            <select name="st_resource_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ทรัพยากร +">
+                <option value="">+ ทรัพยากร +</option>
+                @foreach($st_resources as $item)
+                    <option value="{{ $item->id }}" @if(request('st_resource_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                @endforeach
+            </select>
+
+            <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
+
+            <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+
+        </form>
+    </div>
+</div>
 
 @include('include._color_status')
 

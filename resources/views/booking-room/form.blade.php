@@ -30,7 +30,7 @@ if(isset($rs->end_time)){
     <label>รหัสการจอง / เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
     <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly" value="{{ isset($rs->code) ? $rs->code : '' }}"> /
 
-    <input id="tmpStRoomName" type="text" class="form-control {{ $errors->has('st_room_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : '' }}" required >
+    <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" required >
     <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
     <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
 </div>

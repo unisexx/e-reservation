@@ -62,7 +62,7 @@ class BookingResourceRequest extends FormRequest
             'st_department_code.required'   => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'       => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'st_division_code.required'     => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            // 'g-recaptcha-response.required' => 'กรุณายืนยันตัวตน ฉันไม่ใช่โปรแกรมอัติโนมัติ',
+            // 'g-recaptcha-response.required' => 'กรุณายืนยันตัวตน ฉันไม่ใช่โปรแกรมอัตโนมัติ',
             // 'g-recaptcha-response.captcha'  => 'ระบบยืนยันตัวตนผิดพลาด!!! กรุณาติดต่อแอดมิน',
         ];
     }
