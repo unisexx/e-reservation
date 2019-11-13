@@ -71,3 +71,7 @@ Route::get('report1', 'ReportController@report1');
 Route::get('report1_detail', 'ReportController@report1_detail');
 Route::get('report2', 'ReportController@report2');
 Route::get('report2_detail', 'ReportController@report2_detail');
+
+// profile
+Route::get('profile', 'HomeController@profile');
+Route::patch('profile_save', 'HomeController@profile_save');

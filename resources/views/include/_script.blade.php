@@ -299,7 +299,10 @@
 <!-- เช็กเวลาที่เริ่ม - สิ้นสุด -->
 <script>
 $(document).ready(function(){
-    chkTime();
+    if($('.chkTime').length){
+        chkTime();
+    }
+    
     $('body').on('change', '.chkTime select,.chkTime input', function(){
         chkTime();
     });

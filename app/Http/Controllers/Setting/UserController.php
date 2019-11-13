@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 
+use DB;
+
 class UserController extends Controller
 {
     /**
@@ -25,18 +27,22 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // DB::enableQueryLog();
+
         // ตรวจสอบ permission
         ChkPerm('user-view');
 
         $keyword = $request->get('search');
-        $perPage = 10;
+
+        $rs = User::select('*');
 
         if (!empty($keyword)) {
-            $user = User::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $user = User::latest()->paginate($perPage);
+            $rs = $rs->where(DB::raw('CONCAT_WS(" ", givename, middlename, familyname)') , 'LIKE' , "%$keyword%");
         }
+
+        $user = $rs->orderBy('id','desc')->paginate(10);
+
+        // dd(DB::getQueryLog());
 
         return view('setting.user.index', compact('user'));
     }
