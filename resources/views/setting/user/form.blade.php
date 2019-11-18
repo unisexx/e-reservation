@@ -71,10 +71,10 @@
     <tr>
         <th>หน่วยงาน<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline">
+            <div class="form-inline dep-chain-group">
 
                 <select name="st_department_code" id="lunch"
-                    class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}"
+                    class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}"
                     data-live-search="true" data-size="5" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
@@ -85,7 +85,7 @@
                 </select>
 
                 <select name="st_bureau_code" id="lunch"
-                    class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true"
+                    class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true"
                     data-size="5" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($user->st_department_code))
@@ -98,7 +98,7 @@
                 </select>
 
                 <select name="st_division_code" id="lunch"
-                    class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}"
+                    class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}"
                     data-live-search="true" data-size="5" title="กลุ่ม" required>
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($user->st_bureau_code))

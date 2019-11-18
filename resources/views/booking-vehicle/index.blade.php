@@ -68,16 +68,16 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
 <table class="table table-bordered table-striped sortable tblist">
     <thead>
         <tr>
-            <th style="width:3%" class="nosort" data-sortcolumn="0" data-sortkey="0-0">ลำดับ</th>
-            <th style="width:5%" class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
-            <th style="width:25%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
-            <th style="width:20%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
-            <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
-            <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
-            <th style="width:10%" class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
-            <th style="width:10%" class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
+            <th class="nosort" data-sortcolumn="0" data-sortkey="0-0">ลำดับ</th>
+            <th class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
+            <th class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
+            <th class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
+            <th class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
+            <th class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
+            <th class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
+            <th class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
             @if(empty(request('export')))
-            <th style="width:10%" class="nosort" data-sortcolumn="7" data-sortkey="8-0">จัดการ</th>
+            <th class="nosort" data-sortcolumn="7" data-sortkey="8-0">จัดการ</th>
             @endif
         </tr>
     </thead>
@@ -97,6 +97,8 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
                 <div>
                     @if(!empty($row->st_vehicle_id))
                     {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ $row->st_vehicle->st_driver->name }}
+                    @else
+                    <b>(- ยังไม่ได้เลือกยานพาหนะ -)</b>
                     @endif
                 </div>
             </td>

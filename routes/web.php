@@ -41,6 +41,8 @@ Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');
 Route::get('ajaxResourceChkOverlap', 'AjaxController@ajaxResourceChkOverlap');
 Route::get('ajaxGetBookingRoom', 'AjaxController@ajaxGetBookingRoom');
 Route::get('ajaxGetDriver', 'AjaxController@ajaxGetDriver');
+Route::get('ajaxGetBureauVehicle', 'AjaxController@ajaxGetBureauVehicle');
+Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 
 // ตั้งค่า
 Route::resource('setting/user', 'Setting\\UserController');

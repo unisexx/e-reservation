@@ -53,6 +53,10 @@ class BookingVehicle extends Model
         'note',
         'status',
         'st_vehicle_id',
+        'req_st_department_code',
+        'req_st_bureau_code',
+        'req_st_division_code',
+
     ];
 
     // relation
@@ -74,6 +78,23 @@ class BookingVehicle extends Model
     public function st_vehicle(){
         return $this->hasOne('App\Model\StVehicle', 'id', 'st_vehicle_id');
     }
+
+    public function departmentVehicle()
+    {
+        return $this->hasOne('App\Model\StDepartment', 'code', 'req_st_department_code');
+    }
+
+    public function bureauVehicle()
+    {
+        return $this->hasOne('App\Model\StBureau', 'code', 'req_st_bureau_code');
+    }
+
+    public function divisionVehicle()
+    {
+        return $this->hasOne('App\Model\StDivision', 'code', 'req_st_division_code');
+    }
+
+    
 
     // logsActivity
     protected static $logAttributes = [

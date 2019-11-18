@@ -39,6 +39,20 @@ class AjaxController extends Controller
         return $data['rs'];
     }
 
+    public function ajaxGetBureauVehicle()
+    {
+        $data['rs'] = StVehicle::select('st_bureau_code')->where('st_department_code', 'like', $_GET['st_department_code'] . '%')->where('status', 'พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+
+        return $data['rs'];
+    }
+
+    public function ajaxGetDivisionVehicle()
+    {
+        $data['rs'] = StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $_GET['st_bureau_code'] . '%')->where('status', 'พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+
+        return $data['rs'];
+    }
+
     public function ajaxGetRoom()
     {
         $rs = StRoom::select('*')->where('status', '1');
@@ -103,6 +117,18 @@ class AjaxController extends Controller
             $rs = $rs->where('st_bureau_code', $_GET['bureau_code']);
         }
 
+        if (!empty($_GET['req_st_department_code'])) {
+            $rs = $rs->where('st_department_code', $_GET['req_st_department_code']);
+        }
+
+        if (!empty($_GET['req_st_bureau_code'])) {
+            $rs = $rs->where('st_bureau_code', $_GET['req_st_bureau_code']);
+        }
+
+        if (!empty($_GET['req_st_division_code'])) {
+            $rs = $rs->where('st_division_code', $_GET['req_st_division_code']);
+        }
+
         $rs = $rs->orderBy('id', 'asc')->get();
 
         // dd($rs);
@@ -143,16 +169,35 @@ class AjaxController extends Controller
 
     public function ajaxVehicleChkOverlap()
     {
-        $st_vehicle_id = $_GET['st_vehicle_id'];
-        $start_date = Date2DB($_GET['start_date']);
-        $end_date = Date2DB($_GET['end_date']);
-        $start_time = $_GET['start_time'];
-        $end_time = $_GET['end_time'];
-        $id = $_GET['id'];
+        $st_vehicle_id          = @$_GET['st_vehicle_id'];
+        $start_date             = Date2DB($_GET['start_date']);
+        $end_date               = Date2DB($_GET['end_date']);
+        $start_time             = $_GET['start_time'];
+        $end_time               = $_GET['end_time'];
+        $req_st_department_code = @$_GET['req_st_department_code'];
+        $req_st_bureau_code     = @$_GET['req_st_bureau_code'];
+        $req_st_division_code   = @$_GET['req_st_division_code'];
+        $id                     = $_GET['id'];
 
-        $rs = BookingVehicle::select('*')
-            ->where('st_vehicle_id', $st_vehicle_id)
-            ->where(function ($q) use ($start_date, $end_date) {
+        $rs = BookingVehicle::select('*');
+
+        if (!empty($st_vehicle_id)) {
+            $rs = $rs->where('st_vehicle_id', $st_vehicle_id);
+        }
+
+        if (!empty($req_st_department_code)) {
+            $rs = $rs->where('req_st_department_code', $req_st_department_code);
+        }
+
+        if (!empty($req_st_bureau_code)) {
+            $rs = $rs->where('req_st_bureau_code', $req_st_bureau_code);
+        }
+
+        if (!empty($req_st_division_code)) {
+            $rs = $rs->where('req_st_division_code', $req_st_division_code);
+        }
+        
+        $rs = $rs->where(function ($q) use ($start_date, $end_date) {
                 $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
             })
             ->where(function ($q) use ($start_time, $end_time) {

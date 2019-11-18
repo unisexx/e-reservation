@@ -16,20 +16,20 @@
 
 <h3>ตั้งค่า พนักงานขับ</h3>
 <div id="search">
-    <div id="searchBox">
+    <div id="searchBox" class="dep-chain-group">
         <form method="GET" action="{{ url('/setting/st-driver') }}" accept-charset="UTF-8" class="form-inline" role="search">
             <input type="text" class="form-control" style="width:350px;" placeholder="ชื่อพนักงานขับ" name="search" value="{{ request('search') }}">
 
             @if(CanPerm('access-all'))
 
-            <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
+            <select name="st_department_code" id="lunch" class="chain-department selectpicker" data-live-search="true" title="กรม">
                 <option value="">+ กรม +</option>
                 @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @request('st_department_code')) selected="selected" @endif>{{ $item->title }}</option>
                 @endforeach
             </select>
 
-            <select name="st_bureau_code" id="lunch" class="selectpicker" data-live-search="true" title="สำนัก">
+            <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker" data-live-search="true" title="สำนัก">
                 <option value="">+ สำนัก +</option>
                 @if(request('st_department_code'))
                 @foreach($st_bureaus as $item)
@@ -38,7 +38,7 @@
                 @endif
             </select>
 
-            <select name="st_division_code" id="lunch" class="selectpicker" data-live-search="true" title="กลุ่ม">
+            <select name="st_division_code" id="lunch" class="chain-division selectpicker" data-live-search="true" title="กลุ่ม">
                 <option value="">+ กลุ่ม +</option>
                 @if(request('st_bureau_code'))
                 @foreach($st_divisions as $item)

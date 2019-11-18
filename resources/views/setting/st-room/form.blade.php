@@ -57,7 +57,7 @@ if (isset($stroom->st_bureau_code)) {
     </tr>
     <tr>
         <th>ผู้รับผิดชอบห้องประชุม<span class="Txt_red_12"> *</span></th>
-        <td>
+        <td class="dep-chain-group">
             <div class="form-inline" style="margin-bottom:5px;">
                 <input name="res_name" type="text" class="form-control {{ $errors->has('res_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้รับผิดชอบ" value="{{ isset($stroom->res_name) ? $stroom->res_name : old('res_name') }}" style="width:300px;" required />
                 <input name="res_tel" type="text" class="form-control {{ $errors->has('res_tel') ? 'has-error' : '' }}" placeholder="เบอร์ติดต่อ" value="{{ isset($stroom->res_tel) ? $stroom->res_tel : old('res_tel') }}" style="width:200px;" required />
@@ -79,14 +79,14 @@ if (isset($stroom->st_bureau_code)) {
 
             @elseif(CanPerm('access-all'))
 
-                <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
+                <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$stroom->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
 
-                <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
+                <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($stroom->st_department_code))
                     @foreach($st_bureaus as $item)
@@ -95,7 +95,7 @@ if (isset($stroom->st_bureau_code)) {
                     @endif
                 </select>
 
-                <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
+                <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($stroom->st_bureau_code))
                     @foreach($st_divisions as $item)

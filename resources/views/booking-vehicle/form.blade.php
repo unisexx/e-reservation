@@ -31,10 +31,56 @@ if(isset($rs->end_time)){
 if(isset($rs->point_time)){
     $pTimeArr = (explode(":",$rs->point_time));
 }
+
+// หน่วยงานของยานพาหนะ
+$req_st_departments = App\Model\StVehicle::select('st_department_code')->where('status','พร้อมใช้')->with('department')->distinct()->orderBy('st_department_code', 'asc')->get();
+
+if (old('req_st_department_code')) {
+    $req_st_bureaus = App\Model\StVehicle::select('st_bureau_code')->where('st_department_code', 'like', old('req_st_department_code') . '%')->where('status','พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+}
+
+if (old('req_st_bureau_code')) {
+    $req_st_divisions = App\Model\StVehicle::select('st_division_code')->where('st_bureau_code', 'like', old('req_st_bureau_code') . '%')->where('status','พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+}
+
+if (isset($rs->req_st_department_code)) {
+    $req_st_bureaus = App\Model\StVehicle::select('st_bureau_code')->where('st_department_code', 'like', $rs->req_st_department_code . '%')->where('status','พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+}
+
+if (isset($rs->req_st_bureau_code)) {
+    $req_st_divisions = App\Model\StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $rs->req_st_bureau_code . '%')->where('status','พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+}
 ?>
 
 
 
+<div class="form-group form-inline col-md-12 dep-chain-group">
+    <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
+    <select name="req_st_department_code" id="lunch" class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
+        <option value="">+ กรม +</option>
+        @foreach($req_st_departments as $item)
+        <option value="{{ $item->st_department_code }}" @if($item->st_department_code == @old('req_st_department_code')) selected="selected" @endif @if($item->st_department_code == @$rs->req_st_department_code) selected="selected" @endif>{{ $item->department->title }}</option>
+        @endforeach
+    </select>
+
+    <select name="req_st_bureau_code" id="lunch" class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
+        <option value="">+ สำนัก +</option>
+        @if(old('req_st_department_code') || isset($rs->req_st_department_code))
+        @foreach($req_st_bureaus as $item)
+        <option value="{{ $item->st_bureau_code }}" @if($item->st_bureau_code == @old('req_st_bureau_code')) selected="selected" @endif @if($item->st_bureau_code == @$rs->req_st_bureau_code) selected="selected" @endif>{{ $item->bureau->title }}</option>
+        @endforeach
+        @endif
+    </select>
+
+    <select name="req_st_division_code" id="lunch" class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
+        <option value="">+ กลุ่ม +</option>
+        @if(old('req_st_bureau_code') || isset($rs->req_st_bureau_code))
+        @foreach($req_st_divisions as $item)
+        <option value="{{ $item->st_division_code }}" @if($item->st_division_code == @old('req_st_division_code')) selected="selected" @endif @if($item->st_division_code == @$rs->req_st_division_code) selected="selected" @endif>{{ $item->division->title }}</option>
+        @endforeach
+        @endif
+    </select>
+</div>
 
 <div class="form-group form-inline col-md-12">
     <label>ไปเพื่อ<span class="Txt_red_12"> *</span></label>
@@ -126,17 +172,17 @@ if(isset($rs->point_time)){
 
 <div class="form-group form-inline col-md-12">
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
-    <div style="margin-bottom:5px;">
+    <div class="dep-chain-group" style="margin-bottom:5px;">
         <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;">
 
-        <select name="st_department_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
+        <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>
             @foreach($st_departments as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
         </select>
 
-        <select name="st_bureau_code" id="lunch" class="selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
+        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
             <option value="">+ สำนัก +</option>
             @if(old('st_department_code') || isset($rs->st_department_code))
             @foreach($st_bureaus as $item)
@@ -145,7 +191,7 @@ if(isset($rs->point_time)){
             @endif
         </select>
 
-        <select name="st_division_code" id="lunch" class="selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
+        <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
             <option value="">+ กลุ่ม +</option>
             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
             @foreach($st_divisions as $item)
@@ -249,6 +295,9 @@ if(isset($rs->point_time)){
                     url: '{{ url("ajaxGetVehicle") }}',
                     data: {
                         search: $("#searchTxt").val(),
+                        req_st_department_code: $('select[name=req_st_department_code]').val(),
+                        req_st_bureau_code: $('select[name=req_st_bureau_code]').val(),
+                        req_st_division_code: $('select[name=req_st_division_code]').val(),
                     }
                 })
                 .done(function(data) {

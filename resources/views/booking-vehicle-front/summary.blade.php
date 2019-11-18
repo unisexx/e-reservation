@@ -15,6 +15,10 @@
     <td>{{ $rs->code }}</td>
 </tr>
 <tr>
+    <th>ขอใช้ยานพาหนะของหน่วยงาน</th>
+    <td>{{ $rs->departmentVehicle->title }} {{ $rs->bureauVehicle->title }} {{ $rs->divisionVehicle->title }}</td>
+</tr>
+<tr>
     <th>ยานพาหนะ</th>
     <td>
         @if(isset($rs->st_vehicle_id))

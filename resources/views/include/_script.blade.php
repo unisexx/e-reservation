@@ -238,7 +238,7 @@
 
 
 <!-- chain select หน่วยงาน -->
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('body').on('change', 'select[name=st_department_code]', function() {
             getBureau($(this).val());
@@ -281,7 +281,104 @@
             $('select[name=st_division_code]').selectpicker('refresh');
         });
     }
+</script> --}}
+
+<!-- chain select หน่วยงานใหม่ -->
+<script>
+    $(document).ready(function() {
+        $('body').on('change', 'select.chain-department', function() {
+            getBureau($(this));
+        });
+        $('body').on('change', 'select.chain-bureau', function() {
+            getDivision($(this));
+        });
+    });
+
+    function getBureau($department) {
+        $thisGroup = $department.closest('.dep-chain-group');
+        $thisGroup.find('select.chain-bureau, select.chain-division').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetBureau') }}",
+            data: {
+                st_department_code: $department.val(),
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $thisGroup.find('select.chain-bureau').append('<option value="' + i.code + '">' + i.title + '</option>');
+            });
+            $thisGroup.find('select.chain-bureau').selectpicker('refresh');
+        });
+    }
+
+    function getDivision($bureau) {
+        $thisGroup = $bureau.closest('.dep-chain-group');
+        $thisGroup.find('select.chain-division').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetDivision') }}",
+            data: {
+                st_bureau_code: $bureau.val(),
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $thisGroup.find('select.chain-division').append('<option value="' + i.code + '">' + i.title + '</option>');
+            });
+            $thisGroup.find('select.chain-division').selectpicker('refresh');
+        });
+    }
 </script>
+
+<!-- chain select หน่วยงานของยานพาหนะ -->
+<script>
+    $(document).ready(function() {
+        $('body').on('change', 'select.chain-department-vehicle', function() {
+            getBureauVehicle($(this));
+        });
+        $('body').on('change', 'select.chain-bureau-vehicle', function() {
+            getDivisionVehicle($(this));
+        });
+    });
+
+    function getBureauVehicle($department) {
+        $thisGroup = $department.closest('.dep-chain-group');
+        $thisGroup.find('select.chain-bureau-vehicle, select.chain-division-vehicle').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetBureauVehicle') }}",
+            data: {
+                st_department_code: $department.val(),
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $thisGroup.find('select.chain-bureau-vehicle').append('<option value="' + i.st_bureau_code + '">' + i.bureau.title + '</option>');
+            });
+            $thisGroup.find('select.chain-bureau-vehicle').selectpicker('refresh');
+        });
+    }
+
+    function getDivisionVehicle($bureau) {
+        $thisGroup = $bureau.closest('.dep-chain-group');
+        $thisGroup.find('select.chain-division-vehicle').empty().selectpicker('refresh');
+
+        $.ajax({
+            method: "GET",
+            url: "{{ url('ajaxGetDivisionVehicle') }}",
+            data: {
+                st_bureau_code: $bureau.val(),
+            }
+        }).done(function(data) {
+            $.map(data, function(i) {
+                $thisGroup.find('select.chain-division-vehicle').append('<option value="' + i.st_division_code + '">' + i.division.title + '</option>');
+            });
+            $thisGroup.find('select.chain-division-vehicle').selectpicker('refresh');
+        });
+    }
+</script>
+
 
 <!-- full calendar -->
 <link href="{{ url('js/fullcalendar-4.0.1/packages/core/main.css') }}" rel="stylesheet" />
