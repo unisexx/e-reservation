@@ -414,3 +414,12 @@ $(document).ready(function(){
     });
 });
 </script>
+
+<script>
+$(document).ready(function(){
+    // ถ้ามีการเปลี่ยนแปลงข้อมูล ขอใช้ยานพาหนะของหน่วยงาน ให้เคลียร์ค่า เลือกยานพาหนะ เป็นค่าว่าง
+    $('body').on('change', 'select[name=req_st_department_code], select[name=req_st_bureau_code], select[name=req_st_division_code]', function(){
+        $('input[name=tmpStVehicleName], input[name=st_vehicle_id]').val("");
+    });
+});
+</script>
