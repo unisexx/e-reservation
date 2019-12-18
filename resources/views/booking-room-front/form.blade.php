@@ -29,36 +29,36 @@ if (isset($rs->st_bureau_code)) {
 
 
 <div class="form-group form-inline col-md-12">
-    <label>ชื่อเรื่อง / หัวข้อการประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อห้องประชุม" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
+    <label>ชื่อเรื่อง / หัวข้อการประชุม-อบรม<span class="Txt_red_12"> *</span></label>
+    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
 </div>
 
 <div class="form-group form-inline col-md-12 input-daterange chkTime">
     <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label>
     <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
-    <select id="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('sHour') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('sMinute') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
     <span style="margin:0 15px;">ถึง</span>
     <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    <select id="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('eHour') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('eMinute') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.

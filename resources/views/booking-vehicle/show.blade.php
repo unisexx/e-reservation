@@ -25,10 +25,11 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks: true, // can click day/week names to navigate views
         // editable: true,
         eventLimit: false, // allow "more" link when too many events
+        displayEventTime: false,
         events: [
             @foreach($rs as $key=>$row)
             {
-                shortTitle: '[{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
+                shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
                 title: 'สถานะ: {{ $row->status }}\n{{ $row->gofor }}\nรายละเอียดรถ: {{ @$row->st_vehicle->st_vehicle_type->name }} {{ @$row->st_vehicle->brand }} {{ @$row->st_vehicle->seat }} ที่นั่ง {{ @$row->st_vehicle->color }} ทะเบียน {{ @$row->st_vehicle->reg_number }}\nสถานที่ขึ้นรถ: {{ $row->point_place }} เวลา {{ $row->point_time }}\nสถานที่ไป: {{ $row->destination }}',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}',

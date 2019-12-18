@@ -39,13 +39,14 @@
             eventLimit: false, // allow "more" link when too many events
             selectable: true,
             selectMirror: true,
+            displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
                 window.location.href = "/booking-resource-front/create?start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
-                    shortTitle: '[{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
+                    shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
                     title: 'สถานะ: {{ $row->status }}\nทรัพยากร: {{ $row->stResource->name }}\n{{ $row->title }}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',

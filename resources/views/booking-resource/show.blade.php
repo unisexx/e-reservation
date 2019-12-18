@@ -26,10 +26,11 @@ document.addEventListener('DOMContentLoaded', function() {
         navLinks: true, // can click day/week names to navigate views
         // editable: true,
         eventLimit: false, // allow "more" link when too many events
+        displayEventTime: false,
         events: [
             @foreach($rs as $key=>$row)
             {
-                shortTitle: '[{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
+                shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
                 title: 'สถานะ: {{ $row->status }}\nทรัพยากร: {{ $row->stResource->name }}\n{{ $row->title }}',
                 start: '{{ $row->start_date }}T{{ $row->start_time }}',
                 end: '{{ $row->end_date }}T{{ $row->end_time }}',
