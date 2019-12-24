@@ -35,6 +35,7 @@ class StRoom extends Model
         'name', 'people', 'equipment', 'res_name', 'res_tel', 'fee', 'fee_detail', 'note', 'status', 'image', 'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'over_people',
     ];
 
     /** Dear Custom Function */
@@ -68,19 +69,20 @@ class StRoom extends Model
 
     // logsActivity
     protected static $logAttributes = [
-        'name', 
-        'people', 
-        'equipment', 
-        'res_name', 
-        'res_tel', 
-        'fee', 
-        'fee_detail', 
-        'note', 
-        'status', 
-        'image', 
+        'name',
+        'people',
+        'equipment',
+        'res_name',
+        'res_tel',
+        'fee',
+        'fee_detail',
+        'note',
+        'status',
+        'image',
         'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'over_people',
     ];
     protected static $logOnlyDirty = true;
 }

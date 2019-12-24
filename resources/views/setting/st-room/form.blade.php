@@ -46,7 +46,14 @@ if (isset($stroom->st_bureau_code)) {
     <tr>
         <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline"><input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน</div>
+            <div class="form-inline">
+                <input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน
+
+                <div>
+                    <input type="hidden" name="over_people" value="0" checked>
+                    <label for="op"><input id="op" type="checkbox" name="over_people" value="1" {{ $stroom->over_people == 1 ? 'checked' : '' }}> ยอมให้บันทึกเกินจำนวนที่รองรับได้</label>
+                </div>
+            </div>
         </td>
     </tr>
     <tr>

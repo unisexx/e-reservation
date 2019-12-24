@@ -45,6 +45,7 @@ class BookingVehicle extends Model
         'point_time',
         'destination',
         'request_name',
+        'request_position',
         'st_department_code',
         'st_bureau_code',
         'st_division_code',
@@ -75,7 +76,8 @@ class BookingVehicle extends Model
         return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
     }
 
-    public function st_vehicle(){
+    public function st_vehicle()
+    {
         return $this->hasOne('App\Model\StVehicle', 'id', 'st_vehicle_id');
     }
 
@@ -93,8 +95,6 @@ class BookingVehicle extends Model
     {
         return $this->hasOne('App\Model\StDivision', 'code', 'req_st_division_code');
     }
-
-    
 
     // logsActivity
     protected static $logAttributes = [

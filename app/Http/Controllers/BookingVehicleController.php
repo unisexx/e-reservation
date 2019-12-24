@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
-use App\Model\BookingVehicle;
-
 use App\Http\Requests\BookingVehicleRequest;
-
+use App\Model\BookingVehicle;
 use Auth;
+use Illuminate\Http\Request;
 use Mail;
 
 class BookingVehicleController extends Controller
@@ -48,54 +44,57 @@ class BookingVehicleController extends Controller
          * เห็นเฉพาะยานพาหนะที่อยู่ในสังกัดของตัวเอง
          */
         if (CanPerm('access-self')) {
-            $rs = $rs->whereHas('st_vehicle', function($q){
-                $q->where('st_division_code',Auth::user()->st_division_code);
-            });
+            // $rs = $rs->whereHas('st_vehicle', function($q){
+            //     $q->where('st_division_code',Auth::user()->st_division_code);
+            // });
+
+            $rs = $rs->where('req_st_department_code', Auth::user()->st_department_code)
+                ->where('req_st_bureau_code', Auth::user()->st_bureau_code)
+                ->where('req_st_division_code', Auth::user()->st_division_code);
         }
 
         if (!empty($st_vehicle_type_id)) {
-            $rs = $rs->whereHas('st_vehicle', function($q) use ($st_vehicle_type_id){
-                        $q->where('st_vehicle_type_id', $st_vehicle_type_id);
-                    });
+            $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_vehicle_type_id) {
+                $q->where('st_vehicle_type_id', $st_vehicle_type_id);
+            });
         }
 
         if (!empty($date_select)) {
-            if($data_type == 'start_date'){
-                $rs = $rs->where('start_date',Date2DB($date_select));
-            }elseif($data_type == 'end_date'){
-                $rs = $rs->where('end_date',Date2DB($date_select));
+            if ($data_type == 'start_date') {
+                $rs = $rs->where('start_date', Date2DB($date_select));
+            } elseif ($data_type == 'end_date') {
+                $rs = $rs->where('end_date', Date2DB($date_select));
             }
         }
 
         if (!empty($keyword)) {
-            $rs = $rs->where(function($q) use ($keyword){
+            $rs = $rs->where(function ($q) use ($keyword) {
                 $q->where('code', 'LIKE', "%$keyword%")
                     ->orWhere('gofor', 'LIKE', "%$keyword%")
-                    ->orWhereHas('st_vehicle', function($q) use ($keyword){
+                    ->orWhereHas('st_vehicle', function ($q) use ($keyword) {
                         $q->where('brand', 'LIKE', "%$keyword%")
-                        ->orWhere('color', 'LIKE', "%$keyword%")
-                        ->orWhere('reg_number', 'LIKE', "%$keyword%")->orWhereHas('st_driver', function($q) use ($keyword){
+                            ->orWhere('color', 'LIKE', "%$keyword%")
+                            ->orWhere('reg_number', 'LIKE', "%$keyword%")->orWhereHas('st_driver', function ($q) use ($keyword) {
                             $q->where('name', 'LIKE', "%$keyword%");
                         });
                     });
             });
         }
 
-
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=จองยานพาหนะ_".date('Ymdhis').".xls");  //File name extension was wrong
+            header("Content-Disposition: attachment; filename=จองยานพาหนะ_" . date('Ymdhis') . ".xls"); //File name extension was wrong
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-            header("Cache-Control: private",false);
+            header("Cache-Control: private", false);
 
-            $rs = $rs->orderBy('id','desc')->get();
+            $rs = $rs->orderBy('id', 'desc')->get();
             return view('booking-vehicle.index', compact('rs'));
 
         } else {
 
-            $rs = $rs->orderBy('id','desc')->paginate($perPage);
+            $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
             return view('booking-vehicle.index', compact('rs'));
 
         }
@@ -131,11 +130,11 @@ class BookingVehicleController extends Controller
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
         $rs = BookingVehicle::find($data->id);
-        $rs->code = 'RV'.sprintf("%05d", $data->id);
+        $rs->code = 'RV' . sprintf("%05d", $data->id);
         $rs->save();
-        
+
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
-        return redirect('booking-vehicle/summary/'.$rs->id);
+        return redirect('booking-vehicle/summary/' . $rs->id);
     }
 
     /**
@@ -147,7 +146,7 @@ class BookingVehicleController extends Controller
     public function show($id)
     {
         $rs = BookingVehicle::select('*');
-        $rs = $rs->orderBy('id','desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->get();
         return view('booking-vehicle.show', compact('rs'));
     }
 
@@ -160,7 +159,7 @@ class BookingVehicleController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-edit','booking-vehicle');
+        ChkPerm('booking-vehicle-edit', 'booking-vehicle');
 
         $rs = BookingVehicle::findOrFail($id);
         return view('booking-vehicle.edit', compact('rs'));
@@ -179,7 +178,7 @@ class BookingVehicleController extends Controller
         $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
-        
+
         $rs = BookingVehicle::findOrFail($id);
 
         $email = 0;
@@ -191,19 +190,19 @@ class BookingVehicleController extends Controller
         $rs->update($requestData);
 
         // ฟอร์มอีเมล์
-        if($email == 1){
-            
+        if ($email == 1) {
+
             Mail::send([], [], function ($message) use ($rs) {
-            $message->to($rs->request_email)
-                ->subject('อัพเดทสถานะการจองยานพาหนะ')
-                ->setBody(
-                    'รหัสการจอง: '.$rs->code.'<br>'.
-                    'ไปเพื่อ: '.$rs->gofor.'<br>'.
-                    'จุดขึ้นรถ: '.$rs->point_place.'<br>'.
-                    'สถานที่ไป: '.$rs->destination.'<br>'.
-                    'สถานะการจอง: '.$rs->status.'<br><br>'.
-                    'สามารถดูรายละเอียดการจองได้ที่: <a href="'.url('booking-vehicle/show').'" target="_blank">http://msobooking.m-society.go.th/</a>'
-                    , 'text/html'); // for HTML rich messages
+                $message->to($rs->request_email)
+                    ->subject('อัพเดทสถานะการจองยานพาหนะ')
+                    ->setBody(
+                        'รหัสการจอง: ' . $rs->code . '<br>' .
+                        'ไปเพื่อ: ' . $rs->gofor . '<br>' .
+                        'จุดขึ้นรถ: ' . $rs->point_place . '<br>' .
+                        'สถานที่ไป: ' . $rs->destination . '<br>' .
+                        'สถานะการจอง: ' . $rs->status . '<br><br>' .
+                        'สามารถดูรายละเอียดการจองได้ที่: <a href="' . url('booking-vehicle/show') . '" target="_blank">http://msobooking.m-society.go.th/</a>'
+                        , 'text/html'); // for HTML rich messages
             });
 
         }
@@ -222,7 +221,7 @@ class BookingVehicleController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-vehicle-delete','booking-vehicle');
+        ChkPerm('booking-vehicle-delete', 'booking-vehicle');
 
         BookingVehicle::destroy($id);
 

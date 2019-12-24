@@ -53,6 +53,13 @@ if (isset($rs->req_st_bureau_code)) {
 ?>
 
 
+<div class="form-group form-inline col-md-12">
+    <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
+    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
+    {{-- <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : '' }} {{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
+    น. --}}
+</div>
+
 
 <div class="form-group form-inline col-md-12 dep-chain-group">
     <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
@@ -90,13 +97,6 @@ if (isset($rs->req_st_bureau_code)) {
 <div class="form-group form-inline col-md-6">
     <label>จำนวนผู้โดยสาร <span class="Txt_red_12"> *</span></label>
     <input name="number" type="number" min="1" class="form-control numOnly {{ $errors->has('number') ? 'has-error' : '' }}" style="width:100px;" value="{{ isset($rs->number) ? $rs->number : old('number') }}"> คน
-</div>
-
-<div class="form-group form-inline col-md-12">
-    <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
-    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
-    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : '' }} {{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
-    น.
 </div>
 
 <div class="form-group form-inline col-md-12 input-daterange chkTime">
@@ -174,6 +174,8 @@ if (isset($rs->req_st_bureau_code)) {
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
     <div class="dep-chain-group" style="margin-bottom:5px;">
         <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;">
+
+        <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;">
 
         <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>

@@ -34,6 +34,12 @@ if (old('req_st_bureau_code')) {
 ?>
 
 
+<div class="form-group form-inline col-md-12">
+    <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
+    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
+    {{-- <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
+    น.--}}
+</div>
 
 <div class="form-group form-inline col-md-12 dep-chain-group">
     <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
@@ -73,39 +79,32 @@ if (old('req_st_bureau_code')) {
     <input name="number" type="number" min="1" class="form-control numOnly {{ $errors->has('number') ? 'has-error' : '' }}" style="width:100px;" value="{{ isset($rs->number) ? $rs->number : old('number') }}"> คน
 </div>
 
-<div class="form-group form-inline col-md-12">
-    <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
-    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
-    <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
-    น.
-</div>
-
 <div class="form-group form-inline col-md-12 input-daterange chkTime">
     <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
     <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
-    <select id="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('sHour') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('sMinute') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
     <span style="margin:0 15px;">ถึง</span>
     <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    <select id="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('eHour') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('eMinute') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
@@ -120,15 +119,15 @@ if (old('req_st_bureau_code')) {
         <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
         เวลา
 
-        <select id="pHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="pHour" name="pHour"  class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}">{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == old('pHour') ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
         </select>
         :
-        <select id="pMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="pMinute" name="pMinute" class="selectpicker" data-size="5" data-live-search="true" required>
             @foreach(getMinute() as $item)
-            <option value="{{ $item }}">{{ $item }}</option>
+            <option value="{{ $item }}" {{ $item == old('pMinute') ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         น.
@@ -155,6 +154,8 @@ if (old('req_st_bureau_code')) {
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
     <div class="dep-chain-group" style="margin-bottom:5px;">
         <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;">
+
+        <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;">
 
         <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>
