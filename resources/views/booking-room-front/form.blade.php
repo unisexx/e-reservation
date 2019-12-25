@@ -24,6 +24,7 @@ if (isset($rs->st_bureau_code)) {
 
     <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->tmpStRoomName) ? $rs->tmpStRoomName : old('tmpStRoomName') }}" required >
     <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
+    <input type="hidden" name="st_room_people" value="{{ isset($rs->st_room_id) ? $rs->st_room->people : old('st_room_people') }}">
     <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
 </div>
 
@@ -239,8 +240,9 @@ $(document).ready(function() {
     // กดปุ่มเลือกห้องประชุม
     $('body').on('click', '.selectRoomBtn', function() {
         // alert($(this).data('room-id'));
-        $('#tmpStRoomName').val($(this).data('room-name'));
+        $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน)');
         $('input[name=st_room_id]').val($(this).data('room-id'));
+        $('input[name=st_room_people]').val($(this).data('room-people'));
         // ปิด colorbox
         $.colorbox.close();
     });
