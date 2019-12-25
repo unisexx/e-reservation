@@ -19,9 +19,7 @@
 
 <form method="POST" action="{{ url('booking-room-front') }}" accept-charset="UTF-8" enctype="multipart/form-data">
     {{ csrf_field() }}
-
     @include ('booking-room-front.form', ['formMode' => 'create'])
-
 </form>
 
 @endsection

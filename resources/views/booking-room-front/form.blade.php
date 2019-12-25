@@ -78,14 +78,14 @@ if (isset($rs->st_bureau_code)) {
     <div class="dep-chain-group" style="margin-bottom:5px;">
         <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
 
-        <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
+        <select name="st_department_code" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
             <option value="">+ กรม +</option>
             @foreach($st_departments as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
         </select>
 
-        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
+        <select name="st_bureau_code" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
             <option value="">+ สำนัก +</option>
             @if(old('st_department_code') || isset($rs->st_department_code))
             @foreach($st_bureaus as $item)
@@ -94,7 +94,7 @@ if (isset($rs->st_bureau_code)) {
             @endif
         </select>
 
-        <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
+        <select name="st_division_code" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
             <option value="">+ กลุ่ม +</option>
             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
             @foreach($st_divisions as $item)
@@ -124,7 +124,7 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <div class="form-group form-inline col-md-12">
-    {!! NoCaptcha::display() !!}
+    {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
 </div>
 
 <div id="btnBoxAdd">
@@ -181,6 +181,11 @@ if (isset($rs->st_bureau_code)) {
         </table>
     </div>
 </div>
+
+@push('js')
+{{-- <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+{!! JsValidator::formRequest('App\Http\Requests\BookingRoomRequest') !!} --}}
+
 <script>
 $(document).ready(function() {
     $('body').on('change', '#searchDepartment', function() {
@@ -328,3 +333,4 @@ $(document).ready(function(){
     });
 });
 </script>
+@endpush

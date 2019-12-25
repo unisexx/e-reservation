@@ -109,7 +109,7 @@ if (isset($rs->st_bureau_code)) {
 </div>
 
 <div class="form-group form-inline col-md-12">
-    {!! NoCaptcha::display() !!}
+    {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
 </div>
 
 <div id="btnBoxAdd">

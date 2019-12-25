@@ -7,10 +7,12 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
+    @stack('css')
     @include('include._script')
 </head>
 <body id="app-layout" style="margin-top:0px;">
     @yield('content')
     {!! js_notify() !!}
+    @stack('js')
 </body>
 </html>
