@@ -43,14 +43,14 @@ if (old('req_st_bureau_code')) {
 
 <div class="form-group form-inline col-md-12 dep-chain-group">
     <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
-    <select name="req_st_department_code" id="lunch" class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
+    <select name="req_st_department_code"  class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
         <option value="">+ กรม +</option>
         @foreach($req_st_departments as $item)
         <option value="{{ $item->st_department_code }}" @if($item->st_department_code == @old('req_st_department_code')) selected="selected" @endif @if($item->st_department_code == @$rs->req_st_department_code) selected="selected" @endif>{{ $item->department->title }}</option>
         @endforeach
     </select>
 
-    <select name="req_st_bureau_code" id="lunch" class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
+    <select name="req_st_bureau_code"  class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
         <option value="">+ สำนัก +</option>
         @if(old('req_st_department_code') || isset($rs->req_st_department_code))
         @foreach($req_st_bureaus as $item)
@@ -59,7 +59,7 @@ if (old('req_st_bureau_code')) {
         @endif
     </select>
 
-    <select name="req_st_division_code" id="lunch" class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
+    <select name="req_st_division_code"  class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
         <option value="">+ กลุ่ม +</option>
         @if(old('req_st_bureau_code') || isset($rs->req_st_bureau_code))
         @foreach($req_st_divisions as $item)
@@ -157,14 +157,14 @@ if (old('req_st_bureau_code')) {
 
         <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;">
 
-        <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
+        <select name="st_department_code"  class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>
             @foreach($st_departments as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
         </select>
 
-        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
+        <select name="st_bureau_code"  class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
             <option value="">+ สำนัก +</option>
             @if(old('st_department_code') || isset($rs->st_department_code))
             @foreach($st_bureaus as $item)
@@ -173,7 +173,7 @@ if (old('req_st_bureau_code')) {
             @endif
         </select>
 
-        <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
+        <select name="st_division_code"  class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
             <option value="">+ กลุ่ม +</option>
             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
             @foreach($st_divisions as $item)
@@ -259,6 +259,7 @@ if (old('req_st_bureau_code')) {
         </table>
     </div>
 </div>
+
 
 <script>
 $(document).ready(function() {
