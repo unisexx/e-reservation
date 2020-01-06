@@ -82,11 +82,12 @@ padding: 0 10px;
 }
 </style>
 
+<div id="btnBox">
+    <a href="{{ url('booking-room') }}"><img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ" width="32"></a>
+</div>
+
 <h3>จองห้องประชุม</h3>
 
-<div id="btnBox">
- <a href="{{ url('booking-room') }}">	<img src="{{ url('images/view_list.png') }}" class="vtip" title="ดูมุมมองรายการ"></a>
-</div>
 <br clear="all">
 
 @include('include._color_status')
