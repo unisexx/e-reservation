@@ -11,21 +11,11 @@ use Mail;
 
 class BookingVehicleController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         // ตรวจสอบ permission
@@ -100,11 +90,6 @@ class BookingVehicleController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         // ตรวจสอบ permission
@@ -113,12 +98,6 @@ class BookingVehicleController extends Controller
         return view('booking-vehicle.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(BookingVehicleRequest $request)
     {
         $requestData = $request->all();
@@ -137,12 +116,6 @@ class BookingVehicleController extends Controller
         return redirect('booking-vehicle/summary/' . $rs->id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $rs = BookingVehicle::select('*');
@@ -150,12 +123,6 @@ class BookingVehicleController extends Controller
         return view('booking-vehicle.show', compact('rs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         // ตรวจสอบ permission
@@ -165,13 +132,6 @@ class BookingVehicleController extends Controller
         return view('booking-vehicle.edit', compact('rs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(BookingVehicleRequest $request, $id)
     {
         $requestData = $request->all();
@@ -212,12 +172,6 @@ class BookingVehicleController extends Controller
         return redirect('booking-vehicle');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // ตรวจสอบ permission
@@ -229,15 +183,9 @@ class BookingVehicleController extends Controller
         return redirect('booking-vehicle');
     }
 
-    /**
-     * custom method by เดียร์ ชริลแมว
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function summary($id)
     {
         $rs = BookingVehicle::findOrFail($id);
-        return view('booking-vehicle.summary', compact('rs'));
+        return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('backend');
     }
 }

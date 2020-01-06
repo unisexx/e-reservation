@@ -1,4 +1,16 @@
 <?php
+// $st_resources = App\Model\StResource::where('status','1')->orderBy('id', 'asc')->get();
+
+$q = App\Model\StResource::select('*')->where('status', '1');
+/**
+ * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+ */
+if (CanPerm('access-self')) {
+    $q = $q->where('st_division_code',Auth::user()->st_division_code);
+}
+$st_resources = $q->orderBy('id','desc')->get();
+
+
 $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
 
 if (old('st_department_code')) {
@@ -27,66 +39,57 @@ if(isset($rs->end_time)){
 ?>
 
 <div class="form-group form-inline col-md-12">
-    <label>รหัสการจอง / เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
-    <input type="text" class="form-control" placeholder="Generate Auto" readonly="readonly" value="{{ isset($rs->code) ? $rs->code : '' }}"> /
-
-    <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" required >
-    <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
-    <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
+    <label>ทรัพยากร<span class="Txt_red_12"> *</span></label>
+    <select name="st_resource_id" class="form-control" style="width:auto;">
+        @foreach($st_resources as $row)
+        <option value="{{ $row->id }}" @if($row->id == @$rs->st_resource_id) selected @endif @if($row->id == @old('st_resource_id')) selected="selected" @endif >{{ $row->name }}</option>
+        @endforeach
+    </select>
 </div>
 
-
 <div class="form-group form-inline col-md-12">
-    <label>ชื่อเรื่อง / หัวข้อการประชุม-อบรม<span class="Txt_red_12"> *</span></label>
+    <label>ชื่อเรื่อง<span class="Txt_red_12"> *</span></label>
     <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
 </div>
 
 <div class="form-group form-inline col-md-12 input-daterange chkTime">
-    <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label>
-    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
-    {{-- <input name="start_time" type="text" class="form-control ftime {{ $errors->has('start_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}" style="width:70px;" required/> --}}
-    <select id="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
+    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($rs->start_date) }}" style="width:120px;" required/>
+    <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}" @if($item == @$sTimeArr[0]) selected="selected" @endif>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}" @if($item == @$sTimeArr[1]) selected="selected" @endif>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
     <span style="margin:0 15px;">ถึง</span>
     <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    {{-- <input name="end_time" type="text" class="form-control ftime {{ $errors->has('end_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}" style="width:70px;" required/> --}}
-    <select id="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}" @if($item == @$eTimeArr[0]) selected="selected" @endif>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
-    <select id="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+    <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}" @if($item == @$eTimeArr[1]) selected="selected" @endif>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
 
-    <input type="hidden" name="start_time" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}">
-    <input type="hidden" name="end_time" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}">
-</div>
-
-<div class="form-group form-inline col-md-12 input-daterange">
-    <label>จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="number" type="number" min="1" class="form-control {{ $errors->has('number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" style="width:100px;" required>
-    คน
+    <input type="hidden" name="start_time" value="00:00">
+    <input type="hidden" name="end_time" value="00:00">
 </div>
 
 <div class="form-group form-inline col-md-12">
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
     <div class="dep-chain-group" style="margin-bottom:5px;">
-        <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
+        <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
 
         <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
             <option value="">+ กรม +</option>
@@ -123,6 +126,7 @@ if(isset($rs->end_time)){
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
+@if($formWhere == 'backend')
 <div class="form-group form-inline col-md-12">
 <fieldset>
     <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
@@ -135,86 +139,19 @@ if(isset($rs->end_time)){
         </select>
     </fieldset>
 </div>
+@endif
+
+<div class="form-group form-inline col-md-12">
+    {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
+</div>
 
 <div id="btnBoxAdd">
     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-room') }}'" class="btn btn-default" style="width:100px;" />
-</div>
-
-
-
-
-<!-- This contains the hidden content for inline calls ห้องประชุม-->
-<div style='display:none'>
-    <div id='inline_room' style='padding:5px; background:#fff;'>
-        <h3 style="margin:0; padding:0; color:#636">เลือกห้องประชุม</h3>
-        <div id="search">
-            <div id="searchBox">
-                <form class="form-inline">
-                    <input id="searchTxt" type="text" class="form-control" style="width:400px; display:inline;" placeholder="ชื่อห้องประชุม" />
-
-                    <select id="searchDepartment" class="selectpicker" data-live-search="true" title="กรม">
-                        <option value="">+ กรม +</option>
-                        @foreach($st_departments as $item)
-                            <option value="{{ $item->code }}">{{ $item->title }}</option>
-                        @endforeach
-                    </select>
-
-                    <button id="searchRoomBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
-                </form>
-            </div>
-        </div>
-
-        <table class="tblist">
-            <thead>
-                <tr>
-                    <th>ลำดับ</th>
-                    <th>ภาพห้องประชุม</th>
-                    <th style="width:30%">ชื่อห้องประชุม</th>
-                    <th style="width:40%">รายละเอียด</th>
-                    <th>เลือก</th>
-                </tr>
-            </thead>
-            <tbody id="getRoomData">
-                <!-- ajaxGetRoom Data Here -->
-            </tbody>
-        </table>
-    </div>
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default" style="width:100px;" />
 </div>
 
 <script>
     $(document).ready(function() {
-        // โชว์รายการห้องประชุมตอนกดปุ่มเลือกห้องประชุม
-        $('#openCbox').click(function(){
-            $('#searchRoomBtn').trigger('click');
-        });
-
-        // ค้นหาห้องประชุม
-        $('body').on('click', '#searchRoomBtn', function() {
-            $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');
-
-            $.ajax({
-                url: '{{ url("ajaxGetRoom") }}',
-                data: {
-                    search: $("#searchTxt").val(),
-                    depertment_code: $("#searchDepartment").val(),
-                }
-            })
-            .done(function(data) {
-                // console.log(data);
-                $('#getRoomData').html(data);
-            });
-        });
-
-        // กดปุ่มเลือกห้องประชุม
-        $('body').on('click', '.selectRoomBtn', function() {
-            // alert($(this).data('room-id'));
-            $('#tmpStRoomName').val($(this).data('room-name'));
-            $('input[name=st_room_id]').val($(this).data('room-id'));
-            // ปิด colorbox
-            $.colorbox.close();
-        });
-
         $("#submitFormBtn").click(function(){
             chkOverlap();
         });
@@ -224,13 +161,13 @@ if(isset($rs->end_time)){
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
     function chkOverlap(){
         $.ajax({
-                url: '{{ url("ajaxRoomChkOverlap") }}',
+                url: '{{ url("ajaxResourceChkOverlap") }}',
                 data: {
                     start_date: $('input[name=start_date]').val(),
                     start_time: $('input[name=start_time]').val(),
                     end_date: $('input[name=end_date]').val(),
                     end_time: $('input[name=end_time]').val(),
-                    st_room_id: $('input[name=st_room_id]').val(),
+                    st_resource_id: $('select[name=st_resource_id]').val(),
                     id: "{{ @$rs->id }}",
                 }
             })
@@ -274,9 +211,10 @@ $('.range-date').each(function(k, v) {
                 <tr>
                     <th>ลำดับ</th>
                     <th>รหัสการจอง</th>
-                    <th>หัวข้อการประชุม / ห้องประชุม</th>
-                    <th>วัน เวลา ที่ต้องการใช้ห้อง</th>
-                    <th>ผู้ขอใช้ห้องประชุม</th>
+                    <th>ทรัพยากร</th>
+                    <th>หัวข้อ</th>
+                    <th>วัน เวลา ที่ต้องการใช้</th>
+                    <th>ผู้ขอใช้</th>
                     <th>สถานะ</th>
                 </tr>
             </thead>

@@ -44,36 +44,39 @@ Route::get('ajaxGetDriver', 'AjaxController@ajaxGetDriver');
 Route::get('ajaxGetBureauVehicle', 'AjaxController@ajaxGetBureauVehicle');
 Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 
-// ตั้งค่า
-Route::resource('setting/user', 'Setting\\UserController');
-Route::resource('setting/permission-group', 'Setting\\PermissionGroupController');
-Route::resource('setting/st-room', 'Setting\\StRoomController');
-Route::resource('setting/st-vehicle', 'Setting\\StVehicleController');
-Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');
-Route::resource('setting/st-driver', 'Setting\\StDriverController');
-Route::resource('setting/st-resource', 'Setting\\StResourceController');
+Route::middleware(['auth'])->group(function () {
+    // ตั้งค่า
+    Route::resource('setting/user', 'Setting\\UserController');
+    Route::resource('setting/permission-group', 'Setting\\PermissionGroupController');
+    Route::resource('setting/st-room', 'Setting\\StRoomController');
+    Route::resource('setting/st-vehicle', 'Setting\\StVehicleController');
+    Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');
+    Route::resource('setting/st-driver', 'Setting\\StDriverController');
+    Route::resource('setting/st-resource', 'Setting\\StResourceController');
 
-// จองห้องประชุม
-Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
-Route::resource('booking-room', 'BookingRoomController');
+    // จองห้องประชุม
+    Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
+    Route::resource('booking-room', 'BookingRoomController');
 
-// จองยานพาหนะ
-Route::get('booking-vehicle/summary/{id}', 'BookingVehicleController@summary');
-Route::resource('booking-vehicle', 'BookingVehicleController');
+    // จองยานพาหนะ
+    Route::get('booking-vehicle/summary/{id}', 'BookingVehicleController@summary');
+    Route::resource('booking-vehicle', 'BookingVehicleController');
 
-// จองทรัพยากรอื่นๆ
-Route::get('booking-resource/summary/{id}', 'BookingResourceController@summary');
-Route::resource('booking-resource', 'BookingResourceController');
+    // จองทรัพยากรอื่นๆ
+    Route::get('booking-resource/summary/{id}', 'BookingResourceController@summary');
+    Route::resource('booking-resource', 'BookingResourceController');
 
-// log
-Route::resource('log', 'LogController');
+    // log
+    Route::resource('log', 'LogController');
 
-// รายงาน
-Route::get('report1', 'ReportController@report1');
-Route::get('report1_detail', 'ReportController@report1_detail');
-Route::get('report2', 'ReportController@report2');
-Route::get('report2_detail', 'ReportController@report2_detail');
+    // รายงาน
+    Route::get('report1', 'ReportController@report1');
+    Route::get('report1_detail', 'ReportController@report1_detail');
+    Route::get('report2', 'ReportController@report2');
+    Route::get('report2_detail', 'ReportController@report2_detail');
 
-// profile
-Route::get('profile', 'HomeController@profile');
-Route::patch('profile_save', 'HomeController@profile_save');
+    // profile
+    Route::get('profile', 'HomeController@profile');
+    Route::patch('profile_save', 'HomeController@profile_save');
+
+});

@@ -20,7 +20,7 @@
 <form method="POST" action="{{ url('booking-vehicle-front') }}" accept-charset="UTF-8" enctype="multipart/form-data">
     {{ csrf_field() }}
 
-    @include ('booking-vehicle-front.form', ['formMode' => 'create'])
+    @include ('include.__booking-vehicle-form', ['formMode' => 'create', 'formWhere' => 'frontend'])
 
 </form>
 

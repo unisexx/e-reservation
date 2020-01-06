@@ -217,6 +217,6 @@ class BookingRoomController extends Controller
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);
-        return view('booking-room.summary', compact('rs'));
+        return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('backend');
     }
 }

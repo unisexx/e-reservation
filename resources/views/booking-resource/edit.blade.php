@@ -17,7 +17,7 @@
     {{ method_field('PATCH') }}
     {{ csrf_field() }}
 
-    @include ('booking-resource.form', ['formMode' => 'edit'])
+    @include ('include.__booking-resource-form', ['formMode' => 'edit', 'formWhere' => 'backend'])
 
 </form>
 

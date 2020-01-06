@@ -16,7 +16,7 @@
 <form method="POST" action="{{ url('booking-resource') }}" accept-charset="UTF-8" enctype="multipart/form-data">
     {{ csrf_field() }}
 
-    @include ('booking-resource.form', ['formMode' => 'create'])
+    @include ('include.__booking-resource-form', ['formMode' => 'create', 'formWhere' => 'backend'])
 
 </form>
 

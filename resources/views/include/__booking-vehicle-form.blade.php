@@ -20,6 +20,18 @@ if (isset($rs->st_bureau_code)) {
     $st_divisions = App\Model\StDivision::where('code', 'like', $rs->st_bureau_code . '%')->orderBy('code', 'asc')->get();
 }
 
+if(isset($rs->start_time)){
+    $sTimeArr = (explode(":",$rs->start_time));
+}
+
+if(isset($rs->end_time)){
+    $eTimeArr = (explode(":",$rs->end_time));
+}
+
+if(isset($rs->point_time)){
+    $pTimeArr = (explode(":",$rs->point_time));
+}
+
 // หน่วยงานของยานพาหนะ
 $req_st_departments = App\Model\StVehicle::select('st_department_code')->where('status','พร้อมใช้')->with('department')->distinct()->orderBy('st_department_code', 'asc')->get();
 
@@ -31,26 +43,34 @@ if (old('req_st_bureau_code')) {
     $req_st_divisions = App\Model\StVehicle::select('st_division_code')->where('st_bureau_code', 'like', old('req_st_bureau_code') . '%')->where('status','พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
 }
 
+if (isset($rs->req_st_department_code)) {
+    $req_st_bureaus = App\Model\StVehicle::select('st_bureau_code')->where('st_department_code', 'like', $rs->req_st_department_code . '%')->where('status','พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+}
+
+if (isset($rs->req_st_bureau_code)) {
+    $req_st_divisions = App\Model\StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $rs->req_st_bureau_code . '%')->where('status','พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+}
 ?>
 
 
 <div class="form-group form-inline col-md-12">
     <label>วันที่ยื่นคำขอจอง<span class="Txt_red_12"> *</span></label>
-    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
-    {{-- <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
-    น.--}}
+    <input name="request_date" type="text" class="form-control datepicker fdate {{ $errors->has('request_date') ? 'has-error' : '' }}" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}" style="width:120px;" />
+    {{-- <input name="request_time" type="text" class="form-control ftime {{ $errors->has('request_time') ? 'has-error' : '' }}" placeholder="เวลา" value="{{ isset($rs->request_time) ? $rs->request_time : '' }} {{ old('request_time') ? old('request_time') : $currTime }}" style="width:70px;" />
+    น. --}}
 </div>
+
 
 <div class="form-group form-inline col-md-12 dep-chain-group">
     <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
-    <select name="req_st_department_code"  class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
+    <select name="req_st_department_code" id="lunch" class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
         <option value="">+ กรม +</option>
         @foreach($req_st_departments as $item)
         <option value="{{ $item->st_department_code }}" @if($item->st_department_code == @old('req_st_department_code')) selected="selected" @endif @if($item->st_department_code == @$rs->req_st_department_code) selected="selected" @endif>{{ $item->department->title }}</option>
         @endforeach
     </select>
 
-    <select name="req_st_bureau_code"  class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
+    <select name="req_st_bureau_code" id="lunch" class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
         <option value="">+ สำนัก +</option>
         @if(old('req_st_department_code') || isset($rs->req_st_department_code))
         @foreach($req_st_bureaus as $item)
@@ -59,7 +79,7 @@ if (old('req_st_bureau_code')) {
         @endif
     </select>
 
-    <select name="req_st_division_code"  class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
+    <select name="req_st_division_code" id="lunch" class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
         <option value="">+ กลุ่ม +</option>
         @if(old('req_st_bureau_code') || isset($rs->req_st_bureau_code))
         @foreach($req_st_divisions as $item)
@@ -81,16 +101,16 @@ if (old('req_st_bureau_code')) {
 
 <div class="form-group form-inline col-md-12 input-daterange chkTime">
     <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($_GET['start_date']) }}" style="width:120px;" required/>
+    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
     <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}" {{ $item == old('sHour') ? 'selected' : '' }}>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
     <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}" {{ $item == old('sMinute') ? 'selected' : '' }}>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
@@ -98,19 +118,19 @@ if (old('req_st_bureau_code')) {
     <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
     <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}" {{ $item == old('eHour') ? 'selected' : '' }}>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     :
     <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getMinute() as $item)
-        <option value="{{ $item }}" {{ $item == old('eMinute') ? 'selected' : '' }}>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
     </select>
     น.
 
-    <input type="hidden" name="start_time" value="00:00">
-    <input type="hidden" name="end_time" value="00:00">
+    <input type="hidden" name="start_time" value="{{ isset($rs->start_time) ? $rs->start_time : old('start_time') }}">
+    <input type="hidden" name="end_time" value="{{ isset($rs->end_time) ? $rs->end_time : old('end_time') }}">
 </div>
 
 <div class="form-group form-inline col-md-12">
@@ -119,20 +139,20 @@ if (old('req_st_bureau_code')) {
         <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
         เวลา
 
-        <select id="pHour" name="pHour"  class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="pHour" name="pHour" class="selectpicker" data-size="5" data-live-search="true" required>
         @foreach(getHour() as $item)
-        <option value="{{ $item }}" {{ $item == old('pHour') ? 'selected' : '' }}>{{ $item }}</option>
+        <option value="{{ $item }}" {{ $item == (@$pTimeArr[0] ?? old('pHour')) ? 'selected' : '' }}>{{ $item }}</option>
         @endforeach
         </select>
         :
         <select id="pMinute" name="pMinute" class="selectpicker" data-size="5" data-live-search="true" required>
             @foreach(getMinute() as $item)
-            <option value="{{ $item }}" {{ $item == old('pMinute') ? 'selected' : '' }}>{{ $item }}</option>
+            <option value="{{ $item }}" {{ $item == (@$pTimeArr[1] ?? old('pMinute')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         น.
 
-        <input name="point_time" type="hidden" value="00:00"/>
+        <input name="point_time" type="hidden" value="{{ isset($rs->point_time) ? $rs->point_time : old('point_time') }}"/>
         <script>
             $(document).ready(function(){
                 $('[name=point_time]').val( $("#pHour").val()+":"+$("#pMinute").val() );
@@ -157,14 +177,14 @@ if (old('req_st_bureau_code')) {
 
         <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;">
 
-        <select name="st_department_code"  class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
+        <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
             <option value="">+ กรม +</option>
             @foreach($st_departments as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
         </select>
 
-        <select name="st_bureau_code"  class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
+        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
             <option value="">+ สำนัก +</option>
             @if(old('st_department_code') || isset($rs->st_department_code))
             @foreach($st_bureaus as $item)
@@ -173,7 +193,7 @@ if (old('req_st_bureau_code')) {
             @endif
         </select>
 
-        <select name="st_division_code"  class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
+        <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
             <option value="">+ กลุ่ม +</option>
             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
             @foreach($st_divisions as $item)
@@ -192,11 +212,27 @@ if (old('req_st_bureau_code')) {
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
-{{-- <div class="form-group form-inline col-md-12">
-    <input id="tmpStVehicleName" name="tmpStVehicleName" type="text" class="form-control {{ $errors->has('tmpStVehicleName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @else {{ old('tmpStVehicleName') }} @endif">
-    <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
-    <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
-</div> --}}
+@if($formWhere == 'backend')
+<div class="form-group form-inline col-md-12">
+    <fieldset>
+        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+        <label>สถานะ</label>
+        <select name="status" class="form-control" style="width:auto;">
+            <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('รออนุมัติ') }}">รออนุมัติ</option>
+            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('อนุมัติ') }}">อนุมัติ</option>
+            <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('ไม่อนุมัติ') }}">ไม่อนุมัติ</option>
+            <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}} style="color:{{ colorStatus('ยกเลิก') }}">ยกเลิก</option>
+        </select>
+
+        <span id="selectVehicleBlock">
+            <input id="tmpStVehicleName" name="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @else {{ old('tmpStVehicleName') }} @endif">
+            <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
+            <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
+            <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
+        </span>
+    </fieldset>
+</div>
+@endif
 
 <div class="form-group form-inline col-md-12">
     {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
@@ -204,9 +240,8 @@ if (old('req_st_bureau_code')) {
 
 <div class="form-group form-inline col-md-12">
     <div id="btnBoxAdd">
-        <input type="hidden" name="status" value="รออนุมัติ">
         <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('booking-vehicle-front/show') }}'" class="btn btn-default" style="width:100px;" />
+        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/booking-vehicle') }}'" class="btn btn-default" style="width:100px;" />
     </div>
 </div>
 
@@ -220,23 +255,6 @@ if (old('req_st_bureau_code')) {
             <div id="searchBox">
                 <form class="form-inline">
                     <input id="searchTxt" type="text" class="form-control" style="width:400px; display:inline;" placeholder="ชื่อพนักงานขับรถ / รายละเอียดรถ" />
-
-                    <select id="searchDepartment" class="selectpicker" data-live-search="true" title="กรม">
-                        <option value="">+ กรม +</option>
-                        @foreach($st_departments as $item)
-                            <option value="{{ $item->code }}">{{ $item->title }}</option>
-                        @endforeach
-                    </select>
-
-                    <select id="searchBureau" class="selectpicker" data-live-search="true" title="สำนัก">
-                        <option value="">+ สำนัก +</option>
-                        @if(old('st_department_code') || isset($rs->st_department_code))
-                        @foreach($st_bureaus as $item)
-                        <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
-                        @endforeach
-                        @endif
-                    </select>
-
                     <button id="searchBtn" type="button" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
                 </form>
             </div>
@@ -262,32 +280,15 @@ if (old('req_st_bureau_code')) {
 
 
 <script>
-$(document).ready(function() {
-    $('body').on('change', '#searchDepartment', function() {
-        getBureauCbox($(this).val());
-    });
-});
-
-function getBureauCbox($st_department_code) {
-    $('#searchBureau').empty().selectpicker('refresh');
-
-    $.ajax({
-        method: "GET",
-        url: "{{ url('ajaxGetBureau') }}",
-        data: {
-            st_department_code: $st_department_code,
-        }
-    }).done(function(data) {
-        $.map(data, function(i) {
-            $('#searchBureau').append('<option value="' + i.code + '">' + i.title + '</option>');
-        });
-        $('#searchBureau').selectpicker('refresh');
-    });
-}
-</script>
-
-<script>
     $(document).ready(function() {
+        // เช็กสถานะ
+        // chkStatus();
+
+        // กดเปลี่ยนสถานะ
+        // $('body').on('change', 'select[name=status]', function() {
+        //     chkStatus();
+        // });
+
         // โชว์รายการยานพาหนะตอนกดปุ่มเลือกห้องประชุม
         $('#openCbox').click(function() {
             $('#searchBtn').trigger('click');
@@ -301,8 +302,9 @@ function getBureauCbox($st_department_code) {
                     url: '{{ url("ajaxGetVehicle") }}',
                     data: {
                         search: $("#searchTxt").val(),
-                        depertment_code: $("#searchDepartment").val(),
-                        bureau_code: $("#searchBureau").val(),
+                        req_st_department_code: $('select[name=req_st_department_code]').val(),
+                        req_st_bureau_code: $('select[name=req_st_bureau_code]').val(),
+                        req_st_division_code: $('select[name=req_st_division_code]').val(),
                     }
                 })
                 .done(function(data) {
@@ -320,12 +322,20 @@ function getBureauCbox($st_department_code) {
             $.colorbox.close();
         });
 
-        $('body').on('click', '#submitFormBtn', function(e){
-            e.preventDefault();
-            // $('form').submit();
+        $("#submitFormBtn").click(function() {
             chkOverlap();
         });
     });
+
+    // ถ้าสถานะอนุมัติ ให้เลือกยานพาหนะ, สถานะอื่น ซ่อน
+    function chkStatus() {
+        var status = $('select[name=status]').val();
+        if (status == 'อนุมัติ') {
+            $('#selectVehicleBlock').show();
+        } else {
+            $('#selectVehicleBlock').hide();
+        }
+    }
 
     // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
     // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
@@ -338,9 +348,6 @@ function getBureauCbox($st_department_code) {
                     end_date: $('input[name=end_date]').val(),
                     end_time: $('input[name=end_time]').val(),
                     st_vehicle_id: $('input[name=st_vehicle_id]').val(),
-                    req_st_department_code: $('select[name=req_st_department_code]').val(),
-                    req_st_bureau_code: $('select[name=req_st_bureau_code]').val(),
-                    req_st_division_code: $('select[name=req_st_division_code]').val(),
                     id: "{{ @$rs->id }}",
                 }
             })
@@ -411,6 +418,15 @@ $(document).ready(function(){
     });
     $('body').on('click', '#cboxCloseBtn', function() {
         $.colorbox.close();
+    });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+    // ถ้ามีการเปลี่ยนแปลงข้อมูล ขอใช้ยานพาหนะของหน่วยงาน ให้เคลียร์ค่า เลือกยานพาหนะ เป็นค่าว่าง
+    $('body').on('change', 'select[name=req_st_department_code], select[name=req_st_bureau_code], select[name=req_st_division_code]', function(){
+        $('input[name=tmpStVehicleName], input[name=st_vehicle_id]').val("");
     });
 });
 </script>
