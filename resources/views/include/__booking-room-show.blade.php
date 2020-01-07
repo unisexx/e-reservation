@@ -48,7 +48,7 @@
             events: [
                 @foreach($rs as $key => $row) {
                     shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
-                    title: 'สถานะ: {{ $row->status }}\nเรื่อง/หัวข้อการประชุม-อบรม: {{ $row->title }}\nวัน-เวลา: {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\nผู้ขอใช้: {{ $row->request_name }} {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\nโทรศัพท์: {{ $row->request_tel }}\nอีเมล์: {{ $row->request_email }}\nจำนวน: {{ $row->number }} คน\nห้องประชุม: {{ $row->st_room->name }}',
+                    title: 'สถานะ: {{ $row->status }}\nเรื่อง/หัวข้อการประชุม-อบรม: {{ $row->title }}\nวัน-เวลา: {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\nผู้ขอใช้: {{ $row->request_name }} {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\nโทรศัพท์: {{ $row->request_tel }}\nอีเมล์: {{ $row->request_email }}\nจำนวน: {{ $row->number }} คน\nห้องประชุม: {{ $row->st_room->name }}\nผู้รับผิดชอบห้องประชุม: {{ $row->st_room->res_name }}, โทร: {{ $row->st_room->res_tel }}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",

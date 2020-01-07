@@ -30,7 +30,7 @@ class BookingRoomRequest extends FormRequest
             'start_time'         => 'required',
             'end_date'           => 'required',
             'end_time'           => 'required',
-            'number'             => 'required|numeric|lte:st_room_people',
+            'number'             => 'required|numeric',
             'request_name'       => 'required',
             'request_position'   => 'required',
             'request_tel'        => 'required',
@@ -40,6 +40,11 @@ class BookingRoomRequest extends FormRequest
             'st_division_code'   => 'required',
             // 'g-recaptcha-response' => 'required|captcha',
         ];
+
+        // จำนวนคนเกินห้องประชุม
+        if ($this->st_room_over_people != 1) {
+            $rules['number'] = 'lte:st_room_people';
+        }
 
         return $rules;
     }
@@ -51,7 +56,7 @@ class BookingRoomRequest extends FormRequest
      */
     public function messages()
     {
-        return [
+        $messages = [
             'st_room_id.required'         => 'เลือกห้องประชุม ห้ามเป็นค่าว่าง',
             'title.required'              => 'ชื่อเรื่อง / หัวข้อการประชุม ห้ามเป็นค่าว่าง',
             'start_date.required'         => 'วันที่เริ่มใช้ห้องประชุม ห้ามเป็นค่าว่าง',
@@ -72,5 +77,12 @@ class BookingRoomRequest extends FormRequest
             // 'g-recaptcha-response.required' => 'กรุณายืนยันตัวตน ฉันไม่ใช่โปรแกรมอัตโนมัติ',
             // 'g-recaptcha-response.captcha'  => 'ระบบยืนยันตัวตนผิดพลาด!!! กรุณาติดต่อแอดมิน',
         ];
+
+        // จำนวนคนเกินห้องประชุม
+        if ($this->st_room_over_people != 1) {
+            $messages['number.lte'] = 'จำนวนผู้เข้าร่วมประชุม ห้ามเกินจำนวนที่รองรับของห้องประชุม';
+        }
+
+        return $messages;
     }
 }

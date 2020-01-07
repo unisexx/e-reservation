@@ -36,8 +36,11 @@ if(isset($rs->end_time)){
 <div class="form-group form-inline col-md-12">
     <label>เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
     <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" required >
+
+    <input type="hidden" name="st_room_over_people" value="{{ $rs->st_room_over_people ?? old('st_room_over_people')}}">
     <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
     <input type="hidden" name="st_room_people" value="{{ isset($rs->st_room_id) ? $rs->st_room->people : old('st_room_people') }}">
+
     <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
 </div>
 
@@ -221,9 +224,12 @@ if(isset($rs->end_time)){
         // กดปุ่มเลือกห้องประชุม
         $('body').on('click', '.selectRoomBtn', function() {
             // alert($(this).data('room-id'));
-            $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน)');
             $('input[name=st_room_id]').val($(this).data('room-id'));
             $('input[name=st_room_people]').val($(this).data('room-people'));
+            $('input[name=st_room_over_people]').val($(this).data('room-over-people'));
+
+            var overPeople = ($(this).data('room-over-people') == 1) ? 'ได้' :'ไม่ได้';
+            $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน) (บันทึกเกิน'+overPeople+')');
             // ปิด colorbox
             $.colorbox.close();
         });
