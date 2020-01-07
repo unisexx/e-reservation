@@ -51,7 +51,7 @@ class BookingRoomFrontController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('booking-room-front.show', compact('rs'));
+        return view('include.__booking-room-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)

@@ -1,17 +1,18 @@
-@extends('layouts.front')
+@extends( $from == 'backend' ? 'layouts.admin' : 'layouts.front')
 
 @section('content')
 
-<?php
-    $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
-?>
+@php
+    $action = ($from == 'backend' ? 'booking-vehicle' : 'booking-vehicle-front');
+    $st_vehicles = App\Model\StVehicle::where('status', 'พร้อมใช้')->orderBy('id', 'asc')->get();
+@endphp
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+            plugins: ['interaction', 'dayGrid', 'list'],
             buttonText: {
                 list: 'รายการ',
                 prev: 'เดือนก่อนหน้า',
@@ -19,15 +20,16 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ ขอจองห้องประชุม',
+                    text: '+ ขอจองยานพาหนะ',
                     click: function() {
-                        window.location.href = "/booking-room-front/create";
+                        window.location.href = "/{{ $action }}/create";
                     }
                 }
             },
             header: {
                 left: 'prev,next today',
                 center: 'title',
+                // right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
                 right: 'dayGridMonth,listMonth addBtn'
             },
             // defaultDate: '2019-03-12',
@@ -42,31 +44,39 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/booking-room-front/create?start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
-                    shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
-                    title: 'สถานะ: {{ $row->status }}\nเรื่อง/หัวข้อการประชุม-อบรม: {{ $row->title }}\nวัน-เวลา: {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\nผู้ขอใช้: {{ $row->request_name }} {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\nโทรศัพท์: {{ $row->request_tel }}\nอีเมล์: {{ $row->request_email }}\nจำนวน: {{ $row->number }} คน\nห้องประชุม: {{ $row->st_room->name }}',
+                    shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->gofor }} ({{ $row->status }})',
+                    title: 'สถานะ: {{ $row->status }}\nไปเพื่อ: {{ $row->gofor }}\nรายละเอียดรถ: {{ @$row->st_vehicle->st_vehicle_type->name }} {{ @$row->st_vehicle->brand }} {{ @$row->st_vehicle->seat }} ที่นั่ง {{ @$row->st_vehicle->color }} ทะเบียน {{ @$row->st_vehicle->reg_number }}\nสถานที่ขึ้นรถ: {{ $row->point_place }} เวลา {{ $row->point_time }}\nสถานที่ไป: {{ $row->destination }}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",
                 },
                 @endforeach
             ],
-            eventTimeFormat: {
+            eventTimeFormat: { // like '14:30:00'
                 hour: '2-digit',
                 minute: '2-digit',
+                // second: '2-digit'
             },
             eventRender: function(info) {
+                // console.log(info.view.type);
+                // console.log(info.el.childNodes);
+                // console.log(info.event.extendedProps.description);
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
             },
             eventClick: function(info) {
-                // alert(info.event.title);
                 $.colorbox({
                     html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
                     width: "50%",
                 });
+                // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+                // alert('View: ' + info.view.type);
+
+                // change the border color just for fun
+                // info.el.style.borderColor = 'red';
             }
         });
 
@@ -100,19 +110,21 @@
 </style>
 
 <div id="btnBox">
- <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+ <a href="{{ $from == 'backend' ? url('booking-vehicle') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองห้องประชุม</h3>
+<h3>จองยานพาหนะ</h3>
 
 <div id="search">
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
 
-            <select name="st_room_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
-                <option value="">+ ห้องประชุม +</option>
-                @foreach($st_rooms as $item)
-                    <option value="{{ $item->id }}" @if(request('st_room_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+            <select name="st_vehicle_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ยานพาหนะ +">
+                <option value="">+ ยานพาหนะ +</option>
+                @foreach($st_vehicles as $item)
+                    <option value="{{ $item->id }}" @if(request('st_vehicle_id') == $item->id) selected="selected" @endif>
+                        {{ @$item->st_vehicle_type->name }} {{ @$item->brand }} {{ !empty(@$item->seat) ? @$item->seat : '-' }} ที่นั่ง สี{{ @$item->color }} ทะเบียน {{ @$item->reg_number }}
+                    </option>
                 @endforeach
             </select>
 

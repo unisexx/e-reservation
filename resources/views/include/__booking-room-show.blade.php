@@ -1,10 +1,11 @@
-@extends('layouts.front')
+@extends( $from == 'backend' ? 'layouts.admin' : 'layouts.front')
 
 @section('content')
 
-<?php
-    $st_resources = App\Model\StResource::where('status', 1)->orderBy('name', 'asc')->get();
-?>
+@php
+    $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
+    $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
+@endphp
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -19,9 +20,9 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ ขอจองทรัพยากร',
+                    text: '+ ขอจองห้องประชุม',
                     click: function() {
-                        window.location.href = "/booking-resource-front/create";
+                        window.location.href = "/{{ $action }}/create";
                     }
                 }
             },
@@ -42,19 +43,19 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/booking-resource-front/create?start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
                     shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
-                    title: 'สถานะ: {{ $row->status }}\nทรัพยากร: {{ $row->stResource->name }}\n{{ $row->title }}',
+                    title: 'สถานะ: {{ $row->status }}\nเรื่อง/หัวข้อการประชุม-อบรม: {{ $row->title }}\nวัน-เวลา: {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\nผู้ขอใช้: {{ $row->request_name }} {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\nโทรศัพท์: {{ $row->request_tel }}\nอีเมล์: {{ $row->request_email }}\nจำนวน: {{ $row->number }} คน\nห้องประชุม: {{ $row->st_room->name }}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",
                 },
                 @endforeach
             ],
-            eventTimeFormat: { // like '14:30:00'
+            eventTimeFormat: {
                 hour: '2-digit',
                 minute: '2-digit',
             },
@@ -62,6 +63,7 @@
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
             },
             eventClick: function(info) {
+                // alert(info.event.title);
                 $.colorbox({
                     html: '<div style="padding:15px;">'+info.event.title.replace(/\n/g, "<br />")+'</div>',
                     width: "50%",
@@ -99,19 +101,19 @@
 </style>
 
 <div id="btnBox">
- <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+ <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองทรัพยากรอื่นๆ</h3>
+<h3>จองห้องประชุม</h3>
 
 <div id="search">
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
 
-            <select name="st_resource_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ทรัพยากร +">
-                <option value="">+ ทรัพยากร +</option>
-                @foreach($st_resources as $item)
-                    <option value="{{ $item->id }}" @if(request('st_resource_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+            <select name="st_room_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
+                <option value="">+ ห้องประชุม +</option>
+                @foreach($st_rooms as $item)
+                    <option value="{{ $item->id }}" @if(request('st_room_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
                 @endforeach
             </select>
 

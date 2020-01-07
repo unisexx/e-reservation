@@ -50,7 +50,7 @@ class BookingVehicleFrontController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('booking-vehicle-front.show', compact('rs'));
+        return view('include.__booking-vehicle-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)

@@ -103,11 +103,25 @@ class BookingResourceController extends Controller
         return redirect('booking-resource/summary/' . $rs->id);
     }
 
-    public function show()
+    public function show(Request $request)
     {
+        $keyword = $request->get('search');
+        $st_resource_id = $request->get('st_resource_id');
+
         $rs = BookingResource::select('*');
+
+        if (!empty($st_resource_id)) {
+            $rs = $rs->where('st_resource_id', $st_resource_id);
+        }
+
+        if (!empty($keyword)) {
+            $rs = $rs->where(function ($q) use ($keyword) {
+                $q->where('code', 'LIKE', "%$keyword%");
+            });
+        }
+
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('booking-resource.show', compact('rs'));
+        return view('include.__booking-resource-show', compact('rs'))->withFrom('backend');
     }
 
     public function edit($id)

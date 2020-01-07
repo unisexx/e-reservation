@@ -11,21 +11,11 @@ use Mail;
 
 class BookingRoomController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         // ตรวจสอบ permission
@@ -84,11 +74,6 @@ class BookingRoomController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         // ตรวจสอบ permission
@@ -97,12 +82,6 @@ class BookingRoomController extends Controller
         return view('booking-room.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(BookingRoomRequest $request)
     {
         $requestData = $request->all();
@@ -119,25 +98,29 @@ class BookingRoomController extends Controller
         return redirect('booking-room/summary/' . $rs->id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
+    public function show(Request $request)
     {
+        $keyword = $request->get('search');
+        $st_room_id = $request->get('st_room_id');
+
         $rs = BookingRoom::select('*');
+
+        if (!empty($st_room_id)) {
+            $rs = $rs->where('st_room_id', $st_room_id);
+        }
+
+        if (!empty($keyword)) {
+            $rs = $rs->where(function ($q) use ($keyword) {
+                $q->where('code', 'LIKE', "%$keyword%")
+                    ->orWhere('title', 'LIKE', "%$keyword%")
+                    ->orWhere('request_name', 'LIKE', "%$keyword%");
+            });
+        }
+
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('booking-room.show', compact('rs'));
+        return view('include.__booking-room-show', compact('rs'))->withFrom('backend');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         // ตรวจสอบ permission
@@ -147,13 +130,6 @@ class BookingRoomController extends Controller
         return view('booking-room.edit', compact('rs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(BookingRoomRequest $request, $id)
     {
         $requestData = $request->all();
@@ -191,12 +167,6 @@ class BookingRoomController extends Controller
         return redirect('booking-room');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // ตรวจสอบ permission
@@ -208,12 +178,6 @@ class BookingRoomController extends Controller
         return redirect('booking-room');
     }
 
-    /**
-     * custom method by เดียร์ ชริลแมว
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);

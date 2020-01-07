@@ -52,7 +52,7 @@ class BookingResourceFrontController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('booking-resource-front.show', compact('rs'));
+        return view('include.__booking-resource-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)
