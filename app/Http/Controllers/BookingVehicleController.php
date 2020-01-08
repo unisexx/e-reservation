@@ -120,6 +120,9 @@ class BookingVehicleController extends Controller
     {
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_vehicle_id');
+        $st_department_code = $request->get('st_department_code');
+        $st_bureau_code = $request->get('st_bureau_code');
+        $st_division_code = $request->get('st_division_code');
 
         $rs = BookingVehicle::select('*');
 
@@ -133,7 +136,21 @@ class BookingVehicleController extends Controller
             });
         }
 
-        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        if (!empty($st_department_code)) {
+            $rs = $rs->where('st_department_code', $st_department_code);
+        }
+
+        if (!empty($st_bureau_code)) {
+            $rs = $rs->where('st_bureau_code', $st_bureau_code);
+        }
+
+        if (!empty($st_division_code)) {
+            $rs = $rs->where('st_division_code', $st_division_code);
+        }
+
+        if($st_department_code || $st_bureau_code || $st_division_code){
+            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        }
         return view('include.__booking-vehicle-show', compact('rs'))->withFrom('backend');
     }
 

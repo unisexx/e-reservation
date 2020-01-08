@@ -5,6 +5,14 @@
 @php
     $action = ($from == 'backend' ? 'booking-vehicle' : 'booking-vehicle-front');
     $st_vehicles = App\Model\StVehicle::where('status', 'พร้อมใช้')->orderBy('id', 'asc')->get();
+
+    // หน่วยงานที่รับผิดชอบ
+    $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
+    $st_department_code = request('st_department_code') ?? @old('st_department_code');
+    $st_bureau_code = request('st_bureau_code') ?? @old('st_bureau_code');
+
+    if ($st_department_code) $st_bureaus = App\Model\StBureau::where('code', 'like', $st_department_code . '%')->orderBy('code', 'asc')->get();
+    if ($st_bureau_code) $st_divisions = App\Model\StDivision::where('code', 'like', $st_bureau_code . '%')->orderBy('code', 'asc')->get();
 @endphp
 
 <script>
@@ -115,16 +123,43 @@
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
 
-            <select name="st_vehicle_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ยานพาหนะ +">
+            {{-- <select name="st_vehicle_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ยานพาหนะ +">
                 <option value="">+ ยานพาหนะ +</option>
                 @foreach($st_vehicles as $item)
                     <option value="{{ $item->id }}" @if(request('st_vehicle_id') == $item->id) selected="selected" @endif>
                         {{ @$item->st_vehicle_type->name }} {{ @$item->brand }} {{ !empty(@$item->seat) ? @$item->seat : '-' }} ที่นั่ง สี{{ @$item->color }} ทะเบียน {{ @$item->reg_number }}
                     </option>
                 @endforeach
-            </select>
+            </select> --}}
 
             <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
+
+            <span class="form-inline dep-chain-group">
+                <select name="st_department_code"  class="chain-department selectpicker" data-live-search="true" title="กรม" required>
+                    <option value="">+ กรม +</option>
+                    @foreach($st_departments as $item)
+                    <option value="{{ $item->code }}" @if($item->code == (request('st_department_code') ?? @old('st_department_code'))) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                </select>
+
+                <select name="st_bureau_code"  class="chain-bureau selectpicker" data-live-search="true" title="สำนัก" required>
+                    <option value="">+ สำนัก +</option>
+                    @if($st_department_code))
+                    @foreach($st_bureaus as $item)
+                    <option value="{{ $item->code }}" @if($item->code == (request('st_bureau_code') ?? @old('st_bureau_code'))) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+
+                <select name="st_division_code"  class="chain-division selectpicker" data-live-search="true" title="กลุ่ม" required>
+                    <option value="">+ กลุ่ม +</option>
+                    @if($st_bureau_code)
+                    @foreach($st_divisions as $item)
+                    <option value="{{ $item->code }}" @if($item->code == (request('st_division_code') ?? @old('st_division_code'))) selected="selected" @endif>{{ $item->title }}</option>
+                    @endforeach
+                    @endif
+                </select>
+            </span>
 
             <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
 
