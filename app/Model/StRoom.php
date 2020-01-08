@@ -32,10 +32,20 @@ class StRoom extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'people', 'equipment', 'res_name', 'res_tel', 'fee', 'fee_detail', 'note', 'status', 'image', 'st_department_code',
+        'name', 'people',
+        'equipment',
+        'res_name',
+        'res_tel',
+        'fee',
+        'fee_detail',
+        'note',
+        'status',
+        'image',
+        'st_department_code',
         'st_bureau_code',
         'st_division_code',
         'over_people',
+        'is_default',
     ];
 
     /** Dear Custom Function */
@@ -83,6 +93,7 @@ class StRoom extends Model
         'st_bureau_code',
         'st_division_code',
         'over_people',
+        'is_default',
     ];
     protected static $logOnlyDirty = true;
 }

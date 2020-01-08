@@ -132,10 +132,19 @@ if (isset($stroom->st_bureau_code)) {
     <tr>
         <th>เปิด/ปิด</th>
         <td>
-            <input name="status" type="hidden" value="0" checked="chedked" />
+            <input name="status" type="hidden" value="0" checked="checked" />
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
+    @if(@Auth::user()->permission_group_id == 3)
+    <tr>
+        <th>set default</th>
+        <td>
+            <input name="is_default" type="hidden" value="0" checked="checked" />
+            <input name="is_default" type="checkbox" id="is_default" checked value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
+        </td>
+    </tr>
+    @endif
 </table>
 <div id="btnBoxAdd">
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
