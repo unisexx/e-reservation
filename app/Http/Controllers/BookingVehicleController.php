@@ -133,7 +133,7 @@ class BookingVehicleController extends Controller
             });
         }
 
-        $rs = $rs->orderBy('id', 'desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
         return view('include.__booking-vehicle-show', compact('rs'))->withFrom('backend');
     }
 

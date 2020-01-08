@@ -27,3 +27,23 @@ if (!function_exists('getMinute')) {
         return $minute;
     }
 }
+
+if (!function_exists('getVehicleCboxDetail')) {
+    function getVehicleCboxDetail($booking_vehicle_row)
+    {
+        $row = $booking_vehicle_row;
+
+        if ($row->status == 'อนุมัติ') {
+            $txtVehicleDetail = "<br>รายละเอียดรถ: " . @$row->st_vehicle->st_vehicle_type->name . " " . @$row->st_vehicle->brand . " " . @$row->st_vehicle->seat . " ที่นั่ง " . @$row->st_vehicle->color . " ทะเบียน " . @$row->st_vehicle->reg_number . "<br>ผู้รับผิดชอบยานพาหนะ : " . @$row->st_vehicle->res_name . ",  โทร. : " . @$row->st_vehicle->res_tel;
+        }
+
+        $txt = '';
+        $txt .= "shortTitle: '[" . displyDateTime($row->start_date, $row->start_time, $row->end_date, $row->end_time) . "] [" . $row->code . "] " . $row->gofor . " (" . $row->status . ")',";
+        $txt .= "title: 'สถานะ: " . $row->status . "<br>ไปเพื่อ: " . $row->gofor . "<br>สถานที่ขึ้นรถ " . $row->point_place . " เวลา " . $row->point_time . " น.<br>สถานที่ไป: " . $row->destination . @$txtVehicleDetail . "',";
+        $txt .= "start: '" . $row->start_date . "T" . $row->start_time . "',";
+        $txt .= "end: '" . $row->end_date . "T" . $row->end_time . "',";
+        $txt .= "color: '" . colorStatus($row->status) . "',";
+
+        return $txt;
+    }
+}
