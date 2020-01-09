@@ -67,7 +67,7 @@ class BookingVehicleFrontController extends Controller
         if ($st_department_code || $st_bureau_code || $st_division_code) {
             $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
         }
-        return view('include.__booking-vehicle-show', compact('rs'))->withFrom('backend');
+        return view('include.__booking-vehicle-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)

@@ -5,7 +5,7 @@ $q = App\Model\StResource::select('*')->where('status', '1');
 /**
  * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
  */
-if (CanPerm('access-self')) {
+if (@CanPerm('access-self')) {
     $q = $q->where('st_division_code',Auth::user()->st_division_code);
 }
 $st_resources = $q->orderBy('id','desc')->get();
