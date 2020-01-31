@@ -132,20 +132,60 @@ if(isset($rs->end_time)){
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
 
+
+
+{{-- แอดมิน หลังบ้านเห็นเท่านั้น --}}
 @if($formWhere == 'backend')
+{{-- ตรวจสอบการอนุมัติ ห้องเดียวกัน เวลาเดียวกัน ไม่สามารถอนุมัติซ้อนกันได้ --}}
+@php
+    $st_room_id = $rs->st_room_id;
+    $start_date = $rs->start_date;
+    $end_date = $rs->end_date;
+    $start_time = $rs->start_time;
+    $end_time = $rs->end_time;
+    $id = $rs->id;
+
+    $chkOverlap = App\Model\BookingRoom::select('*')->where('status', 'อนุมัติ')->where('st_room_id', $st_room_id)
+        ->where(function ($q) use ($start_date, $end_date) {
+            $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
+        })
+        ->where(function ($q) use ($start_time, $end_time) {
+            $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
+        });
+
+    if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
+        $chkOverlap = $chkOverlap->where('id', '<>', $id);
+    }
+
+    $chkOverlap = $chkOverlap->get();
+@endphp
 <div class="form-group form-inline col-md-12">
-<fieldset>
+    <fieldset>
     <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
         <label>สถานะ</label>
         <select name="status" class="form-control" style="width:auto;">
             <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+            @if($chkOverlap->count() < 1)
+                <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+            @endif
             <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
             <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
         </select>
+
+        @if($chkOverlap->count() >= 1)
+        <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
+        <ul>
+            @foreach($chkOverlap as $overlap)
+            <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
+            @endforeach
+        </ul>
+        @endif
     </fieldset>
 </div>
 @endif
+{{-- แอดมิน หลังบ้านเห็นเท่านั้น --}}
+
+
 
 <div class="form-group form-inline col-md-12">
     {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
@@ -199,6 +239,8 @@ if(isset($rs->end_time)){
 
 <script>
     $(document).ready(function() {
+        var $formWhere = "{{ $formWhere }}";
+
         // โชว์รายการห้องประชุมตอนกดปุ่มเลือกห้องประชุม
         $('#openCbox').click(function(){
             $('#searchRoomBtn').trigger('click');
@@ -235,12 +277,15 @@ if(isset($rs->end_time)){
         });
 
         $("#submitFormBtn").click(function(){
-            chkOverlap();
+            if($formWhere == 'frontend'){
+                chkOverlap();
+            }else{
+                $('form').submit();
+            }
         });
     });
 
-    // เช็กว่ามีการจองเวลาเหลือมกับรายการที่มีอยู่แล้วหรือไม่
-    // ตัวแปร วันที่เริ่ม,เวลาที่เริ่ม,วันที่สิ้นสุด,เวลาที่สิ้นสุด,ไอดีของห้องประชุม
+    // เช็กเฉพาะหน้าบ้านเท่านั้น
     function chkOverlap(){
         $.ajax({
                 url: '{{ url("ajaxRoomChkOverlap") }}',
