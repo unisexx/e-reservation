@@ -137,6 +137,7 @@ if (isset($stroom->st_bureau_code)) {
         </td>
     </tr>
     @if(@Auth::user()->permission_group_id == 3)
+    {{-- เฉพาะ Superadmin ให้ติกเลือกห้องเป็น defalut ที่ใช้แสดงผลที่หน้านี้ http://msobooking.m-society.go.th/booking-room-front/show?st_room_id=12&search= --}}
     <tr>
         <th>set default</th>
         <td>

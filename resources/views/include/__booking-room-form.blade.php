@@ -225,7 +225,7 @@ if(isset($rs->end_time)){
         $('body').on('click', '.selectRoomBtn', function() {
             // alert($(this).data('room-id'));
             $('input[name=st_room_id]').val($(this).data('room-id'));
-            $('input[name=st_room_people]').val($(this).data('room-people'));
+            $('input[name=st_room_people], input[name=number]').val($(this).data('room-people'));
             $('input[name=st_room_over_people]').val($(this).data('room-over-people'));
 
             var overPeople = ($(this).data('room-over-people') == 1) ? 'ได้' :'ไม่ได้';
