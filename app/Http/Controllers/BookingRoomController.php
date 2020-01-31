@@ -57,7 +57,7 @@ class BookingRoomController extends Controller
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
-            header("Content-Disposition: attachment; filename=จองห้องประชุม_" . date('Ymdhis') . ".xls"); //File name extension was wrong
+            header("Content-Disposition: attachment; filename=จองห้องประชุม/อบรม_" . date('Ymdhis') . ".xls"); //File name extension was wrong
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header("Cache-Control: private", false);
@@ -151,7 +151,7 @@ class BookingRoomController extends Controller
 
             Mail::send([], [], function ($message) use ($rs) {
                 $message->to($rs->request_email)
-                    ->subject('อัพเดทสถานะการจองห้องประชุม')
+                    ->subject('อัพเดทสถานะการจองห้องประชุม/อบรม')
                     ->setBody(
                         'รหัสการจอง: ' . $rs->code . '<br>' .
                         'หัวข้อการประชุม / ห้องประชุม: ' . $rs->title . ' / ' . $rs->st_room->name . '<br>' .

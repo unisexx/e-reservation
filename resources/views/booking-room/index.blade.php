@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองห้องประชุม</h3>
+<h3>จองห้องประชุม/อบรม</h3>
 
 @if(empty(request('export')))
 
@@ -39,7 +39,7 @@
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     @if(CanPerm('booking-room-create'))
-    <input type="button" title="+ ขอจองห้องประชุม" value="+ ขอจองห้องประชุม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
     @endif
 </div>
 

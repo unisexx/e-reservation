@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('setting/st-driver', 'Setting\\StDriverController');
     Route::resource('setting/st-resource', 'Setting\\StResourceController');
 
-    // จองห้องประชุม
+    // จองห้องประชุม/อบรม
     Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
     Route::resource('booking-room', 'BookingRoomController');
 

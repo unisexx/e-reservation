@@ -20,7 +20,7 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ ขอจองห้องประชุม',
+                    text: '+ ขอจองห้องประชุม/อบรม',
                     click: function() {
                         window.location.href = "/{{ $action }}/create";
                     }
@@ -104,7 +104,7 @@
  <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองห้องประชุม</h3>
+<h3>จองห้องประชุม/อบรม</h3>
 
 <div id="search">
     <div id="searchBox">

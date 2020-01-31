@@ -15,7 +15,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 
-                @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม</a></li>@endif
+                @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม/อบรม</a></li>@endif
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 
