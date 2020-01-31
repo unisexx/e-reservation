@@ -77,8 +77,12 @@
     <td>ตั้งแต่วันที่ {{ DB2Date($rs->start_date) }} เวลา {{ date("H:i", strtotime($rs->start_time)) }} น. - ถึงวันที่ {{ DB2Date($rs->end_date) }} เวลา {{ date("H:i", strtotime($rs->end_time)) }} น.</td>
 </tr>
 <tr>
-    <th>จำนวนผู้เข้าร่วมประชุม</th>
+    <th>จำนวนผู้เข้าร่วมประชุม (คน)</th>
     <td>{{ $rs->number }}</td>
+</tr>
+<tr>
+    <th>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (คน)</th>
+    <td>{{ $rs->internet_number }}</td>
 </tr>
 <tr>
     <th>ข้อมูลการติดต่อผู้ขอใช้</th>
@@ -89,7 +93,7 @@
     </td>
 </tr>
 <tr>
-    <th>หมายเหตุ หรือรายละเอียดอื่นๆ</th>
+    <th>หมายเหตุ / ความต้องการเพิ่มเติมอื่นๆ</th>
     <td>{{ isset($rs->note) ? $rs->note : '-' }}</td>
 </tr>
 <tr>

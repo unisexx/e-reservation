@@ -90,6 +90,12 @@ if(isset($rs->end_time)){
     คน
 </div>
 
+<div class="form-group form-inline col-md-12 input-daterange">
+    <label>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (ใส่เลข 0 ถ้าไม่ประสงค์จะใช้งาน)<span class="Txt_red_12"> *</span></label>
+    <input name="internet_number" type="number" min="0" class="form-control {{ $errors->has('internet_number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->internet_number) ? $rs->internet_number : old('internet_number') }}" style="width:100px;" required>
+    คน
+</div>
+
 <div class="form-group form-inline col-md-12">
     <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
     <div class="dep-chain-group" style="margin-bottom:5px;">
@@ -128,9 +134,12 @@ if(isset($rs->end_time)){
 </div>
 
 <div class="form-group form-inline col-md-12">
-    <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
+    <label>หมายเหตุ / ความต้องการเพิ่มเติมอื่นๆ (ระบุรายละเอียด)</label>
     <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
 </div>
+
+
+
 
 
 
@@ -184,6 +193,9 @@ if(isset($rs->end_time)){
 </div>
 @endif
 {{-- แอดมิน หลังบ้านเห็นเท่านั้น --}}
+
+
+
 
 
 
