@@ -1,3 +1,21 @@
+<style>
+body {
+background-image: url("{{ url('images/room-bg.jpg') }}");
+background-position: center center;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-size: cover;
+background-color:#464646;
+}
+
+/* For mobile devices */
+@media only screen and (max-width: 767px) {
+body {
+        background-image: url("{{ url('images/room-bg.jpg') }}");
+    }
+}
+</style>
+
 <?php
 $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
 
