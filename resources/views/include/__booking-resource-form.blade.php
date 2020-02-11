@@ -38,119 +38,134 @@ if(isset($rs->end_time)){
 }
 ?>
 
-<div class="form-group form-inline col-md-12">
-    <label>ทรัพยากร<span class="Txt_red_12"> *</span></label>
-    <select name="st_resource_id" class="form-control" style="width:auto;">
-        @foreach($st_resources as $row)
-        <option value="{{ $row->id }}" @if($row->id == @$rs->st_resource_id) selected @endif @if($row->id == @old('st_resource_id')) selected="selected" @endif >{{ $row->name }}</option>
+
+<div class="container bg-body-content">
+
+    @if ($errors->any())
+    <ul class="alert alert-danger list-unstyled">
+        <li><b>ไม่สามารถบันทึกได้เนื่องจาก</b></li>
+        @foreach ($errors->all() as $error)
+        <li>- {{ $error }}</li>
         @endforeach
-    </select>
-</div>
+    </ul>
+    @endif
 
-<div class="form-group form-inline col-md-12">
-    <label>ชื่อเรื่อง<span class="Txt_red_12"> *</span></label>
-    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
-</div>
-
-<div class="form-group form-inline col-md-12 input-daterange chkTime">
-    <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-    <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($rs->start_date) }}" style="width:120px;" required/>
-    <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
-        @foreach(getHour() as $item)
-        <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
-        @endforeach
-    </select>
-    :
-    <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
-        @foreach(getMinute() as $item)
-        <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
-        @endforeach
-    </select>
-    น.
-    <span style="margin:0 15px;">ถึง</span>
-    <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-    <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
-        @foreach(getHour() as $item)
-        <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
-        @endforeach
-    </select>
-    :
-    <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
-        @foreach(getMinute() as $item)
-        <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
-        @endforeach
-    </select>
-    น.
-
-    <input type="hidden" name="start_time" value="00:00">
-    <input type="hidden" name="end_time" value="00:00">
-</div>
-
-<div class="form-group form-inline col-md-12">
-    <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
-    <div class="dep-chain-group" style="margin-bottom:5px;">
-        <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
-
-        <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;" required>
-
-        <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
-            <option value="">+ กรม +</option>
-            @foreach($st_departments as $item)
-            <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+    <div class="form-group form-inline col-md-12">
+        <label>ทรัพยากร<span class="Txt_red_12"> *</span></label>
+        <select name="st_resource_id" class="form-control" style="width:auto;">
+            @foreach($st_resources as $row)
+            <option value="{{ $row->id }}" @if($row->id == @$rs->st_resource_id) selected @endif @if($row->id == @old('st_resource_id')) selected="selected" @endif >{{ $row->name }}</option>
             @endforeach
         </select>
-
-        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
-            <option value="">+ สำนัก +</option>
-            @if(old('st_department_code') || isset($rs->st_department_code))
-            @foreach($st_bureaus as $item)
-            <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
-            @endforeach
-            @endif
-        </select>
-
-        <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
-            <option value="">+ กลุ่ม +</option>
-            @if(old('st_bureau_code') || isset($rs->st_bureau_code))
-            @foreach($st_divisions as $item)
-            <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
-            @endforeach
-            @endif
-        </select>
-
     </div>
-    <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;" required>
-    <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" style="min-width:300px;" required>
-</div>
 
-<div class="form-group form-inline col-md-12">
-    <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
-    <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
-</div>
+    <div class="form-group form-inline col-md-12">
+        <label>ชื่อเรื่อง<span class="Txt_red_12"> *</span></label>
+        <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
+    </div>
 
-@if($formWhere == 'backend')
-<div class="form-group form-inline col-md-12">
-<fieldset>
-    <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
-        <label>สถานะ</label>
-        <select name="status" class="form-control" style="width:auto;">
-            <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
-            <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-            <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
+    <div class="form-group form-inline col-md-12 input-daterange chkTime">
+        <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
+        <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($rs->start_date) }}" style="width:120px;" required/>
+        <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+            @foreach(getHour() as $item)
+            <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
+            @endforeach
         </select>
-    </fieldset>
-</div>
-@endif
+        :
+        <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+            @foreach(getMinute() as $item)
+            <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
+            @endforeach
+        </select>
+        น.
+        <span style="margin:0 15px;">ถึง</span>
+        <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+        <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+            @foreach(getHour() as $item)
+            <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
+            @endforeach
+        </select>
+        :
+        <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+            @foreach(getMinute() as $item)
+            <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
+            @endforeach
+        </select>
+        น.
 
-<div class="form-group form-inline col-md-12">
-    {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
-</div>
+        <input type="hidden" name="start_time" value="00:00">
+        <input type="hidden" name="end_time" value="00:00">
+    </div>
 
-<div id="btnBoxAdd">
-    <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default" style="width:100px;" />
+    <div class="form-group form-inline col-md-12">
+        <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
+        <div class="dep-chain-group" style="margin-bottom:5px;">
+            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
+
+            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;" required>
+
+            <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
+                <option value="">+ กรม +</option>
+                @foreach($st_departments as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+            </select>
+
+            <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
+                <option value="">+ สำนัก +</option>
+                @if(old('st_department_code') || isset($rs->st_department_code))
+                @foreach($st_bureaus as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+                @endif
+            </select>
+
+            <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
+                <option value="">+ กลุ่ม +</option>
+                @if(old('st_bureau_code') || isset($rs->st_bureau_code))
+                @foreach($st_divisions as $item)
+                <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                @endforeach
+                @endif
+            </select>
+
+        </div>
+        <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;" required>
+        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" style="min-width:300px;" required>
+    </div>
+
+    <div class="form-group form-inline col-md-12">
+        <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
+        <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
+    </div>
+
+    @if($formWhere == 'backend')
+    <div class="form-group form-inline col-md-12">
+    <fieldset>
+        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+            <label>สถานะ</label>
+            <select name="status" class="form-control" style="width:auto;">
+                <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
+                <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+                <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
+                <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
+            </select>
+        </fieldset>
+    </div>
+    @endif
+
+    <div class="form-group form-inline col-md-12">
+        {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
+    </div>
+
+    <div id="btnBoxAdd">
+        <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
+        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default" style="width:100px;" />
+    </div>
+
 </div>
+{{-- END CONTAINER --}}
 
 <script>
     $(document).ready(function() {
