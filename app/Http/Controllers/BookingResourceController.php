@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
 use App\Model\BookingResource;
+use App\Model\ManageResource;
 use Auth;
 use Illuminate\Http\Request;
 use Mail;
@@ -30,13 +31,22 @@ class BookingResourceController extends Controller
         $rs = BookingResource::select('*');
 
         /**
-         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
-         * เห็นเฉพาะทรัพยากรที่อยู่ในสังกัดของตัวเอง
+         *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองทรัพยากร (Manage booking) ใน setting/st-resource ให้แสดงเฉพาะการจองของทรัพยากรที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
          */
-        if (CanPerm('access-self')) {
-            $rs = $rs->whereHas('stResource', function ($q) {
-                $q->where('st_division_code', Auth::user()->st_division_code);
-            });
+        $is_manageresource = ManageResource::select('st_resource_id')->where('user_id', Auth::user()->id)->get()->toArray();
+        // dd($is_manageroom);
+        if($is_manageresource){
+            $rs = $rs->whereIn('st_resource_id', $is_manageresource);
+        }else{
+            /**
+             * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
+             * เห็นเฉพาะทรัพยากรที่อยู่ในสังกัดของตัวเอง
+             */
+            if (CanPerm('access-self')) {
+                $rs = $rs->whereHas('stResource', function ($q) {
+                    $q->where('st_division_code', Auth::user()->st_division_code);
+                });
+            }
         }
 
         if (!empty($st_resource_id)) {

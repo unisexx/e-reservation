@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Model\StResource;
 use Illuminate\Http\Request;
 
+use App\Model\ManageResource;
+
 use Auth;
 
 class StResourceController extends Controller
@@ -85,7 +87,19 @@ class StResourceController extends Controller
         
         $requestData = $request->all();
         
-        StResource::create($requestData);
+        $stresource = StResource::create($requestData);
+
+        // บันทึกผู้จัดการทรัพยากร
+        if(isset($request->manage_resource_user_id)){
+            foreach($request->manage_resource_user_id as $user_id){
+                ManageResource::updateOrCreate(
+                    [
+                        'st_resource_id' => $stresource->id,
+                        'user_id' => $user_id,
+                    ]
+                );
+            }
+        }
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('setting/st-resource');
@@ -144,6 +158,25 @@ class StResourceController extends Controller
 
         $rs = StResource::findOrFail($id);
         $rs->update($requestData);
+
+        // บันทึกผู้จัดการจองทรัพยากร
+        if(isset($request->manage_resource_user_id)){
+            foreach($request->manage_resource_user_id as $user_id){
+                ManageResource::updateOrCreate(
+                    [
+                        'st_resource_id' => $rs->id,
+                        'user_id' => $user_id,
+                    ]
+                );
+            }
+        }
+
+        // ลบผู้จัดการจองทรัพยากรที่ไม่ได้ถูกเลือกในฟอร์ม
+        if (isset($request->manage_resource_user_id)) {
+            ManageResource::where('st_resource_id', $rs->id)->whereNotIn('user_id', $request->manage_resource_user_id)->delete();
+        }else{
+            ManageResource::where('st_resource_id', $rs->id)->delete();
+        }
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
         return redirect('setting/st-resource');

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
 use App\Model\BookingRoom;
+use App\Model\ManageRoom;
 use Auth;
 use Illuminate\Http\Request;
 use Mail;
+use DB;
 
 class BookingRoomController extends Controller
 {
@@ -28,14 +30,23 @@ class BookingRoomController extends Controller
 
         $rs = BookingRoom::select('*');
 
+
         /**
-         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
-         * เห็นเฉพาะห้องที่อยู่ในสังกัดของตัวเอง
+         *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
          */
-        if (CanPerm('access-self')) {
-            $rs = $rs->whereHas('st_room', function ($q) {
-                $q->where('st_division_code', Auth::user()->st_division_code);
-            });
+        $is_manageroom = ManageRoom::select('st_room_id')->where('user_id', Auth::user()->id)->get()->toArray();
+        // dd($is_manageroom);
+        if($is_manageroom){
+            $rs = $rs->whereIn('st_room_id', $is_manageroom);
+        }else{
+            /**
+             * เห็นเฉพาะห้องที่อยู่ในกลุ่มของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, ถ้าเป็น default คือเห็นทั้งหมด
+             */
+            if (CanPerm('access-self')) {
+                $rs = $rs->whereHas('st_room', function ($q) {
+                    $q->where('st_division_code', Auth::user()->st_division_code);
+                });
+            }
         }
 
         if (!empty($date_select)) {

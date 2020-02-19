@@ -77,6 +77,11 @@ class StRoom extends Model
         return $this->hasMany('App\Model\BookingRoom', 'st_room_id', 'id');
     }
 
+    public function manageRoom()
+    {
+        return $this->hasMany('App\Model\ManageRoom', 'st_room_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'name',

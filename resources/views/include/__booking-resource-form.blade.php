@@ -6,7 +6,7 @@ $q = App\Model\StResource::select('*')->where('status', '1');
  * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
  */
 if (@CanPerm('access-self')) {
-    $q = $q->where('st_division_code',Auth::user()->st_division_code);
+    $q = $q->where('st_bureau_code',Auth::user()->st_bureau_code);
 }
 $st_resources = $q->orderBy('id','desc')->get();
 
@@ -105,6 +105,7 @@ if(isset($rs->end_time)){
 
             <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;" required>
 
+            <div style="margin-top:5px;">
             <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
                 <option value="">+ กรม +</option>
                 @foreach($st_departments as $item)
@@ -129,6 +130,7 @@ if(isset($rs->end_time)){
                 @endforeach
                 @endif
             </select>
+            </div>
 
         </div>
         <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;" required>
@@ -169,8 +171,14 @@ if(isset($rs->end_time)){
 
 <script>
     $(document).ready(function() {
+        var $formWhere = "{{ $formWhere }}";
+
         $("#submitFormBtn").click(function(){
-            chkOverlap();
+            if($formWhere == 'frontend'){
+                chkOverlap();
+            }else{
+                $('form').submit();
+            }
         });
     });
 

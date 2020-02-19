@@ -146,6 +146,35 @@ if (isset($stroom->st_bureau_code)) {
         </td>
     </tr>
     @endif
+
+    {{-- Admin ผู้จัดการห้อง คือ user ที่มีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
+    {{-- Admin ผู้จัดการจองห้อง คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
+    {{-- Admin ผู้จัดการห้องสามารถเลือก Admin ผู้จัดการจองห้อง ในสำนัก/กอง ตนเอง มาดูแลห้องได้ --}}
+    @php
+        // หา user ที่ไม่มีสิทธิ์ในการตั้งค่าห้องประชุม
+        $users = App\User::where('status', 1)
+                    ->where('st_bureau_code', @Auth::user()->st_bureau_code)
+                    ->whereIn('permission_group_id', function($query){
+                        $query->select('id')->from('permission_groups')->whereNotIn('id', function($query){
+                            $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [17,18,19,20]);
+                        });
+                    })
+                    ->orderBy('id', 'desc')
+                    ->get();
+        // dd($users);
+    @endphp
+    @if($users)
+    <tr>
+        <th>เลือกผู้จัดการจองห้อง (Manage booking)</th>
+        <td>
+            @foreach($users as $key => $user)
+                <div>
+                    <label id="userlabel{{$key}}"><input for="userlabel{{$key}}" type="checkbox" name="manage_room_user_id[]" value="{{ $user->id }}" @if(@$stroom) {{ @$stroom->manageRoom->where('user_id', $user->id)->count() > 0 ? 'checked' : '' }} @endif> {{ $user->prefix->title }} {{$user->givename }} {{ $user->familyname }}</label>
+                </div>
+            @endforeach
+        </td>
+    </tr>
+    @endif
 </table>
 <div id="btnBoxAdd">
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />

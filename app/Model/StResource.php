@@ -50,4 +50,9 @@ class StResource extends Model
         'st_division_code',
     ];
     protected static $logOnlyDirty = true;
+
+    public function manageResource()
+    {
+        return $this->hasMany('App\Model\ManageResource', 'st_resource_id', 'id');
+    }
 }
