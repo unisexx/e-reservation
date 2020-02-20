@@ -108,8 +108,9 @@ class StRoomController extends Controller
             foreach($request->manage_room_user_id as $user_id){
                 ManageRoom::updateOrCreate(
                     [
-                        'st_room_id' => $stroom->id,
-                        'user_id' => $user_id,
+                        'st_room_id'        => $stroom->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
                     ]
                 );
             }
@@ -192,8 +193,9 @@ class StRoomController extends Controller
             foreach($request->manage_room_user_id as $user_id){
                 ManageRoom::updateOrCreate(
                     [
-                        'st_room_id' => $stroom->id,
-                        'user_id' => $user_id,
+                        'st_room_id'        => $stroom->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
                     ]
                 );
             }

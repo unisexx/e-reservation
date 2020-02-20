@@ -94,8 +94,9 @@ class StResourceController extends Controller
             foreach($request->manage_resource_user_id as $user_id){
                 ManageResource::updateOrCreate(
                     [
-                        'st_resource_id' => $stresource->id,
-                        'user_id' => $user_id,
+                        'st_resource_id'    => $stresource->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
                     ]
                 );
             }
@@ -164,8 +165,9 @@ class StResourceController extends Controller
             foreach($request->manage_resource_user_id as $user_id){
                 ManageResource::updateOrCreate(
                     [
-                        'st_resource_id' => $rs->id,
-                        'user_id' => $user_id,
+                        'st_resource_id'    => $rs->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
                     ]
                 );
             }
