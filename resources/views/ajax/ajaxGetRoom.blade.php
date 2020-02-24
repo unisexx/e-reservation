@@ -24,7 +24,7 @@
         <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($item->fee) ? $item->fee : "-" }}</div>
     </td>
     <td>
-        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectRoomBtn" data-room-id="{{ $item->id }}" data-room-name="{{ $item->name}} ">
+        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectRoomBtn" data-room-id="{{ $item->id }}" data-room-name="{{ $item->name }}" data-room-people="{{ $item->people }}" data-room-over-people="{{ $item->over_people }}">
     </td>
 </tr>
 @endforeach

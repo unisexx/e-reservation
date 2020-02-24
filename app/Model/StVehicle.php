@@ -43,6 +43,8 @@ class StVehicle extends Model
         'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'res_name',
+        'res_tel',
     ];
 
     /** Dear Custom Function */
@@ -97,6 +99,8 @@ class StVehicle extends Model
         'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'res_name',
+        'res_tel',
     ];
     protected static $logOnlyDirty = true;
 }

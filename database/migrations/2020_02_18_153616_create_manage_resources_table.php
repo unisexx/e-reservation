@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStPrefixesTable extends Migration
+class CreateManageResourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateStPrefixesTable extends Migration
      */
     public function up()
     {
-        Schema::create('st_prefixes', function (Blueprint $table) {
+        Schema::create('manage_resources', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateStPrefixesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('st_prefixes');
+        Schema::dropIfExists('manage_resources');
     }
 }

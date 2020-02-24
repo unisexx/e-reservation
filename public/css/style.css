@@ -927,3 +927,53 @@ table a:hover{
 .fc-event{
     box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 10px -5px hsla(0,0%,60%,.4) !important;
 }
+
+
+/* à¹€à¸žà¸´à¹ˆà¸¡ style à¸ªà¸³à¸«à¸£à¸±à¸šà¸«à¸™à¹‰à¸² form */
+.bg-header1-pic{ }
+.bg-header1{  background-image: url(../images/top-bg.jpg); background-size:100% 100%; background-position: top center; border-bottom:4px solid #79C867;
+/*
+    background-color: #66ab56; opacity:.9 ;   -webkit-backface-visibility: hidden;
+	background-image: -webkit-gradient(linear, 0% 0%, 100% 100%, color-stop(0, #66ab56), color-stop(1, #a4d792));
+    background-image: -webkit-linear-gradient(top left, #66ab56 0%, #a4d792 100%);
+    background-image: linear-gradient(to bottom right, #66ab56 0%, #a4d792 100%);
+    background-image: -ms-linear-gradient(top left, #66ab56 0%, #a4d792 100%);  border-bottom:4px solid #66ab56;
+    */
+	width: 100%; 
+}
+
+.bg-body2{background-image: url(../images/vehicle-bg.jpg); background-size:cover; background-position: center center; background-repeat: no-repeat;}
+.bg-body{background-image: url(../images/room-bg.jpg);}
+.bg-body-content{background-color:#FFFFFF; padding:20px; border-radius: 4px;}
+.icon-home{float:right; margin-right:40px; margin-bottom:20px;}
+.page-form{ font-family: 'Sarabun'!important;}
+.btn-skin2 { font-family: 'K2D', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 9px 25px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    background: #fff;
+    color: #ccc;
+    text-decoration: none;
+}
+.btn-skin2:hover {
+  background: #ccc;	border-color: #ccc;
+  color: #fff;
+}
+.form-box input:focus,.form-box select:focus,.form-box textarea:focus {	border-color: #71c55d;}
+.form-box input,.form-box select,.form-box textarea {font-size: 14px;	min-height: 2.8em; line-height: 1.6em;	border: 1px solid #eee; -webkit-box-shadow: none !important; box-shadow: none !important; border-radius: 2px;}
+.text-white{color:white; font-weight:bold; margin:0;  text-shadow:
+	3px 3px 0 #3b802f,
+  -1px -1px 0 #3b802f,  
+   1px -1px 0 #3b802f,
+   -1px 1px 0 #3b802f,
+	1px 1px 0 #3b802f;}
+.pt-3{padding-top:30px;}
+.pt-5{padding-top:50px;}
+.pb-3{padding-bottom:30px;}
+.line01{border-bottom:1px solid #c6c7c7;}

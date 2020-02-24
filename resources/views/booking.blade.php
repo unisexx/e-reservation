@@ -54,7 +54,7 @@
                                     <img src="images/icon01.png">
                                 </div>
                                 <div class="service-desc">
-                                    <h5>จองห้องประชุม</h5>
+                                    <h5>จองห้องประชุม/อบรม</h5>
                                     <div class="divider-header"></div>
                                     <a href="booking-room-front/show" class="btn btn-skin">booking</a>
                                 </div>

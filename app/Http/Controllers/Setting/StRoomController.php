@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\StRoomRequest;
 
+use App\Model\ManageRoom;
+
 use Auth;
 
 class StRoomController extends Controller
@@ -99,7 +101,20 @@ class StRoomController extends Controller
             $requestData['image'] = implode("|",$image);
         }
         
-        StRoom::create($requestData);
+        $stroom = StRoom::create($requestData);
+
+        // บันทึกผู้จัดการห้อง
+        if(isset($request->manage_room_user_id)){
+            foreach($request->manage_room_user_id as $user_id){
+                ManageRoom::updateOrCreate(
+                    [
+                        'st_room_id'        => $stroom->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
+                    ]
+                );
+            }
+        }
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('setting/st-room');
@@ -147,12 +162,13 @@ class StRoomController extends Controller
     public function update(StRoomRequest $request, $id)
     {
         $requestData = $request->all();
+        // dd($requestData['manage_room_user_id']);
 
         // ไฟล์แนบ
         // if ($request->hasFile('image')) {
         //     $imageName = time().'.'.request()->image->getClientOriginalExtension();
         //     request()->image->move(public_path('uploads/room/'), $imageName);
-
+ 
         //     $requestData['image'] = $imageName;
         // }
 
@@ -171,6 +187,26 @@ class StRoomController extends Controller
         
         $stroom = StRoom::findOrFail($id);
         $stroom->update($requestData);
+
+        // บันทึกผู้จัดการจองห้อง
+        if(isset($request->manage_room_user_id)){
+            foreach($request->manage_room_user_id as $user_id){
+                ManageRoom::updateOrCreate(
+                    [
+                        'st_room_id'        => $stroom->id,
+                        'user_id'           => $user_id,
+                        'create_by_user_id' => Auth::user()->id,
+                    ]
+                );
+            }
+        }
+
+        // ลบผู้จัดการจองห้องที่ไม่ได้ถูกเลือกในฟอร์ม
+        if (isset($request->manage_room_user_id)) {
+            ManageRoom::where('st_room_id', $stroom->id)->whereNotIn('user_id', $request->manage_room_user_id)->delete();
+        }else{
+            ManageRoom::where('st_room_id', $stroom->id)->delete();
+        }
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
         return redirect('setting/st-room');

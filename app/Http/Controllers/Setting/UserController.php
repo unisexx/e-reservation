@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 
+use App\Model\ManageRoom;
+use App\Model\ManageResource;
+
 use DB;
 
 class UserController extends Controller
@@ -191,6 +194,18 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
+
+        /**
+         * ถ้ามีการเปลี่ยนแปลง permission_group_id ให้ เคลียร์ค่า manage_room, manage_resource
+         * ถ้าไม่เคลียร์จะทำให้เห็นห้องกับทรัพยากรตามที่ถูกตั้งค่าไว้ตอนอยู่สิทธิ์การใช้งานเก่า
+         */
+        $user->permission_group_id = $request->permission_group_id;
+        // dd($user->isDirty('permission_group_id'));
+        if($user->isDirty('permission_group_id')){
+            ManageRoom::where('user_id', $id)->delete();
+            ManageResource::where('user_id', $id)->delete();
+        }
+
         $user->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');

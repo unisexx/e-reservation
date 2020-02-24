@@ -67,7 +67,7 @@ if (isset($rs->st_bureau_code)) {
 
                 <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
-                    @if(old('st_department_code') || isset($rs->st_department_code))
+                    @if(old('st_department_code') || isseๆฟt($rs->st_department_code))
                     @foreach($st_bureaus as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
@@ -96,6 +96,34 @@ if (isset($rs->st_bureau_code)) {
             empty($rs->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
+    {{-- Admin ผู้จัดการทรัพยากร คือ user ที่มีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าทรัพยากรนี้ --}}
+    {{-- Admin ผู้จัดการจองทรัพยากร คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าทรัพยากรนี้ --}}
+    {{-- Admin ผู้จัดการทรัพยากรสามารถเลือก Admin ผู้จัดการจองทรัพยากร ในสำนัก/กอง ตนเอง มาดูแลได้ --}}
+    @php
+        // หา user ที่ไม่มีสิทธิ์ในการตั้งค่าทรัพยากร
+        $users = App\User::where('status', 1)
+                    ->where('st_bureau_code', @Auth::user()->st_bureau_code)
+                    ->whereIn('permission_group_id', function($query){
+                        $query->select('id')->from('permission_groups')->whereNotIn('id', function($query){
+                            $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [63,64,65,66]);
+                        });
+                    })
+                    ->orderBy('id', 'desc')
+                    ->get();
+        // dd($users);
+    @endphp
+    @if($users)
+    <tr>
+        <th>เลือกผู้จัดการจองทรัพยากร (Manage booking)</th>
+        <td>
+            @foreach($users as $key => $user)
+                <div>
+                    <label id="userlabel{{$key}}"><input for="userlabel{{$key}}" type="checkbox" name="manage_resource_user_id[]" value="{{ $user->id }}" @if(@$rs) {{ @$rs->manageResource->where('user_id', $user->id)->count() > 0 ? 'checked' : '' }} @endif> {{ $user->prefix->title }} {{$user->givename }} {{ $user->familyname }}</label>
+                </div>
+            @endforeach
+        </td>
+    </tr>
+    @endif
 </table>
 <div id="btnBoxAdd">
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />

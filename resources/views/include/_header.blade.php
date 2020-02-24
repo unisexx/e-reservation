@@ -15,7 +15,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 
-                @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม</a></li>@endif
+                @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม/อบรม</a></li>@endif
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 
@@ -55,7 +55,7 @@
                     </ul>
                 </li>
                 <?php endif;?>
-                <li><a href="{{ url('profile') }}" class="vtip" title="{{ @Auth::user()->prefix->title }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }} [{{ @Auth::user()->permission_group->title }}]"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
+                <li><a href="{{ url('profile') }}" class="vtip" title="{{ @Auth::user()->prefix->title }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }}<br>- {{ @Auth::user()->department->title }}<br>- {{ @Auth::user()->bureau->title }}<br>- {{ @Auth::user()->division->title }}<br>[{{ @Auth::user()->permission_group->title }}]"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
                 <li>
                     <a class="" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <!-- {{ __('Logout') }} -->

@@ -17,7 +17,7 @@ if(!function_exists('CanPerm'))
 // ใช้ใน controller
 if(!function_exists('ChkPerm'))
 {
-	function ChkPerm($name=false, $url_redirect = 'plan')
+	function ChkPerm($name=false, $url_redirect = 'home')
 	{
 		// permission(plan-view);
 		$rs = App\Model\Permission::where('name',$name)

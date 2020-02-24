@@ -32,9 +32,20 @@ class StRoom extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'people', 'equipment', 'res_name', 'res_tel', 'fee', 'fee_detail', 'note', 'status', 'image', 'st_department_code',
+        'name', 'people',
+        'equipment',
+        'res_name',
+        'res_tel',
+        'fee',
+        'fee_detail',
+        'note',
+        'status',
+        'image',
+        'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'over_people',
+        'is_default',
     ];
 
     /** Dear Custom Function */
@@ -66,21 +77,28 @@ class StRoom extends Model
         return $this->hasMany('App\Model\BookingRoom', 'st_room_id', 'id');
     }
 
+    public function manageRoom()
+    {
+        return $this->hasMany('App\Model\ManageRoom', 'st_room_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
-        'name', 
-        'people', 
-        'equipment', 
-        'res_name', 
-        'res_tel', 
-        'fee', 
-        'fee_detail', 
-        'note', 
-        'status', 
-        'image', 
+        'name',
+        'people',
+        'equipment',
+        'res_name',
+        'res_tel',
+        'fee',
+        'fee_detail',
+        'note',
+        'status',
+        'image',
         'st_department_code',
         'st_bureau_code',
         'st_division_code',
+        'over_people',
+        'is_default',
     ];
     protected static $logOnlyDirty = true;
 }

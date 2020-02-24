@@ -46,7 +46,14 @@ if (isset($stroom->st_bureau_code)) {
     <tr>
         <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
         <td>
-            <div class="form-inline"><input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน</div>
+            <div class="form-inline">
+                <input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน
+
+                <div>
+                    <input type="hidden" name="over_people" value="0" checked>
+                    <label for="op"><input id="op" type="checkbox" name="over_people" value="1" {{ @$stroom->over_people == 1 ? 'checked' : '' }}> ยอมให้บันทึกเกินจำนวนที่รองรับได้</label>
+                </div>
+            </div>
         </td>
     </tr>
     <tr>
@@ -125,10 +132,49 @@ if (isset($stroom->st_bureau_code)) {
     <tr>
         <th>เปิด/ปิด</th>
         <td>
-            <input name="status" type="hidden" value="0" checked="chedked" />
+            <input name="status" type="hidden" value="0" checked="checked" />
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
+    @if(@Auth::user()->permission_group_id == 3)
+    {{-- เฉพาะ Superadmin ให้ติกเลือกห้องเป็น defalut ที่ใช้แสดงผลที่หน้านี้ http://msobooking.m-society.go.th/booking-room-front/show?st_room_id=12&search= --}}
+    <tr>
+        <th>set default</th>
+        <td>
+            <input name="is_default" type="hidden" value="0" checked="checked" />
+            <input name="is_default" type="checkbox" id="is_default" checked value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
+        </td>
+    </tr>
+    @endif
+
+    {{-- Admin ผู้จัดการห้อง คือ user ที่มีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
+    {{-- Admin ผู้จัดการจองห้อง คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
+    {{-- Admin ผู้จัดการห้องสามารถเลือก Admin ผู้จัดการจองห้อง ในสำนัก/กอง ตนเอง มาดูแลห้องได้ --}}
+    @php
+        // หา user ที่ไม่มีสิทธิ์ในการตั้งค่าห้องประชุม
+        $users = App\User::where('status', 1)
+                    ->where('st_bureau_code', @Auth::user()->st_bureau_code)
+                    ->whereIn('permission_group_id', function($query){
+                        $query->select('id')->from('permission_groups')->whereNotIn('id', function($query){
+                            $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [17,18,19,20]);
+                        });
+                    })
+                    ->orderBy('id', 'desc')
+                    ->get();
+        // dd($users);
+    @endphp
+    @if($users)
+    <tr>
+        <th>เลือกผู้จัดการจองห้อง (Manage booking)</th>
+        <td>
+            @foreach($users as $key => $user)
+                <div>
+                    <label id="userlabel{{$key}}"><input for="userlabel{{$key}}" type="checkbox" name="manage_room_user_id[]" value="{{ $user->id }}" @if(@$stroom) {{ @$stroom->manageRoom->where('user_id', $user->id)->count() > 0 ? 'checked' : '' }} @endif> {{ $user->prefix->title }} {{$user->givename }} {{ $user->familyname }}</label>
+                </div>
+            @endforeach
+        </td>
+    </tr>
+    @endif
 </table>
 <div id="btnBoxAdd">
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
