@@ -40,6 +40,10 @@ class BookingRoomFrontController extends Controller
 
         if (!empty($st_room_id)) {
             $rs = $rs->where('st_room_id', $st_room_id);
+        }else{
+            $rs = $rs->whereHas('st_room', function($q){
+                $q->where('is_default', 1);
+            });
         }
 
         if (!empty($keyword)) {

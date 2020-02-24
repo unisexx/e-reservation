@@ -4,7 +4,7 @@
 
 @php
     $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
-    $st_rooms = App\Model\StRoom::where('status', 1)->where('is_default', 1)->orderBy('name', 'asc')->get();
+    $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
 @endphp
 
 <script>
