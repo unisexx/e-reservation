@@ -136,13 +136,16 @@ if (isset($stroom->st_bureau_code)) {
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
-    @if(@Auth::user()->permission_group_id == 3)
+    @if(CanPerm('is-superadmin'))
     {{-- เฉพาะ Superadmin ให้ติกเลือกห้องเป็น defalut ที่ใช้แสดงผลที่หน้านี้ http://msobooking.m-society.go.th/booking-room-front/show?st_room_id=12&search= --}}
     <tr>
-        <th>set default</th>
+        <th>
+            set default (ค่าเริ่มต้นการแสดงผล)<br>
+            <small><u>หมายเหตุ</u> สามารถตั้งค่าได้ห้องเดียวเท่านั้น ถ้าติ๊กถูกที่ห้องนี้ ห้องอื่นที่เคยตั้งค่าไว้จะถูกลบออก</small>
+        </th>
         <td>
             <input name="is_default" type="hidden" value="0" checked="checked" />
-            <input name="is_default" type="checkbox" id="is_default" checked value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
+            <input name="is_default" type="checkbox" id="is_default" value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
     @endif
@@ -151,6 +154,7 @@ if (isset($stroom->st_bureau_code)) {
     {{-- Admin ผู้จัดการจองห้อง คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
     {{-- Admin ผู้จัดการห้องสามารถเลือก Admin ผู้จัดการจองห้อง ในสำนัก/กอง ตนเอง มาดูแลห้องได้ --}}
     @php
+    // DB::enableQueryLog();
         // หา user ที่ไม่มีสิทธิ์ในการตั้งค่าห้องประชุม
         $users = App\User::where('status', 1)
                     ->where('st_bureau_code', @Auth::user()->st_bureau_code)
@@ -162,6 +166,7 @@ if (isset($stroom->st_bureau_code)) {
                     ->orderBy('id', 'desc')
                     ->get();
         // dd($users);
+    // dd(DB::getQueryLog());
     @endphp
     @if($users)
     <tr>

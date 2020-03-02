@@ -100,6 +100,11 @@ class StRoomController extends Controller
             }
             $requestData['image'] = implode("|",$image);
         }
+
+        // ถ้ามีการติ๊ก set default ให้เคลียร์ค่า set default ห้องทั้งหมดออกก่อน
+        if($request->is_default == 1){
+            StRoom::query()->update(['is_default' => '0']);
+        }
         
         $stroom = StRoom::create($requestData);
 
@@ -162,6 +167,7 @@ class StRoomController extends Controller
     public function update(StRoomRequest $request, $id)
     {
         $requestData = $request->all();
+
         // dd($requestData['manage_room_user_id']);
 
         // ไฟล์แนบ
@@ -183,6 +189,11 @@ class StRoomController extends Controller
                 }
             }
             $requestData['image'] = implode("|",$image);
+        }
+
+        // ถ้ามีการติ๊ก set default ให้เคลียร์ค่า set default ห้องทั้งหมดออกก่อน
+        if($request->is_default == 1){
+            StRoom::query()->update(['is_default' => '0']);
         }
         
         $stroom = StRoom::findOrFail($id);
