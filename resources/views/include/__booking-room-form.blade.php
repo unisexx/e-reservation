@@ -69,6 +69,7 @@ if(isset($rs->end_time)){
         <input type="hidden" name="st_room_over_people" value="{{ $rs->st_room_over_people ?? old('st_room_over_people')}}">
         <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
         <input type="hidden" name="st_room_people" value="{{ isset($rs->st_room_id) ? $rs->st_room->people : old('st_room_people') }}">
+        <input type="hidden" name="st_room_is_internet" value="{{ isset($rs->st_room_id) ? $rs->st_room->is_internet : old('st_room_is_internet') }}">
 
         <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
     </div>
@@ -119,9 +120,9 @@ if(isset($rs->end_time)){
         คน
     </div>
 
-    <div id="is_internet_section" class="form-group form-inline col-md-12" style="{{ @$rs->st_room->is_internet == 1 ? 'display:block;' : 'display:none;' }}">
-        <label>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (ใส่เลข 0 ถ้าไม่ประสงค์จะใช้งาน)<span class="Txt_red_12"> *</span></label>
-        <input name="internet_number" type="number" min="0" class="form-control {{ $errors->has('internet_number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->internet_number) ? $rs->internet_number : old('internet_number') }}" style="width:100px;" required>
+    <div id="is_internet_section" class="form-group form-inline col-md-12" style="{{ @$rs->st_room->is_internet == 1 || old('st_room_is_internet') == 1 ? 'display:block;' : 'display:none;' }}">
+        <label>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต</label>
+        <input name="internet_number" type="number" min="0" class="form-control {{ $errors->has('internet_number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ @$rs->internet_number ?? old('internet_number') }}" style="width:100px;" required>
         คน
     </div>
 
@@ -315,6 +316,7 @@ if(isset($rs->end_time)){
             $('input[name=st_room_id]').val($(this).data('room-id'));
             $('input[name=st_room_people], input[name=number]').val($(this).data('room-people'));
             $('input[name=st_room_over_people]').val($(this).data('room-over-people'));
+            $('input[name=st_room_is_internet]').val($(this).data('room-is-internet'));
 
             var overPeople = ($(this).data('room-over-people') == 1) ? 'ได้' :'ไม่ได้';
             $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน) (บันทึกเกิน'+overPeople+')');
