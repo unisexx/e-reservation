@@ -102,9 +102,9 @@ class StRoomController extends Controller
         }
 
         // ถ้ามีการติ๊ก set default ให้เคลียร์ค่า set default ห้องทั้งหมดออกก่อน
-        if($request->is_default == 1){
-            StRoom::query()->update(['is_default' => '0']);
-        }
+        // if($request->is_default == 1){
+        //     StRoom::query()->update(['is_default' => '0']);
+        // }
         
         $stroom = StRoom::create($requestData);
 
@@ -192,9 +192,9 @@ class StRoomController extends Controller
         }
 
         // ถ้ามีการติ๊ก set default ให้เคลียร์ค่า set default ห้องทั้งหมดออกก่อน
-        if($request->is_default == 1){
-            StRoom::query()->update(['is_default' => '0']);
-        }
+        // if($request->is_default == 1){
+        //     StRoom::query()->update(['is_default' => '0']);
+        // }
         
         $stroom = StRoom::findOrFail($id);
         $stroom->update($requestData);

@@ -119,7 +119,7 @@ if(isset($rs->end_time)){
         คน
     </div>
 
-    <div class="form-group form-inline col-md-12 input-daterange">
+    <div id="is_internet_section" class="form-group form-inline col-md-12" style="{{ @$rs->st_room->is_internet == 1 ? 'display:block;' : 'display:none;' }}">
         <label>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (ใส่เลข 0 ถ้าไม่ประสงค์จะใช้งาน)<span class="Txt_red_12"> *</span></label>
         <input name="internet_number" type="number" min="0" class="form-control {{ $errors->has('internet_number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->internet_number) ? $rs->internet_number : old('internet_number') }}" style="width:100px;" required>
         คน
@@ -318,6 +318,14 @@ if(isset($rs->end_time)){
 
             var overPeople = ($(this).data('room-over-people') == 1) ? 'ได้' :'ไม่ได้';
             $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน) (บันทึกเกิน'+overPeople+')');
+
+            // is_internet ถ้าเป็น 1 ให้้เสดง 0 ไม่แสดง
+            if($(this).data('room-is-internet') == 1){
+                $('#is_internet_section').show();
+            }else{
+                $('#is_internet_section').hide();
+            }
+
             // ปิด colorbox
             $.colorbox.close();
         });

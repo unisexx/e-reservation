@@ -63,6 +63,17 @@ if (isset($stroom->st_bureau_code)) {
         </td>
     </tr>
     <tr>
+        <th>ขอ User เพื่อใช้งานอินเทอร์เน็ต<span class="Txt_red_12"> *</span></th>
+        <td>
+            <label style="margin-right:20px;">
+                <input name="is_internet" type="radio" value="1" {!! @$stroom->is_internet == '1' ? 'checked="checked"' : '' !!}/> แสดง
+            </label>
+            <label>
+                <input name="is_internet" type="radio" value="0" {!! @$stroom->is_internet == '0' ? 'checked="checked"' : '' !!}/> ไม่แสดง
+            </label>
+        </td>
+    </tr>
+    <tr>
         <th>ผู้รับผิดชอบห้องประชุม<span class="Txt_red_12"> *</span></th>
         <td class="dep-chain-group">
             <div class="form-inline" style="margin-bottom:5px;">
@@ -136,8 +147,8 @@ if (isset($stroom->st_bureau_code)) {
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
-    @if(CanPerm('is-superadmin'))
     {{-- เฉพาะ Superadmin ให้ติกเลือกห้องเป็น defalut ที่ใช้แสดงผลที่หน้านี้ http://msobooking.m-society.go.th/booking-room-front/show?st_room_id=12&search= --}}
+    {{-- @if(CanPerm('is-superadmin'))
     <tr>
         <th>
             set default (ค่าเริ่มต้นการแสดงผล)<br>
@@ -148,7 +159,7 @@ if (isset($stroom->st_bureau_code)) {
             <input name="is_default" type="checkbox" id="is_default" value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
-    @endif
+    @endif --}}
 
     {{-- Admin ผู้จัดการห้อง คือ user ที่มีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
     {{-- Admin ผู้จัดการจองห้อง คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}

@@ -8,10 +8,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     @include('include._script')
+    @stack('css')
 </head>
 <body id="app-layout">
     @include('include._header')
     @yield('content')
+    @stack('js')
     {!! js_notify() !!}
 </body>
 </html>

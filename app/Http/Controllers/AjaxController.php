@@ -11,6 +11,7 @@ use App\Model\StDriver;
 use App\Model\StRoom;
 use App\Model\StVehicle;
 use Auth;
+use DB;
 
 class AjaxController extends Controller
 {
@@ -278,5 +279,10 @@ class AjaxController extends Controller
         $data['rs'] = $rs->get();
 
         return $data['rs'];
+    }
+
+    public function ajaxSetDefaultRoom(){
+        DB::table('st_rooms')->update(['is_default' => 0]);
+        DB::table('st_rooms')->where('id', $_GET['id'])->update(['is_default' => 1]);
     }
 }

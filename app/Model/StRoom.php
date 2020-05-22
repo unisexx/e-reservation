@@ -46,6 +46,7 @@ class StRoom extends Model
         'st_division_code',
         'over_people',
         'is_default',
+        'is_internet',
     ];
 
     /** Dear Custom Function */
@@ -99,6 +100,7 @@ class StRoom extends Model
         'st_division_code',
         'over_people',
         'is_default',
+        'is_internet',
     ];
     protected static $logOnlyDirty = true;
 }

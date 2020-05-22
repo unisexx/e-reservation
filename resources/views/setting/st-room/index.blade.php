@@ -31,6 +31,9 @@
         <th style="width:20%">ชื่อห้องประชุม</th>
         <th style="width:30%">รายละเอียด</th>
         <th>สถานะ</th>
+        @if(CanPerm('is-superadmin'))
+            <th style="text-align: center;">set default<br>(ค่าเริ่มต้นการแสดงผล)</th>
+        @endif
         <th>จัดการ</th>
     </tr>
     @foreach($stroom as $key=>$item)
@@ -61,6 +64,11 @@
             <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($item->fee) ? $item->fee : "-" }}</div>
         </td>
         <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
+        @if(CanPerm('is-superadmin'))
+        <td align="center">
+            <input class="isDefault" name="is_default" type="radio" value="{{ $item->id }}" {!! (@$item->is_default == 1) ? 'checked="checked"' : '' !!} />
+        </td>
+        @endif
         <td>
 
             @if(CanPerm('st-room-edit'))
@@ -100,3 +108,26 @@ $(document).ready(function(){
 });
 </script>
 @endsection
+
+@push('css')
+<style>
+    input[type='radio'] { transform: scale(1.5); }
+</style>
+@endpush
+
+@push('js')
+<script>
+$(document).ready(function(){
+    $('body').on('click', '.isDefault', function() {
+        var roomId = $('input[name=is_default]:checked').val();
+        $.get("{{ url('ajaxSetDefaultRoom') }}",
+        {
+            id: roomId,
+        },
+        function(data){
+            
+        });
+    });
+});
+</script>
+@endpush
