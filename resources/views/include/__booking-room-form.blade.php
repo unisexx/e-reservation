@@ -80,6 +80,12 @@ if(isset($rs->end_time)){
         <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
     </div>
 
+    <div class="form-group form-inline col-md-12">
+        <label>ประธานการประชุม<span class="Txt_red_12"> *</span></label>
+        <input name="president_name" type="text" class="form-control {{ $errors->has('president_name') ? 'has-error' : '' }}" placeholder="ชื่อประธาน" value="{{ isset($rs->president_name) ? $rs->president_name : old('president_name') }}" style="min-width:300px;" required>
+        <input name="president_position" type="text" class="form-control {{ $errors->has('president_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งประธาน" value="{{ isset($rs->president_position) ? $rs->president_position : old('president_position') }}" style="min-width:300px;" required>
+    </div>
+
     <div class="form-group form-inline col-md-12 input-daterange chkTime">
         <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label>
         <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>

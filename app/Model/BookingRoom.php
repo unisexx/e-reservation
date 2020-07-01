@@ -50,6 +50,9 @@ class BookingRoom extends Model
         'request_email',
         'note',
         'status',
+        'president_name',
+        'president_position',
+
     ];
 
     // relation
@@ -92,6 +95,8 @@ class BookingRoom extends Model
         'request_email',
         'note',
         'status',
+        'president_name',
+        'president_position',
     ];
     protected static $logOnlyDirty = true;
 }

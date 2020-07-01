@@ -73,6 +73,10 @@
     <td>{{ $rs->title }}</td>
 </tr>
 <tr>
+    <th>ประธานการประชุม</th>
+    <td>{{ @$rs->president_name }} ({{ @$rs->president_position }})</td>
+</tr>
+<tr>
     <th>วัน เวลา ที่ต้องการใช้ห้องประชุม</th>
     <td>ตั้งแต่วันที่ {{ DB2Date($rs->start_date) }} เวลา {{ date("H:i", strtotime($rs->start_time)) }} น. - ถึงวันที่ {{ DB2Date($rs->end_date) }} เวลา {{ date("H:i", strtotime($rs->end_time)) }} น.</td>
 </tr>
