@@ -67,7 +67,7 @@ if (isset($rs->st_bureau_code)) {
 
                 <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
-                    @if(old('st_department_code') || isseๆฟt($rs->st_department_code))
+                    @if(old('st_department_code') || isset($rs->st_department_code))
                     @foreach($st_bureaus as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach

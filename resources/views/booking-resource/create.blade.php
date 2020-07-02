@@ -4,7 +4,7 @@
 
 <h3>จองทรัพยากรอื่นๆ (เพิ่ม / แก้ไข)</h3>
 
-<form method="POST" action="{{ url('booking-resource') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+<form method="POST" action="{{ url('booking-resource') }}" accept-charset="UTF-8" enctype="multipart/form-data" autocomplete="off">
     {{ csrf_field() }}
 
     @include ('include.__booking-resource-form', ['formMode' => 'create', 'formWhere' => 'backend'])

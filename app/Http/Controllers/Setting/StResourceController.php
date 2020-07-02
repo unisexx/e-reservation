@@ -14,21 +14,11 @@ use Auth;
 
 class StResourceController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index(Request $request)
     {
         // ตรวจสอบ permission
@@ -55,11 +45,6 @@ class StResourceController extends Controller
         return view('setting.st-resource.index', compact('rs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
         // ตรวจสอบ permission
@@ -68,13 +53,6 @@ class StResourceController extends Controller
         return view('setting.st-resource.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -106,13 +84,6 @@ class StResourceController extends Controller
         return redirect('setting/st-resource');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
     public function show($id)
     {
         $rs = StResource::findOrFail($id);
@@ -120,13 +91,6 @@ class StResourceController extends Controller
         return view('setting.st-resource.show', compact('rs'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
     public function edit($id)
     {
         // ตรวจสอบ permission
@@ -137,14 +101,6 @@ class StResourceController extends Controller
         return view('setting.st-resource.edit', compact('rs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
@@ -184,13 +140,6 @@ class StResourceController extends Controller
         return redirect('setting/st-resource');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function destroy($id)
     {
         // ตรวจสอบ permission

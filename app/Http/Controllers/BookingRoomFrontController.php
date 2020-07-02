@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
 use App\Model\BookingRoom;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmail;
 
 class BookingRoomFrontController extends Controller
 {
@@ -61,6 +62,14 @@ class BookingRoomFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);
+
+        // send mail job
+		$this->sendEmailSummary($rs);
+
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('frontend');
+    }
+
+    public function sendEmailSummary($rs){
+        SendEmail::dispatch($rs->id, 'booking-room');
     }
 }

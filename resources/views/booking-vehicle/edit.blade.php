@@ -4,7 +4,7 @@
 
 <h3>จองยานพาหนะ (เพิ่ม / แก้ไข)</h3>
 
-<form method="POST" action="{{ url('booking-vehicle/' . $rs->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+<form method="POST" action="{{ url('booking-vehicle/' . $rs->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data" autocomplete="off">
     {{ method_field('PATCH') }}
     {{ csrf_field() }}
 

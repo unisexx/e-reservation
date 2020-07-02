@@ -81,3 +81,17 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('profile_save', 'HomeController@profile_save');
 
 });
+
+Route::get('email-test', function(){
+	$details['email'] = 'unisexx@gmail.com';
+    dispatch(new App\Jobs\SendEmailJob($details));
+    dd('done');
+});
+
+Route::get('test-email', 'JobController@enqueue');
+
+Route::get('command', function () {
+	/* php artisan migrate */
+    \Artisan::call('queue:work');
+    dd("Done");
+});

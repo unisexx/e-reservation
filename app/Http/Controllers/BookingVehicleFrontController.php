@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingVehicleRequest;
 use App\Model\BookingVehicle;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmail;
 
 class BookingVehicleFrontController extends Controller
 {
@@ -73,6 +74,14 @@ class BookingVehicleFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingVehicle::findOrFail($id);
+
+        // send mail job
+		$this->sendEmailSummary($rs);
+
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('frontend');
+    }
+
+    public function sendEmailSummary($rs){
+        SendEmail::dispatch($rs->id, 'booking-vehicle');
     }
 }

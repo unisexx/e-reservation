@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
 use App\Model\BookingResource;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmail;
 
 // use Mail;
 
@@ -58,6 +59,14 @@ class BookingResourceFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingResource::findOrFail($id);
+
+        // send mail job
+		$this->sendEmailSummary($rs);
+        
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('frontend');
+    }
+
+    public function sendEmailSummary($rs){
+        SendEmail::dispatch($rs->id, 'booking-resource');
     }
 }
