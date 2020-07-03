@@ -7,7 +7,9 @@ use App\Http\Requests\BookingVehicleRequest;
 use App\Model\BookingVehicle;
 use Auth;
 use Illuminate\Http\Request;
+
 use Mail;
+use App\Mail\Status;
 
 class BookingVehicleController extends Controller
 {
@@ -182,19 +184,19 @@ class BookingVehicleController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-
-            Mail::send([], [], function ($message) use ($rs) {
-                $message->to($rs->request_email)
-                    ->subject('อัพเดทสถานะการจองยานพาหนะ')
-                    ->setBody(
-                        'รหัสการจอง: ' . $rs->code . '<br>' .
-                        'ไปเพื่อ: ' . $rs->gofor . '<br>' .
-                        'จุดขึ้นรถ: ' . $rs->point_place . '<br>' .
-                        'สถานที่ไป: ' . $rs->destination . '<br>' .
-                        'สถานะการจอง: ' . $rs->status . '<br><br>' .
-                        'สามารถดูรายละเอียดการจองได้ที่: <a href="' . url('booking-vehicle/show') . '" target="_blank">http://msobooking.m-society.go.th/</a>'
-                        , 'text/html'); // for HTML rich messages
-            });
+            $this->sendEmailStatus($rs);
+            // Mail::send([], [], function ($message) use ($rs) {
+            //     $message->to($rs->request_email)
+            //         ->subject('อัพเดทสถานะการจองยานพาหนะ')
+            //         ->setBody(
+            //             'รหัสการจอง: ' . $rs->code . '<br>' .
+            //             'ไปเพื่อ: ' . $rs->gofor . '<br>' .
+            //             'จุดขึ้นรถ: ' . $rs->point_place . '<br>' .
+            //             'สถานที่ไป: ' . $rs->destination . '<br>' .
+            //             'สถานะการจอง: ' . $rs->status . '<br><br>' .
+            //             'สามารถดูรายละเอียดการจองได้ที่: <a href="' . url('booking-vehicle/show') . '" target="_blank">http://msobooking.m-society.go.th/</a>'
+            //             , 'text/html'); // for HTML rich messages
+            // });
 
         }
         //-- END ฟอร์มอีเมล์
@@ -218,5 +220,9 @@ class BookingVehicleController extends Controller
     {
         $rs = BookingVehicle::findOrFail($id);
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('backend');
+    }
+
+    public function sendEmailStatus($rs){
+        Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-vehicle'));
     }
 }

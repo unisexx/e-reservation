@@ -71,10 +71,8 @@ tr:nth-child(even) {background: #f9f9f9}
 
 
 @if($type == 'booking-vehicle')
-    <h3>จองยานพาหนะ</h3>
-
-    สรุปรายละเอียดการจองยานพาหนะ
-    <table class="table table-striped table-bordered">
+    <h3>สรุปรายละเอียดการจองยานพาหนะ</h3>
+    <table border="1">
     <tr>
         <th>รหัสการจอง</th>
         <td>{{ @$rs->code }}</td>
@@ -145,10 +143,8 @@ tr:nth-child(even) {background: #f9f9f9}
 @endif
 
 @if($type == 'booking-resource')
-    <h3>จองทรัพยากรอื่นๆ</h3>
-
-    สรุปรายละเอียดการจองทรัพยากรอื่นๆ
-    <table class="table table-striped table-bordered">
+    <h3>สรุปรายละเอียดการจองทรัพยากร</h3>
+    <table border="1">
     <tr>
         <th>ทรัพยากร</th>
         <td>{{ @$rs->stResource->name }}</td>

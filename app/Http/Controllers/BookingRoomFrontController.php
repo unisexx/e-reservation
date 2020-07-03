@@ -28,6 +28,9 @@ class BookingRoomFrontController extends Controller
         $rs->code = 'RR' . sprintf("%05d", $data->id);
         $rs->save();
 
+        // ส่งเมล์
+        $this->sendEmailSummary($rs);
+        
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('booking-room-front/summary/' . $rs->id);
     }
@@ -62,10 +65,6 @@ class BookingRoomFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);
-
-        // send mail job
-		$this->sendEmailSummary($rs);
-
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('frontend');
     }
 

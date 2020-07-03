@@ -8,8 +8,10 @@ use App\Model\BookingRoom;
 use App\Model\ManageRoom;
 use Auth;
 use Illuminate\Http\Request;
-use Mail;
 use DB;
+
+use Mail;
+use App\Mail\Status;
 
 class BookingRoomController extends Controller
 {
@@ -163,18 +165,7 @@ class BookingRoomController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-
-            Mail::send([], [], function ($message) use ($rs) {
-                $message->to($rs->request_email)
-                    ->subject('อัพเดทสถานะการจองห้องประชุม/อบรม')
-                    ->setBody(
-                        'รหัสการจอง: ' . $rs->code . '<br>' .
-                        'หัวข้อการประชุม / ห้องประชุม: ' . $rs->title . ' / ' . $rs->st_room->name . '<br>' .
-                        'สถานะการจอง: ' . $rs->status . '<br><br>' .
-                        'สามารถดูรายละเอียดการจองได้ที่: <a href="' . url('booking-room-front/show') . '" target="_blank">http://msobooking.m-society.go.th/</a>'
-                        , 'text/html'); // for HTML rich messages
-            });
-
+            $this->sendEmailStatus($rs);
         }
         //-- END ฟอร์มอีเมล์
 
@@ -197,5 +188,9 @@ class BookingRoomController extends Controller
     {
         $rs = BookingRoom::findOrFail($id);
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('backend');
+    }
+
+    public function sendEmailStatus($rs){
+        Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-room'));
     }
 }

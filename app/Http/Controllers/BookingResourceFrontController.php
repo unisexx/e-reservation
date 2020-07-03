@@ -31,6 +31,9 @@ class BookingResourceFrontController extends Controller
         $rs->code = $data->stResource->code . sprintf("%05d", $data->id);
         $rs->save();
 
+        // ส่งเมล์
+        $this->sendEmailSummary($rs);
+
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('booking-resource-front/summary/' . $rs->id);
     }
@@ -59,10 +62,6 @@ class BookingResourceFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingResource::findOrFail($id);
-
-        // send mail job
-		$this->sendEmailSummary($rs);
-        
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('frontend');
     }
 

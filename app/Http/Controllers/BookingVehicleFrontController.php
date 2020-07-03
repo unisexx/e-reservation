@@ -29,6 +29,9 @@ class BookingVehicleFrontController extends Controller
         $rs->code = 'RV' . sprintf("%05d", $data->id);
         $rs->save();
 
+        // ส่งเมล์
+        $this->sendEmailSummary($rs);
+
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
         return redirect('booking-vehicle-front/summary/' . $rs->id);
     }
@@ -74,10 +77,6 @@ class BookingVehicleFrontController extends Controller
     public function summary($id)
     {
         $rs = BookingVehicle::findOrFail($id);
-
-        // send mail job
-		$this->sendEmailSummary($rs);
-
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('frontend');
     }
 
