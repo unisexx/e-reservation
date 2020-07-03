@@ -83,6 +83,9 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
     </thead>
     <tbody>
         @foreach($rs as $key=>$row)
+        @php
+            // dd($row);
+        @endphp
         <tr @if(($key % 2)==1) class="odd" @endif>
             <td>
                 @if(empty(request('export')))
@@ -96,7 +99,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
                 <div class="topicMeeting">{{ $row->gofor }}</div>
                 <div>
                     @if(!empty($row->st_vehicle_id))
-                    {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ $row->st_vehicle->st_driver->name }}
+                    {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ @$row->st_driver->name }}
                     @else
                     <b>(- ยังไม่ได้เลือกยานพาหนะ -)</b>
                     @endif

@@ -86,7 +86,7 @@ class BookingVehicleController extends Controller
 
         } else {
 
-            $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
+            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle','st_driver','department','bureau','division')->paginate($perPage);
             return view('booking-vehicle.index', compact('rs'));
 
         }

@@ -57,6 +57,7 @@ class BookingVehicle extends Model
         'req_st_department_code',
         'req_st_bureau_code',
         'req_st_division_code',
+        'st_driver_id',
 
     ];
 
@@ -96,6 +97,11 @@ class BookingVehicle extends Model
         return $this->hasOne('App\Model\StDivision', 'code', 'req_st_division_code');
     }
 
+    public function st_driver()
+    {
+        return $this->belongsto('App\Model\StDriver', 'st_driver_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'code',
@@ -119,6 +125,7 @@ class BookingVehicle extends Model
         'note',
         'status',
         'st_vehicle_id',
+        'st_driver_id',
     ];
     protected static $logOnlyDirty = true;
 }

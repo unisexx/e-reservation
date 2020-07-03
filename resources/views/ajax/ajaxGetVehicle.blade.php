@@ -6,7 +6,7 @@
     <td>{{$row->st_driver->name}} {{$row->st_driver->tel}}</td>
     <td>{{$row->status}}</td>
     <td>
-        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectVehicleBtn" data-vehicle-id="{{ $row->id }}" data-vehicle-name="{{$row->st_vehicle_type->name}} {{$row->brand}} {{!empty($row->seat)?$row->seat:'-'}} ที่นั่ง สี{{$row->color}} ทะเบียน {{$row->reg_number}}">
+        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectVehicleBtn" data-vehicle-id="{{ $row->id }}" data-st-driver-id="{{ $row->st_driver_id }}" data-vehicle-name="{{$row->st_vehicle_type->name}} {{$row->brand}} {{!empty($row->seat)?$row->seat:'-'}} ที่นั่ง สี{{$row->color}} ทะเบียน {{$row->reg_number}}">
     </td>
 </tr>
 @endforeach

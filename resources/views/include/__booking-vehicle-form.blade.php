@@ -259,6 +259,15 @@ if (isset($rs->req_st_bureau_code)) {
                 <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
                 <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
             </span>
+
+            <div class="form-group form-inline col-md-12" style="margin-top: 10px;">
+                <label>พนักงานขับรถ<span class="Txt_red_12"> *</span></label>
+                <span class="form-inline">
+                    <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
+                        <option value="">+ พนักงานขับรถ +</option>
+                    </select>
+                </span>
+            </div>
         </fieldset>
     </div>
     @endif
@@ -351,6 +360,7 @@ if (isset($rs->req_st_bureau_code)) {
             // alert($(this).data('vehicle-id'));
             $('#tmpStVehicleName').val($(this).data('vehicle-name'));
             $('input[name=st_vehicle_id]').val($(this).data('vehicle-id'));
+            $('select[name=st_driver_id]').val($(this).data('st-driver-id'));
             // ปิด colorbox
             $.colorbox.close();
         });
@@ -462,4 +472,38 @@ $(document).ready(function(){
         $('input[name=tmpStVehicleName], input[name=st_vehicle_id]').val("");
     });
 });
+</script>
+
+<script>
+$(document).ready(function(){
+    getDriver();
+    $('body').on('change', 'select[name=req_st_department_code], select[name=req_st_bureau_code], select[name=req_st_division_code]', function() {
+        getDriver();
+    });
+});
+
+function getDriver(){
+    if( $('select[name=st_department_code]').val() != ''){
+        $('select[name=st_driver_id]').empty();
+        var selectedDriver = "{{ @$rs->st_driver_id }}";
+        $.ajax({
+            url: '{{ url("ajaxGetDriver") }}',
+            data: {
+                st_department_code: $('select[name=req_st_department_code]').val(),
+                st_bureau_code: $('select[name=req_st_bureau_code]').val(),
+                st_division_code: $('select[name=req_st_division_code]').val()
+            }
+        })
+        .done(function(data) {
+            $.map(data, function(i) {
+                $('select[name=st_driver_id]').append('<option value="' + i.id + '">' + i.name + '</option>');
+            });
+            
+            // console.log(selectedDriver);
+            if(selectedDriver.length > 0){
+                $("select[name=st_driver_id]").val(selectedDriver);
+            }
+        });
+    }
+}
 </script>
