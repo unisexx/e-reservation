@@ -36,7 +36,7 @@ class StVehicleRequest extends FormRequest
             'st_department_code' => 'required',
             'st_bureau_code'     => 'required',
             'st_division_code'   => 'required',
-            'st_driver_id'       => 'required',
+            // 'st_driver_id'       => 'required',
         ];
 
         if ($this->segment(3) != '') {
@@ -77,7 +77,7 @@ class StVehicleRequest extends FormRequest
             'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
             'st_division_code.required'   => 'กลุ่ม ห้ามเป็นค่าว่าง',
-            'st_driver_id.required'       => 'พนักงานขับวันนี้ ห้ามเป็นค่าว่าง',
+            // 'st_driver_id.required'       => 'พนักงานขับวันนี้ ห้ามเป็นค่าว่าง',
         ];
     }
 }

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
+use App\Jobs\SendEmail;
 use App\Model\BookingRoom;
 use Illuminate\Http\Request;
-use App\Jobs\SendEmail;
 
 class BookingRoomFrontController extends Controller
 {
@@ -30,8 +30,9 @@ class BookingRoomFrontController extends Controller
 
         // ส่งเมล์
         $this->sendEmailSummary($rs);
-        
+
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-room-front/summary/' . $rs->id);
     }
 
@@ -42,10 +43,11 @@ class BookingRoomFrontController extends Controller
 
         $rs = BookingRoom::select('*');
 
+        // ถ้าไม่ได้มาจากช่องค้นหา ให้ select room ตามค่าที่ตั้ง default ไว้ในเมนูตั้งค่าห้อง
         if (!empty($st_room_id)) {
             $rs = $rs->where('st_room_id', $st_room_id);
-        }else{
-            $rs = $rs->whereHas('st_room', function($q){
+        } else {
+            $rs = $rs->whereHas('st_room', function ($q) {
                 $q->where('is_default', 1);
             });
         }
@@ -59,16 +61,19 @@ class BookingRoomFrontController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
+
         return view('include.__booking-room-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs){
+    public function sendEmailSummary($rs)
+    {
         SendEmail::dispatch($rs->id, 'booking-room');
     }
 }

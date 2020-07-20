@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Route::get('email-test', function(){
-// 	$details['email'] = 'unisexx@gmail.com';
+//     $details['email'] = 'unisexx@gmail.com';
 //     dispatch(new App\Jobs\SendEmailJob($details));
 //     dd('done');
 // });
@@ -91,7 +91,28 @@ Route::middleware(['auth'])->group(function () {
 // Route::get('test-email', 'JobController@enqueue');
 
 // Route::get('command', function () {
-// 	/* php artisan migrate */
+//     /* php artisan migrate */
 //     \Artisan::call('queue:work');
 //     dd("Done");
 // });
+
+Route::any('captcha-test', function () {
+    if (request()->getMethod() == 'POST') {
+        $rules = ['captcha' => 'required|captcha'];
+        $validator = validator()->make(request()->all(), $rules);
+        if ($validator->fails()) {
+            echo '<p style="color: #ff0000;">Incorrect!</p>';
+        } else {
+            echo '<p style="color: #00ff30;">Matched :)</p>';
+        }
+    }
+
+    $form = '<form method="post" action="captcha-test">';
+    $form .= '<input type="hidden" name="_token" value="' . csrf_token() . '">';
+    $form .= '<p>' . captcha_img() . '</p>';
+    $form .= '<p><input type="text" name="captcha"></p>';
+    $form .= '<p><button type="submit" name="check">Check</button></p>';
+    $form .= '</form>';
+
+    return $form;
+});

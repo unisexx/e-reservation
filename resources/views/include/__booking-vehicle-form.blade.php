@@ -272,8 +272,16 @@ if (isset($rs->req_st_bureau_code)) {
     </div>
     @endif
 
-    <div class="form-group form-inline col-md-12">
+    {{-- <div class="form-group form-inline col-md-12">
         {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
+    </div> --}}
+
+    <div class="form-group form-inline col-md-12">
+        <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
+        <span class="form-inline">
+            {!! captcha_img() !!}
+            <input class="form-control" type="text" name="captcha" style="width:100px;">
+        </span>
     </div>
 
     <div class="form-group form-inline col-md-12">

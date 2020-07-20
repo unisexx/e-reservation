@@ -112,7 +112,7 @@ if (isset($rs->st_bureau_code)) {
             </div>
         </td>
     </tr>
-    <tr>
+    {{-- <tr>
         <th>พนักงานขับวันนี้<span class="Txt_red_12"> *</span></th>
         <td>
             <span class="form-inline">
@@ -121,7 +121,7 @@ if (isset($rs->st_bureau_code)) {
                 </select>
             </span>
         </td>
-    </tr>
+    </tr> --}}
     <tr>
         <th>สถานะ</th>
         <td>

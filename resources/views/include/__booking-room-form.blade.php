@@ -81,7 +81,7 @@ if(isset($rs->end_time)){
     </div>
 
     <div class="form-group form-inline col-md-12">
-        <label>ประธานการประชุม<span class="Txt_red_12"> *</span></label>
+        <label>ประธานการประชุม</label>
         <input name="president_name" type="text" class="form-control {{ $errors->has('president_name') ? 'has-error' : '' }}" placeholder="ชื่อประธาน" value="{{ isset($rs->president_name) ? $rs->president_name : old('president_name') }}" style="min-width:300px;" required>
         <input name="president_position" type="text" class="form-control {{ $errors->has('president_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งประธาน" value="{{ isset($rs->president_position) ? $rs->president_position : old('president_position') }}" style="min-width:300px;" required>
     </div>
@@ -237,8 +237,16 @@ if(isset($rs->end_time)){
 
 
 
-    <div class="form-group form-inline col-md-12">
+    {{-- <div class="form-group form-inline col-md-12">
         {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
+    </div> --}}
+
+    <div class="form-group form-inline col-md-12">
+        <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
+        <span class="form-inline">
+            {!! captcha_img() !!}
+            <input class="form-control" type="text" name="captcha" style="width:100px;">
+        </span>
     </div>
 
     <div id="btnBoxAdd">

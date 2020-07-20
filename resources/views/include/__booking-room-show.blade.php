@@ -5,6 +5,7 @@
 @php
     $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
     $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
+    $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
 @endphp
 
 <script>
@@ -101,7 +102,7 @@
 </style>
 
 <div id="btnBox">
- <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+    <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
 <h3>จองห้องประชุม/อบรม</h3>
@@ -112,7 +113,7 @@
             <select name="st_room_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
                 <option value="">+ ห้องประชุม +</option>
                 @foreach($st_rooms as $item)
-                    <option value="{{ $item->id }}" @if(request('st_room_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                    <option value="{{ $item->id }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
                 @endforeach
             </select>
             <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">

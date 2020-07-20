@@ -44,7 +44,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <th>ภาพยานพาหนะ</th>
         <th>ประเภท / ยี่ห้อ / ที่นั่ง / สี / เลขทะเบียน</th>
         <th>หน่วยงานที่รับผิดชอบ</th>
-        <th>พนักงานขับวันนี้</th>
+        {{-- <th>พนักงานขับวันนี้</th> --}}
         <th>สถานะ</th>
         <th>จัดการ</th>
     </tr>
@@ -58,7 +58,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
             {{ $row->bureau->title }} >
             {{ $row->division->title }}
         </td>
-        <td>{{$row->st_driver->name}} {{$row->st_driver->tel}}</td>
+        {{-- <td>{{$row->st_driver->name}} {{$row->st_driver->tel}}</td> --}}
         <td>{{$row->status}}</td>
         <td>
             @if(CanPerm('st-vehicle-edit'))
