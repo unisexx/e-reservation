@@ -110,12 +110,13 @@
 <div id="search">
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
-            <select name="st_room_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
+            <select class="selectpicker goUrl" data-size="5" data-live-search="true" title="+ ห้องประชุม +">
                 <option value="">+ ห้องประชุม +</option>
                 @foreach($st_rooms as $item)
-                    <option value="{{ $item->id }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                    <option value="{{ url('booking-room-front/show?st_room_id='.$item->id.'&search='.request('search')) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
                 @endforeach
             </select>
+            <input type="hidden" name="st_room_id" value="{{ request('st_room_id') }}">
             <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
             <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
@@ -132,9 +133,22 @@
 @push('js')
 <script>
 $(document).ready(function(){
-    if($("[name=st_room_id] option:selected").val()){
-        $('#roomName').text($("[name=st_room_id] option:selected").text());
+    if($("select.goUrl option:selected").val()){
+        $('#roomName').text($("select.goUrl option:selected").text());
     }
 });
+</script>
+
+<script>
+    $(function(){
+        // bind change event to select
+        $('select.goUrl').on('change', function () {
+            var url = $(this).val(); // get selected value
+            if (url) { // require a URL
+                window.location = url; // redirect
+            }
+            return false;
+        });
+    });
 </script>
 @endpush
