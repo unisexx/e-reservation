@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingVehicleRequest;
+use App\Mail\Status;
 use App\Model\BookingVehicle;
 use Auth;
 use Illuminate\Http\Request;
-
 use Mail;
-use App\Mail\Status;
 
 class BookingVehicleController extends Controller
 {
@@ -82,11 +81,13 @@ class BookingVehicleController extends Controller
             header("Cache-Control: private", false);
 
             $rs = $rs->orderBy('id', 'desc')->get();
+
             return view('booking-vehicle.index', compact('rs'));
 
         } else {
 
-            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle','st_driver','department','bureau','division')->paginate($perPage);
+            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->paginate($perPage);
+
             return view('booking-vehicle.index', compact('rs'));
 
         }
@@ -115,6 +116,7 @@ class BookingVehicleController extends Controller
         $rs->save();
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-vehicle/summary/' . $rs->id);
     }
 
@@ -150,9 +152,12 @@ class BookingVehicleController extends Controller
             $rs = $rs->where('st_division_code', $st_division_code);
         }
 
-        if ($st_department_code || $st_bureau_code || $st_division_code) {
-            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
-        }
+        // if ($st_department_code || $st_bureau_code || $st_division_code) {
+        //     $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        // }
+
+        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+
         return view('include.__booking-vehicle-show', compact('rs'))->withFrom('backend');
     }
 
@@ -162,6 +167,7 @@ class BookingVehicleController extends Controller
         ChkPerm('booking-vehicle-edit', 'booking-vehicle');
 
         $rs = BookingVehicle::findOrFail($id);
+
         return view('booking-vehicle.edit', compact('rs'));
     }
 
@@ -202,6 +208,7 @@ class BookingVehicleController extends Controller
         //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('booking-vehicle');
     }
 
@@ -213,16 +220,19 @@ class BookingVehicleController extends Controller
         BookingVehicle::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('booking-vehicle');
     }
 
     public function summary($id)
     {
         $rs = BookingVehicle::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs){
+    public function sendEmailStatus($rs)
+    {
         Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-vehicle'));
     }
 }

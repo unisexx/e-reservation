@@ -48,7 +48,7 @@
             events: [
                 @foreach($rs as $key => $row) {
                     shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
-                    title: 'สถานะ: {{ $row->status }}\nทรัพยากร: {{ $row->stResource->name }}\n{{ $row->title }}',
+                    title: '{{ $row->code }}\nสถานะ: {{ $row->status }}\nทรัพยากร: {{ $row->stResource->name }}\n{{ $row->title }}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",

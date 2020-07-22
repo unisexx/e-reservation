@@ -70,6 +70,13 @@
                 // console.log(info.el.childNodes);
                 // console.log(info.event.extendedProps.description);
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
+
+                // ถ้าเป็นหน้าลิสรายการ
+                if (info.view.type == 'listMonth') {
+                    // console.log($(info.el).find('a').html(info.event.title));
+                    $(info.el).find('a').html(info.event.title)
+                }		   
+
             },
             eventClick: function(info) {
                 $.colorbox({

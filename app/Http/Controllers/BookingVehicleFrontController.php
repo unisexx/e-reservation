@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingVehicleRequest;
+use App\Jobs\SendEmail;
 use App\Model\BookingVehicle;
 use Illuminate\Http\Request;
-use App\Jobs\SendEmail;
 
 class BookingVehicleFrontController extends Controller
 {
@@ -33,6 +33,7 @@ class BookingVehicleFrontController extends Controller
         $this->sendEmailSummary($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-vehicle-front/summary/' . $rs->id);
     }
 
@@ -68,19 +69,24 @@ class BookingVehicleFrontController extends Controller
             $rs = $rs->where('st_division_code', $st_division_code);
         }
 
-        if ($st_department_code || $st_bureau_code || $st_division_code) {
-            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
-        }
+        // if ($st_department_code || $st_bureau_code || $st_division_code) {
+        //     $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        // }
+
+        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+
         return view('include.__booking-vehicle-show', compact('rs'))->withFrom('frontend');
     }
 
     public function summary($id)
     {
         $rs = BookingVehicle::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs){
+    public function sendEmailSummary($rs)
+    {
         SendEmail::dispatch($rs->id, 'booking-vehicle');
     }
 }
