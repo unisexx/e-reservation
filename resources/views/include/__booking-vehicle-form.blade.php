@@ -316,7 +316,7 @@ if (isset($rs->req_st_bureau_code)) {
                     <th style="width:10%">ลำดับ</th>
                     <th style="width:10%">ภาพยานพาหนะ</th>
                     <th style="width:30%">ประเภท / ยี่ห้อ / ที่นั่ง / สี / เลขทะเบียน</th>
-                    <th style="width:20%">พนักงานขับวันนี้</th>
+                    {{-- <th style="width:20%">พนักงานขับวันนี้</th> --}}
                     <th style="width:10%">สถานะ</th>
                     <th>เลือก</th>
                 </tr>
