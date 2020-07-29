@@ -141,7 +141,7 @@ if (isset($stroom->st_bureau_code)) {
         <td><textarea name="note" rows="5" class="form-control" id="textarea" style="width:500px;">{{ isset($stroom->note) ? $stroom->note : '' }}</textarea></td>
     </tr>
     <tr>
-        <th>เปิด/ปิด</th>
+        <th>เปิด/ปิด การใช้งาน</th>
         <td>
             <input name="status" type="hidden" value="0" checked="checked" />
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />

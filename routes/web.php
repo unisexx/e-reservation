@@ -18,6 +18,25 @@ Route::get('/', function () {
     return view('booking');
 });
 
+// คู่มือ
+Route::get('download/admin', function () {
+    $file = public_path() . "/manual/admin.pdf";
+    $headers = array(
+        'Content-Type: application/pdf',
+    );
+
+    return Response::download($file, 'ระบบการขอใช้ทรัพยากร (e-Reservation)-ผู้ดูเเลระบบ.pdf', $headers);
+});
+
+Route::get('download/user', function () {
+    $file = public_path() . "/manual/user.pdf";
+    $headers = array(
+        'Content-Type: application/pdf',
+    );
+
+    return Response::download($file, 'ระบบการขอใช้ทรัพยากร (e-Reservation)-ผู้ใช้งาน.pdf', $headers);
+});
+
 // Booking
 Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
 Route::resource('booking-room-front', 'BookingRoomFrontController');
