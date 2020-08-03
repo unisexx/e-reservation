@@ -30,7 +30,6 @@ class BookingRoomController extends Controller
         $perPage = 10;
 
         $rs = BookingRoom::select('*');
-        $rs_all = $rs->get();
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -49,6 +48,7 @@ class BookingRoomController extends Controller
                 });
             }
         }
+        $rs_all = $rs->get();
 
         if (!empty($date_select)) {
             if ($data_type == 'start_date') {

@@ -31,7 +31,6 @@ class BookingResourceController extends Controller
         $perPage = 10;
 
         $rs = BookingResource::select('*');
-        $rs_all = $rs->get();
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองทรัพยากร (Manage booking) ใน setting/st-resource ให้แสดงเฉพาะการจองของทรัพยากรที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -51,6 +50,7 @@ class BookingResourceController extends Controller
                 });
             }
         }
+        $rs_all = $rs->get();
 
         if (!empty($st_resource_id)) {
             $rs = $rs->where('st_resource_id', $st_resource_id);

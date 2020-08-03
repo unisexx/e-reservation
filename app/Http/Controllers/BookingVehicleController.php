@@ -30,7 +30,6 @@ class BookingVehicleController extends Controller
         $perPage = 10;
 
         $rs = BookingVehicle::select('*');
-        $rs_all = $rs->get();
 
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
@@ -45,6 +44,7 @@ class BookingVehicleController extends Controller
                 ->where('req_st_bureau_code', Auth::user()->st_bureau_code)
                 ->where('req_st_division_code', Auth::user()->st_division_code);
         }
+        $rs_all = $rs->get();
 
         if (!empty($st_vehicle_type_id)) {
             $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_vehicle_type_id) {
