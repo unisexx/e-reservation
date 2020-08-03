@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
+use App\Jobs\SendEmail;
 use App\Model\BookingResource;
 use Illuminate\Http\Request;
-use App\Jobs\SendEmail;
 
 // use Mail;
 
@@ -35,6 +35,7 @@ class BookingResourceFrontController extends Controller
         $this->sendEmailSummary($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-resource-front/summary/' . $rs->id);
     }
 
@@ -42,8 +43,10 @@ class BookingResourceFrontController extends Controller
     {
         $keyword = $request->get('search');
         $st_resource_id = $request->get('st_resource_id');
+        $status = $request->get('status');
 
         $rs = BookingResource::select('*');
+        $rs_all = $rs->get();
 
         if (!empty($st_resource_id)) {
             $rs = $rs->where('st_resource_id', $st_resource_id);
@@ -55,17 +58,24 @@ class BookingResourceFrontController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         $rs = $rs->orderBy('id', 'desc')->get();
-        return view('include.__booking-resource-show', compact('rs'))->withFrom('frontend');
+
+        return view('include.__booking-resource-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }
 
     public function summary($id)
     {
         $rs = BookingResource::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs){
+    public function sendEmailSummary($rs)
+    {
         SendEmail::dispatch($rs->id, 'booking-resource');
     }
 }

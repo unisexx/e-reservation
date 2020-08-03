@@ -15,7 +15,7 @@
         <td></td>
     </tr>
     <tr>
-        <th>เปิด / ปิดการใช้งาน</th>
+        <th>เปิดการใช้งาน</th>
         <td>
             <input name="status" type="hidden" value="0" checked="chedked" />
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$permissiongroup->status == 1 || empty($permissiongroup->id)) ? 'checked="checked"' : '' !!} />

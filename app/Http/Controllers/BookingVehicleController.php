@@ -26,9 +26,11 @@ class BookingVehicleController extends Controller
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
+        $status = $request->get('status');
         $perPage = 10;
 
         $rs = BookingVehicle::select('*');
+        $rs_all = $rs->get();
 
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
@@ -72,6 +74,10 @@ class BookingVehicleController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -88,7 +94,7 @@ class BookingVehicleController extends Controller
 
             $rs = $rs->orderBy('id', 'desc')->with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->paginate($perPage);
 
-            return view('booking-vehicle.index', compact('rs'));
+            return view('booking-vehicle.index', compact('rs', 'rs_all'));
 
         }
     }

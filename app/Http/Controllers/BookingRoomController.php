@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
+use App\Mail\Status;
 use App\Model\BookingRoom;
 use App\Model\ManageRoom;
 use Auth;
 use Illuminate\Http\Request;
-use DB;
-
 use Mail;
-use App\Mail\Status;
 
 class BookingRoomController extends Controller
 {
@@ -28,19 +26,20 @@ class BookingRoomController extends Controller
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
+        $status = $request->get('status');
         $perPage = 10;
 
         $rs = BookingRoom::select('*');
-
+        $rs_all = $rs->get();
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
          */
         $is_manageroom = ManageRoom::select('st_room_id')->where('user_id', Auth::user()->id)->get()->toArray();
         // dd($is_manageroom);
-        if($is_manageroom){
+        if ($is_manageroom) {
             $rs = $rs->whereIn('st_room_id', $is_manageroom);
-        }else{
+        } else {
             /**
              * เห็นเฉพาะห้องที่อยู่ในกลุ่มของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, ถ้าเป็น default คือเห็นทั้งหมด
              */
@@ -67,6 +66,10 @@ class BookingRoomController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -76,12 +79,14 @@ class BookingRoomController extends Controller
             header("Cache-Control: private", false);
 
             $rs = $rs->orderBy('id', 'desc')->get();
+
             return view('booking-room.index', compact('rs'));
 
         } else {
 
             $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
-            return view('booking-room.index', compact('rs'));
+
+            return view('booking-room.index', compact('rs', 'rs_all'));
 
         }
 
@@ -108,6 +113,7 @@ class BookingRoomController extends Controller
         $rs->save();
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-room/summary/' . $rs->id);
     }
 
@@ -120,8 +126,8 @@ class BookingRoomController extends Controller
 
         if (!empty($st_room_id)) {
             $rs = $rs->where('st_room_id', $st_room_id);
-        }else{
-            $rs = $rs->whereHas('st_room', function($q){
+        } else {
+            $rs = $rs->whereHas('st_room', function ($q) {
                 $q->where('is_default', 1);
             });
         }
@@ -135,6 +141,7 @@ class BookingRoomController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
+
         return view('include.__booking-room-show', compact('rs'))->withFrom('backend');
     }
 
@@ -144,6 +151,7 @@ class BookingRoomController extends Controller
         ChkPerm('booking-room-edit', 'booking-room');
 
         $rs = BookingRoom::findOrFail($id);
+
         return view('booking-room.edit', compact('rs'));
     }
 
@@ -170,6 +178,7 @@ class BookingRoomController extends Controller
         //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('booking-room');
     }
 
@@ -181,16 +190,19 @@ class BookingRoomController extends Controller
         BookingRoom::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('booking-room');
     }
 
     public function summary($id)
     {
         $rs = BookingRoom::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs){
+    public function sendEmailStatus($rs)
+    {
         Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-room'));
     }
 }

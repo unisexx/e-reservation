@@ -123,7 +123,7 @@
     </div>
 </div>
 
-@include('include._color_status')
+@include('include._color_status', [ 'allrow' => $rs_all ])
 
 <div class="text-center"><h1 id="roomName"></h1></div>
 <div id='calendar'></div>

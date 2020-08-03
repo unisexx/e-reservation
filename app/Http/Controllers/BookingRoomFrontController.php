@@ -40,8 +40,10 @@ class BookingRoomFrontController extends Controller
     {
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_room_id');
+        $status = $request->get('status');
 
         $rs = BookingRoom::select('*');
+        $rs_all = $rs->get();
 
         // ถ้าไม่ได้มาจากช่องค้นหา ให้ select room ตามค่าที่ตั้ง default ไว้ในเมนูตั้งค่าห้อง
         if (!empty($st_room_id)) {
@@ -60,9 +62,13 @@ class BookingRoomFrontController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         $rs = $rs->orderBy('id', 'desc')->get();
 
-        return view('include.__booking-room-show', compact('rs'))->withFrom('frontend');
+        return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }
 
     public function summary($id)

@@ -44,7 +44,7 @@ class BookingVehicleRequest extends FormRequest
             'st_department_code'     => 'required',
             'st_bureau_code'         => 'required',
             'st_division_code'       => 'required',
-            'captcha'                => 'required|captcha',
+            'captcha'                => 'sometimes|required|captcha',
             // 'g-recaptcha-response' => 'required|captcha',
         ];
 

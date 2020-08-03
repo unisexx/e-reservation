@@ -260,7 +260,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
             </span>
 
-            <div class="form-group form-inline col-md-12" style="margin-top: 10px;">
+            <div style="margin-top: 10px;">
                 <label>พนักงานขับรถ<span class="Txt_red_12"> *</span></label>
                 <span class="form-inline">
                     <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
@@ -272,10 +272,9 @@ if (isset($rs->req_st_bureau_code)) {
     </div>
     @endif
 
-    {{-- <div class="form-group form-inline col-md-12">
-        {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
-    </div> --}}
 
+
+    @if($formWhere == 'frontend')
     <div class="form-group form-inline col-md-12">
         <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
         <span class="form-inline">
@@ -283,6 +282,7 @@ if (isset($rs->req_st_bureau_code)) {
             <input class="form-control" type="text" name="captcha" style="width:100px;">
         </span>
     </div>
+    @endif
 
     <div class="form-group form-inline col-md-12">
         <div id="btnBoxAdd">

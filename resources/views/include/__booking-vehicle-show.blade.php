@@ -174,7 +174,7 @@
     </div>
 </div>
 
-@include('include._color_status')
+@include('include._color_status', [ 'allrow' => $rs_all ])
 
 <div id='calendar'></div>
 

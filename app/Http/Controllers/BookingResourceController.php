@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
+use App\Mail\Status;
 use App\Model\BookingResource;
 use App\Model\ManageResource;
 use Auth;
 use Illuminate\Http\Request;
 use Mail;
-use App\Mail\Status;
 
 class BookingResourceController extends Controller
 {
@@ -27,18 +27,20 @@ class BookingResourceController extends Controller
         $st_resource_id = $request->get('st_resource_id');
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
+        $status = $request->get('status');
         $perPage = 10;
 
         $rs = BookingResource::select('*');
+        $rs_all = $rs->get();
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองทรัพยากร (Manage booking) ใน setting/st-resource ให้แสดงเฉพาะการจองของทรัพยากรที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
          */
         $is_manageresource = ManageResource::select('st_resource_id')->where('user_id', Auth::user()->id)->get()->toArray();
         // dd($is_manageroom);
-        if($is_manageresource){
+        if ($is_manageresource) {
             $rs = $rs->whereIn('st_resource_id', $is_manageresource);
-        }else{
+        } else {
             /**
              * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
              * เห็นเฉพาะทรัพยากรที่อยู่ในสังกัดของตัวเอง
@@ -70,6 +72,10 @@ class BookingResourceController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -79,12 +85,14 @@ class BookingResourceController extends Controller
             header("Cache-Control: private", false);
 
             $rs = $rs->orderBy('id', 'desc')->get();
+
             return view('booking-resource.index', compact('rs'));
 
         } else {
 
             $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
-            return view('booking-resource.index', compact('rs'));
+
+            return view('booking-resource.index', compact('rs', 'rs_all'));
 
         }
 
@@ -111,6 +119,7 @@ class BookingResourceController extends Controller
         $rs->save();
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('booking-resource/summary/' . $rs->id);
     }
 
@@ -132,6 +141,7 @@ class BookingResourceController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
+
         return view('include.__booking-resource-show', compact('rs'))->withFrom('backend');
     }
 
@@ -141,6 +151,7 @@ class BookingResourceController extends Controller
         ChkPerm('booking-resource-edit', 'booking-resource');
 
         $rs = BookingResource::findOrFail($id);
+
         return view('booking-resource.edit', compact('rs'));
     }
 
@@ -167,6 +178,7 @@ class BookingResourceController extends Controller
         //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('booking-resource');
     }
 
@@ -178,16 +190,19 @@ class BookingResourceController extends Controller
         BookingResource::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('booking-resource');
     }
 
     public function summary($id)
     {
         $rs = BookingResource::findOrFail($id);
+
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs){
+    public function sendEmailStatus($rs)
+    {
         Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-resource'));
     }
 }

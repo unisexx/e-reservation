@@ -56,7 +56,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
     @endif
 </div>
 
-@include('include._color_status')
+@include('include._color_status', [ 'allrow' => $rs_all ])
 
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}

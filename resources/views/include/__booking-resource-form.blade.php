@@ -157,10 +157,8 @@ if(isset($rs->end_time)){
     </div>
     @endif
 
-    {{-- <div class="form-group form-inline col-md-12">
-        {!! NoCaptcha::display(['data-size' => 'invisible']) !!}
-    </div> --}}
 
+    @if($formWhere == 'frontend')
     <div class="form-group form-inline col-md-12">
         <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
         <span class="form-inline">
@@ -168,6 +166,7 @@ if(isset($rs->end_time)){
             <input class="form-control" type="text" name="captcha" style="width:100px;">
         </span>
     </div>
+    @endif
 
     <div id="btnBoxAdd">
         <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
