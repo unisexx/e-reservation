@@ -151,8 +151,7 @@
     </tr>
     <tr>
         <th>Confirm Password</th>
-        <td><input name="confirm_password" type="password" class="form-control" id="confirm_password" value=""
-                style="width:200px;" /></td>
+        <td><input name="confirm_password" type="password" class="form-control" id="confirm_password" value="" style="width:200px;" /></td>
     </tr>
     <tr>
         <th>เปิดการใช้งาน</th>
@@ -169,3 +168,52 @@
     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ"
         onclick="document.location='{{ url('/setting/user') }}'" class="btn btn-default" style="width:100px;" />
 </div>
+
+@push('js')
+<script>
+$(document).ready(function(){
+    // chkDigitPid('1-3499-00024-00-7');
+    var xxx = '1-3499-00024-00-7';
+    console.log(xxx.length);
+
+    $('form').submit(function () {
+        var idCard = $.trim($('[name=idcard]').val());
+        if(!chkDigitPid(idCard)){
+            alert("หมายเลขประจำตัวประชาชนไม่ถูกต้อง");
+            return false;
+        }
+    });
+});
+
+function chkDigitPid(p_iPID) {
+    var total = 0;
+    var iPID;
+    var chk;
+    var Validchk;
+    iPID = p_iPID.replace(/-/g, "");
+    Validchk = iPID.substr(12, 1);
+    var j = 0;
+    var pidcut;
+    for (var n = 0; n < 12; n++) {
+        pidcut = parseInt(iPID.substr(j, 1));
+        total = (total + ((pidcut) * (13 - n)));
+        j++;
+    }
+
+    chk = 11 - (total % 11);
+
+    if (chk == 10) {
+        chk = 0;
+    } else if (chk == 11) {
+        chk = 1;
+    }
+    if (chk == Validchk) {
+        // alert("ระบุหมายเลขประจำตัวประชาชนถูกต้อง");
+        return true;
+    } else {
+        // alert("ระบุหมายเลขประจำตัวประชาชนไม่ถูกต้อง");
+        return false;
+    }
+}
+</script>
+@endpush

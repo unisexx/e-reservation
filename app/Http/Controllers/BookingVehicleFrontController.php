@@ -95,4 +95,10 @@ class BookingVehicleFrontController extends Controller
     {
         SendEmail::dispatch($rs->id, 'booking-vehicle');
     }
+
+    function print($id) {
+        $rs = BookingVehicle::with('st_vehicle', 'division', 'bureau', 'department')->findOrFail($id);
+
+        return view('include.__booking-print', compact('rs'))->withType('vehicle')->withFrom('frontend');
+    }
 }

@@ -58,6 +58,8 @@
 @if($type == 'room')
 <h3>จองห้องประชุม/อบรม</h3>
 
+<a href="{{ url('booking-room-front/print/'.$rs->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="float: right; width:48px; margin-bottom:10px;"></a>
+
 สรุปรายละเอียดการจองห้องประชุม/อบรม
 <table class="table table-striped table-bordered">
 <tr>
@@ -118,6 +120,8 @@
 
 @if($type == 'vehicle')
 <h3>จองยานพาหนะ</h3>
+
+<a href="{{ url('booking-vehicle-front/print/'.$rs->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="float: right; width:48px; margin-bottom:10px;"></a>
 
 สรุปรายละเอียดการจองยานพาหนะ
 <table class="table table-striped table-bordered">

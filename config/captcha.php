@@ -10,8 +10,8 @@ return [
         'math'       => true,
         'lines'      => 1,
         'bgImage'    => false,
-        'bgColor'    => '#79c867',
-        'fontColors' => ['#000000'],
+        'bgColor'    => '#5cb85c',
+        'fontColors' => ['#333333'],
     ],
     'math'       => [
         'length'  => 9,

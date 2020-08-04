@@ -82,4 +82,10 @@ class BookingRoomFrontController extends Controller
     {
         SendEmail::dispatch($rs->id, 'booking-room');
     }
+
+    function print($id) {
+        $rs = BookingRoom::with('st_room', 'division', 'bureau', 'department')->findOrFail($id);
+
+        return view('include.__booking-print', compact('rs'))->withType('room')->withFrom('frontend');
+    }
 }

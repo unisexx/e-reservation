@@ -133,6 +133,7 @@ class AjaxController extends Controller
         $rs = $rs->orderBy('id', 'asc')->get();
 
         // dd($rs);
+
         return view('ajax.ajaxGetVehicle', compact('rs'));
     }
 
@@ -170,15 +171,15 @@ class AjaxController extends Controller
 
     public function ajaxVehicleChkOverlap()
     {
-        $st_vehicle_id          = @$_GET['st_vehicle_id'];
-        $start_date             = Date2DB($_GET['start_date']);
-        $end_date               = Date2DB($_GET['end_date']);
-        $start_time             = $_GET['start_time'];
-        $end_time               = $_GET['end_time'];
+        $st_vehicle_id = @$_GET['st_vehicle_id'];
+        $start_date = Date2DB($_GET['start_date']);
+        $end_date = Date2DB($_GET['end_date']);
+        $start_time = $_GET['start_time'];
+        $end_time = $_GET['end_time'];
         $req_st_department_code = @$_GET['req_st_department_code'];
-        $req_st_bureau_code     = @$_GET['req_st_bureau_code'];
-        $req_st_division_code   = @$_GET['req_st_division_code'];
-        $id                     = $_GET['id'];
+        $req_st_bureau_code = @$_GET['req_st_bureau_code'];
+        $req_st_division_code = @$_GET['req_st_division_code'];
+        $id = $_GET['id'];
 
         $rs = BookingVehicle::select('*');
 
@@ -197,10 +198,10 @@ class AjaxController extends Controller
         if (!empty($req_st_division_code)) {
             $rs = $rs->where('req_st_division_code', $req_st_division_code);
         }
-        
+
         $rs = $rs->where(function ($q) use ($start_date, $end_date) {
-                $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
-            })
+            $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
+        })
             ->where(function ($q) use ($start_time, $end_time) {
                 $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
             });
@@ -262,7 +263,7 @@ class AjaxController extends Controller
         $st_bureau_code = $_GET['st_bureau_code'];
         $st_division_code = $_GET['st_division_code'];
 
-        $rs = StDriver::select('*');
+        $rs = StDriver::select('*')->where('status', 1);
 
         if (!empty($st_department_code)) {
             $rs = $rs->where('st_department_code', $st_department_code);
@@ -281,7 +282,8 @@ class AjaxController extends Controller
         return $data['rs'];
     }
 
-    public function ajaxSetDefaultRoom(){
+    public function ajaxSetDefaultRoom()
+    {
         DB::table('st_rooms')->update(['is_default' => 0]);
         DB::table('st_rooms')->where('id', $_GET['id'])->update(['is_default' => 1]);
     }

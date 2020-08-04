@@ -39,9 +39,11 @@ Route::get('download/user', function () {
 
 // Booking
 Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
+Route::get('booking-room-front/print/{id}', 'BookingRoomFrontController@print');
 Route::resource('booking-room-front', 'BookingRoomFrontController');
 
 Route::get('booking-vehicle-front/summary/{id}', 'BookingVehicleFrontController@summary');
+Route::get('booking-vehicle-front/print/{id}', 'BookingVehicleFrontController@print');
 Route::resource('booking-vehicle-front', 'BookingVehicleFrontController');
 
 Route::get('booking-resource-front/summary/{id}', 'BookingResourceFrontController@summary');
