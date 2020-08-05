@@ -133,8 +133,10 @@ class BookingVehicleController extends Controller
         $st_department_code = $request->get('st_department_code');
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
+        $status = $request->get('status');
 
         $rs = BookingVehicle::select('*');
+        $rs_all = $rs->get();
 
         if (!empty($st_room_id)) {
             $rs = $rs->where('st_vehicle_id', $st_room_id);
@@ -162,9 +164,13 @@ class BookingVehicleController extends Controller
         //     $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
         // }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
 
-        return view('include.__booking-vehicle-show', compact('rs'))->withFrom('backend');
+        return view('include.__booking-vehicle-show', compact('rs', 'rs_all'))->withFrom('backend');
     }
 
     public function edit($id)

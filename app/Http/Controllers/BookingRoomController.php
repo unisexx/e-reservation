@@ -121,8 +121,10 @@ class BookingRoomController extends Controller
     {
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_room_id');
+        $status = $request->get('status');
 
         $rs = BookingRoom::select('*');
+        $rs_all = $rs->get();
 
         if (!empty($st_room_id)) {
             $rs = $rs->where('st_room_id', $st_room_id);
@@ -140,9 +142,13 @@ class BookingRoomController extends Controller
             });
         }
 
+        if (!empty($status)) {
+            $rs = $rs->where('status', $status);
+        }
+
         $rs = $rs->orderBy('id', 'desc')->get();
 
-        return view('include.__booking-room-show', compact('rs'))->withFrom('backend');
+        return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('backend');
     }
 
     public function edit($id)
