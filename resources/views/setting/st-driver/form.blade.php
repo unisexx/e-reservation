@@ -88,7 +88,7 @@ if (isset($rs->st_bureau_code)) {
         </td>
     </tr>
     <tr>
-        <th>เปิด/ปิด</th>
+        <th>เปิดการใช้งาน</th>
         <td>
             <input name="status" type="hidden" value="0" checked="chedked" />
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$rs->status == 1 ||

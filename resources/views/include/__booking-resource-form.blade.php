@@ -67,13 +67,13 @@ if(isset($rs->end_time)){
     <div class="form-group form-inline col-md-12 input-daterange chkTime">
         <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
         <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($rs->start_date) }}" style="width:120px;" required/>
-        <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         :
-        <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getMinute() as $item)
             <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
@@ -81,13 +81,13 @@ if(isset($rs->end_time)){
         น.
         <span style="margin:0 15px;">ถึง</span>
         <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-        <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="eHour" name="eHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         :
-        <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getMinute() as $item)
             <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
@@ -160,7 +160,7 @@ if(isset($rs->end_time)){
 
     @if($formWhere == 'frontend')
     <div class="form-group form-inline col-md-12">
-        <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
+        <label>กรุณาใส่ผลบวกที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
         <span class="form-inline">
             {!! captcha_img() !!}
             <input class="form-control" type="text" name="captcha" style="width:100px;">

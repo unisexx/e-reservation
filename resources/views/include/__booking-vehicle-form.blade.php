@@ -92,14 +92,14 @@ if (isset($rs->req_st_bureau_code)) {
 
     <div class="form-group form-inline col-md-12 dep-chain-group">
         <label>ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12"> *</span></label>
-        <select name="req_st_department_code" id="lunch" class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กรม">
+        <select name="req_st_department_code" id="lunch" class="chain-department-vehicle selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="10" title="กรม">
             <option value="">+ กรม +</option>
             @foreach($req_st_departments as $item)
             <option value="{{ $item->st_department_code }}" @if($item->st_department_code == @old('req_st_department_code')) selected="selected" @endif @if($item->st_department_code == @$rs->req_st_department_code) selected="selected" @endif>{{ $item->department->title }}</option>
             @endforeach
         </select>
 
-        <select name="req_st_bureau_code" id="lunch" class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="สำนัก">
+        <select name="req_st_bureau_code" id="lunch" class="chain-bureau-vehicle selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="10" title="สำนัก">
             <option value="">+ สำนัก +</option>
             @if(old('req_st_department_code') || isset($rs->req_st_department_code))
             @foreach($req_st_bureaus as $item)
@@ -108,7 +108,7 @@ if (isset($rs->req_st_bureau_code)) {
             @endif
         </select>
 
-        <select name="req_st_division_code" id="lunch" class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="กลุ่ม">
+        <select name="req_st_division_code" id="lunch" class="chain-division-vehicle selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="10" title="กลุ่ม">
             <option value="">+ กลุ่ม +</option>
             @if(old('req_st_bureau_code') || isset($rs->req_st_bureau_code))
             @foreach($req_st_divisions as $item)
@@ -131,13 +131,13 @@ if (isset($rs->req_st_bureau_code)) {
     <div class="form-group form-inline col-md-12 input-daterange chkTime">
         <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
         <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
-        <select id="sHour" name="sHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         :
-        <select id="sMinute" name="sMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getMinute() as $item)
             <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
@@ -145,13 +145,13 @@ if (isset($rs->req_st_bureau_code)) {
         น.
         <span style="margin:0 15px;">ถึง</span>
         <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-        <select id="eHour" name="eHour" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="eHour" name="eHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
         </select>
         :
-        <select id="eMinute" name="eMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+        <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getMinute() as $item)
             <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
@@ -168,13 +168,13 @@ if (isset($rs->req_st_bureau_code)) {
             <input name="point_place" type="text" class="form-control {{ $errors->has('point_place') ? 'has-error' : '' }}" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}" style="width:400px;">
             เวลา
 
-            <select id="pHour" name="pHour" class="selectpicker" data-size="5" data-live-search="true" required>
+            <select id="pHour" name="pHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$pTimeArr[0] ?? old('pHour')) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach
             </select>
             :
-            <select id="pMinute" name="pMinute" class="selectpicker" data-size="5" data-live-search="true" required>
+            <select id="pMinute" name="pMinute" class="selectpicker" data-size="10" data-live-search="true" required>
                 @foreach(getMinute() as $item)
                 <option value="{{ $item }}" {{ $item == (@$pTimeArr[1] ?? old('pMinute')) ? 'selected' : '' }}>{{ $item }}</option>
                 @endforeach
@@ -276,7 +276,7 @@ if (isset($rs->req_st_bureau_code)) {
 
     @if($formWhere == 'frontend')
     <div class="form-group form-inline col-md-12">
-        <label>กรุณาใส่คำตอบที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
+        <label>กรุณาใส่ผลบวกที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
         <span class="form-inline">
             {!! captcha_img() !!}
             <input class="form-control" type="text" name="captcha" style="width:100px;">

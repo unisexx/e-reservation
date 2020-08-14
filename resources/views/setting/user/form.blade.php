@@ -30,7 +30,7 @@
     <tr>
         <th>คำนำหน้าชื่อ<span class="Txt_red_12"> *</span></th>
         <td>
-            <select name="st_prefix_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="5" title="คำนำหน้าชื่อ" required>
+            <select name="st_prefix_code" id="lunch" class="selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="10" title="คำนำหน้าชื่อ" required>
                 <option value="">+ คำนำหน้าชื่อ +</option>
                 @foreach($st_prefixs as $item)
                 <option value="{{ $item->code }}" @if($item->code == @old('st_prefix_code')) selected="selected" @endif @if($item->code == @$user->st_prefix_code) selected="selected" @endif>{{ $item->title }}</option>
@@ -75,7 +75,7 @@
 
                 <select name="st_department_code" id="lunch"
                     class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}"
-                    data-live-search="true" data-size="5" title="กรม" required>
+                    data-live-search="true" data-size="10" title="กรม" required>
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected"
@@ -86,7 +86,7 @@
 
                 <select name="st_bureau_code" id="lunch"
                     class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true"
-                    data-size="5" title="สำนัก" required>
+                    data-size="10" title="สำนัก" required>
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($user->st_department_code))
                     @foreach($st_bureaus as $item)
@@ -99,7 +99,7 @@
 
                 <select name="st_division_code" id="lunch"
                     class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}"
-                    data-live-search="true" data-size="5" title="กลุ่ม" required>
+                    data-live-search="true" data-size="10" title="กลุ่ม" required>
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($user->st_bureau_code))
                     @foreach($st_divisions as $item)

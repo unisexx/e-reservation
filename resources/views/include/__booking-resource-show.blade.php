@@ -109,7 +109,7 @@
     <div id="searchBox">
         <form accept-charset="UTF-8" class="form-inline" role="search">
 
-            <select name="st_resource_id" class="selectpicker" data-size="5" data-live-search="true" title="+ ทรัพยากร +">
+            <select name="st_resource_id" class="selectpicker" data-size="15" data-live-search="true" title="+ ทรัพยากร +">
                 <option value="">+ ทรัพยากร +</option>
                 @foreach($st_resources as $item)
                     <option value="{{ $item->id }}" @if(request('st_resource_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>

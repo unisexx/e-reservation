@@ -80,7 +80,7 @@ class BookingRoomRequest extends FormRequest
             'st_division_code.required'   => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
             // 'g-recaptcha-response.required' => 'กรุณายืนยันตัวตน ฉันไม่ใช่โปรแกรมอัตโนมัติ',
             // 'g-recaptcha-response.captcha'  => 'ระบบยืนยันตัวตนผิดพลาด!!! กรุณาติดต่อแอดมิน',
-            'captcha.required'            => 'กรุณาใส่คำตอบที่ถูกต้อง',
+            'captcha.required'            => 'กรุณาใส่ผลบวกที่ถูกต้อง',
             'captcha.captcha'             => 'คำตอบไม่ถูกต้อง',
         ];
 
