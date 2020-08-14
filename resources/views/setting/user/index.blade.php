@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends(empty(request('export')) ? 'layouts.admin' : 'layouts.excel')
 
 @section('content')
 <?php
@@ -19,6 +19,9 @@
 ?>
 
 <h3>ผู้ใช้งาน</h3>
+
+@if(empty(request('export')))
+
 <div id="search">
     <div id="searchBox">
         <form method="GET" action="{{ url('/setting/user') }}" accept-charset="UTF-8" class="form-inline" role="search">
@@ -70,6 +73,15 @@
 
 @if(CanPerm('user-create'))
 <div id="btnBox">
+    <?php
+    $get = '';
+    foreach (@$_GET as $key => $value) {
+        $get .= ($get) ? '&' . $key . '=' . $value : $key . '=' . $value;
+    }
+    ?>
+    <a href="{{ url('setting/user?export=excel&'.$get) }}">
+        <input type="button" title="export excel" value="export excel" class="btn vtip" />
+    </a>
     <input type="button" title="เพิ่มผู้ใช้งาน" value="เพิ่มผู้ใช้งาน" onclick="document.location='{{ url('/setting/user/create') }}'" class="btn btn-warning vtip" />
 </div>
 @endif
@@ -77,6 +89,9 @@
 <div class="pagination-wrapper">
     {!! $user->appends(['search' => Request::get('search')])->render() !!}
 </div>
+
+@endif
+<!-- export -->
 
 <table class="tblist">
     <tr>
@@ -91,7 +106,13 @@
     </tr>
     @foreach($user as $key=>$item)
     <tr @if(($key % 2)==1) class="odd" @endif>
-        <td>{{ (($user->currentPage() - 1 ) * $user->perPage() ) + $loop->iteration }}</td>
+        <td>
+            @if(empty(request('export')))
+            {{ (($user->currentPage() - 1 ) * $user->perPage() ) + $loop->iteration }}
+            @else
+            {{ $key+1 }}
+            @endif
+        </td>
         <td>{{ $item->prefix->title }} {{ $item->givename }} {{ $item->familyname }}</td>
         <td>
             {{ @$item->department->title }} >
@@ -104,6 +125,7 @@
         <td>
             @if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif
         </td>
+        @if(empty(request('export')))
         <td>
             @if(CanPerm('user-edit'))
             <a href="{{ url('/setting/user/' . $item->id . '/edit') }}" title="Edit User">
@@ -121,12 +143,15 @@
             </form>
             @endif
         </td>
+         @endif
     </tr>
     @endforeach
 </table>
 
+@if(empty(request('export')))
 <div class="pagination-wrapper">
     {!! $user->appends(['search' => Request::get('search')])->render() !!}
 </div>
+@endif
 
 @endsection

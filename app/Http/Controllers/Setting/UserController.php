@@ -59,11 +59,26 @@ class UserController extends Controller
             $rs = $rs->where('permission_group_id', $permission_group_id);
         }
 
-        $user = $rs->orderBy('id', 'desc')->paginate(10);
+        if (@$_GET['export'] == 'excel') {
 
-        // dd(DB::getQueryLog());
+            header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+            header("Content-Disposition: attachment; filename=ผู้ใช้งาน_" . date('Ymdhis') . ".xls"); //File name extension was wrong
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Cache-Control: private", false);
 
-        return view('setting.user.index', compact('user'));
+            $user = $rs->orderBy('id', 'desc')->get();
+
+            return view('setting.user.index', compact('user'));
+
+        } else {
+
+            $user = $rs->orderBy('id', 'desc')->paginate(10);
+
+            return view('setting.user.index', compact('user'));
+
+        }
+
     }
 
     /**
