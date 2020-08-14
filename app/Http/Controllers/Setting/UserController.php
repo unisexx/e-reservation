@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Setting;
 
 use App\Http\Controllers\Controller;
-use App\User;
-use Illuminate\Http\Request;
-
-use App\Model\ManageRoom;
 use App\Model\ManageResource;
-
+use App\Model\ManageRoom;
+use App\User;
 use DB;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -36,14 +34,32 @@ class UserController extends Controller
         ChkPerm('user-view');
 
         $keyword = $request->get('search');
+        $st_department_code = $request->get('st_department_code');
+        $st_bureau_code = $request->get('st_bureau_code');
+        $permission_group_id = $request->get('permission_group_id');
 
         $rs = User::select('*');
 
         if (!empty($keyword)) {
-            $rs = $rs->where(DB::raw('CONCAT_WS(" ", givename, middlename, familyname)') , 'LIKE' , "%$keyword%");
+            $rs = $rs->where(function ($q) use ($keyword) {
+                $q = $q->where(DB::raw('CONCAT_WS(" ", givename, middlename, familyname)'), 'LIKE', "%$keyword%");
+                $q = $q->orWhere('idcard', 'LIKE', "%$keyword%");
+            });
         }
 
-        $user = $rs->orderBy('id','desc')->paginate(10);
+        if (!empty($st_department_code)) {
+            $rs = $rs->where('st_department_code', $st_department_code);
+        }
+
+        if (!empty($st_bureau_code)) {
+            $rs = $rs->where('st_bureau_code', $st_bureau_code);
+        }
+
+        if (!empty($permission_group_id)) {
+            $rs = $rs->where('permission_group_id', $permission_group_id);
+        }
+
+        $user = $rs->orderBy('id', 'desc')->paginate(10);
 
         // dd(DB::getQueryLog());
 
@@ -74,32 +90,32 @@ class UserController extends Controller
     {
         $this->validate($request, [
             // 'name'                => 'required',
-            'st_prefix_code' => 'required',
-            'idcard' => 'required',
-            'st_department_code' => 'required',
-            'st_bureau_code' => 'required',
-            'st_division_code' => 'required',
+            'st_prefix_code'      => 'required',
+            'idcard'              => 'required',
+            'st_department_code'  => 'required',
+            'st_bureau_code'      => 'required',
+            'st_division_code'    => 'required',
             'permission_group_id' => 'required',
-            'email' => 'required|unique:users',
-            'password' => 'required',
-            'confirm_password' => 'same:password',
-            'givename' => 'required',
-            'familyname' => 'required',
+            'email'               => 'required|unique:users',
+            'password'            => 'required',
+            'confirm_password'    => 'same:password',
+            'givename'            => 'required',
+            'familyname'          => 'required',
         ], [
             // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
-            'st_prefix_code.required' => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
-            'idcard.required' => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
-            'st_department_code.required' => 'หน่วยงาน ห้ามเป็นค่าว่าง',
+            'st_prefix_code.required'      => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
+            'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
-            'email.required' => 'อีเมล์ ห้ามเป็นค่าว่าง',
-            'email.unique' => 'อีเมล์นี้ถูกใช้แล้ว',
-            'password.required' => 'Password ห้ามเป็นค่าว่าง',
-            'confirm_password.same' => 'Confirm Password ต้องเหมือนกับ Password',
-            'st_department_code.required' => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_bureau_code.required' => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_division_code.required' => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'givename.required' => 'ชื่อตัว ห้ามเป็นค่าว่าง',
-            'familyname.required' => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'email.required'               => 'อีเมล์ ห้ามเป็นค่าว่าง',
+            'email.unique'                 => 'อีเมล์นี้ถูกใช้แล้ว',
+            'password.required'            => 'Password ห้ามเป็นค่าว่าง',
+            'confirm_password.same'        => 'Confirm Password ต้องเหมือนกับ Password',
+            'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
@@ -108,9 +124,14 @@ class UserController extends Controller
             $requestData['password'] = bcrypt($request->password);
         }
 
+        if ($requestData['idcard']) {
+            $requestData['idcard'] = str_replace("-", "", $request->idcard);
+        }
+
         $user = User::create($requestData);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('setting/user');
     }
 
@@ -158,31 +179,31 @@ class UserController extends Controller
 
         $this->validate($request, [
             // 'name'                => 'required',
-            'st_prefix_code' => 'required',
-            'idcard' => 'required',
-            'st_department_code' => 'required',
+            'st_prefix_code'      => 'required',
+            'idcard'              => 'required',
+            'st_department_code'  => 'required',
             'permission_group_id' => 'required',
-            'email' => 'required|unique:users,email,' . $id . ',id',
-            'confirm_password' => 'same:password',
-            'st_department_code' => 'required',
-            'st_bureau_code' => 'required',
-            'st_division_code' => 'required',
-            'givename' => 'required',
-            'familyname' => 'required',
+            'email'               => 'required|unique:users,email,' . $id . ',id',
+            'confirm_password'    => 'same:password',
+            'st_department_code'  => 'required',
+            'st_bureau_code'      => 'required',
+            'st_division_code'    => 'required',
+            'givename'            => 'required',
+            'familyname'          => 'required',
         ], [
             // 'name.required'                => 'ชื่อ-สกุลผู้ใช้งาน ห้ามเป็นค่าว่าง',
-            'st_prefix_code.required' => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
-            'idcard.required' => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
-            'st_department_code.required' => 'หน่วยงาน ห้ามเป็นค่าว่าง',
+            'st_prefix_code.required'      => 'คำนำหน้าชื่อ ห้ามเป็นค่าว่าง',
+            'idcard.required'              => 'เลขบัตรประชาชน ห้ามเป็นค่าว่าง',
+            'st_department_code.required'  => 'หน่วยงาน ห้ามเป็นค่าว่าง',
             'permission_group_id.required' => 'สิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
-            'email.required' => 'อีเมล์ ห้ามเป็นค่าว่าง',
-            'email.unique' => 'อีเมล์นี้ถูกใช้แล้ว',
-            'confirm_password.same' => 'Confirm Password ต้องเหมือนกับ Password',
-            'st_department_code.required' => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_bureau_code.required' => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'st_division_code.required' => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
-            'givename.required' => 'ชื่อตัว ห้ามเป็นค่าว่าง',
-            'familyname.required' => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
+            'email.required'               => 'อีเมล์ ห้ามเป็นค่าว่าง',
+            'email.unique'                 => 'อีเมล์นี้ถูกใช้แล้ว',
+            'confirm_password.same'        => 'Confirm Password ต้องเหมือนกับ Password',
+            'st_department_code.required'  => 'กรมผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_bureau_code.required'      => 'สำนักผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'st_division_code.required'    => 'กลุ่มผู้ขอใช้ ห้ามเป็นค่าว่าง',
+            'givename.required'            => 'ชื่อตัว ห้ามเป็นค่าว่าง',
+            'familyname.required'          => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
@@ -193,6 +214,10 @@ class UserController extends Controller
             unset($requestData['password']);
         }
 
+        if ($requestData['idcard']) {
+            $requestData['idcard'] = str_replace("-", "", $request->idcard);
+        }
+
         $user = User::findOrFail($id);
 
         /**
@@ -201,7 +226,7 @@ class UserController extends Controller
          */
         $user->permission_group_id = $request->permission_group_id;
         // dd($user->isDirty('permission_group_id'));
-        if($user->isDirty('permission_group_id')){
+        if ($user->isDirty('permission_group_id')) {
             ManageRoom::where('user_id', $id)->delete();
             ManageResource::where('user_id', $id)->delete();
         }
@@ -209,6 +234,7 @@ class UserController extends Controller
         $user->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('setting/user')->with('flash_message', 'User updated!');
     }
 
@@ -227,6 +253,7 @@ class UserController extends Controller
         User::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('setting/user')->with('flash_message', 'User deleted!');
     }
 }

@@ -3,7 +3,7 @@
     $permission_groups = App\Model\PermissionGroup::where('status',1)->orderBy('id','asc')->get();
 
     // คำนำหน้าชื่อ
-    $st_prefixs = App\Model\StPrefix::orderBy('id','asc')->get();
+    $st_prefixs = App\Model\StPrefix::where('status', 1)->orderBy('id','asc')->get();
 
     // หน่วยงาน
     $st_ministries = App\Model\StMinistry::orderBy('code', 'asc')->get();
