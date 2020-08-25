@@ -64,6 +64,9 @@ class BookingVehicleController extends Controller
             $rs = $rs->where(function ($q) use ($keyword) {
                 $q->where('code', 'LIKE', "%$keyword%")
                     ->orWhere('gofor', 'LIKE', "%$keyword%")
+                    ->orWhereHas('st_driver', function ($q) use ($keyword) {
+                        $q->where('name', 'LIKE', "%$keyword%");
+                    })
                     ->orWhereHas('st_vehicle', function ($q) use ($keyword) {
                         $q->where('brand', 'LIKE', "%$keyword%")
                             ->orWhere('color', 'LIKE', "%$keyword%")
@@ -144,7 +147,8 @@ class BookingVehicleController extends Controller
 
         if (!empty($keyword)) {
             $rs = $rs->where(function ($q) use ($keyword) {
-                $q->where('code', 'LIKE', "%$keyword%");
+                $q->where('code', 'LIKE', "%$keyword%")
+                    ->orWhere('request_name', 'LIKE', "%$keyword%");
             });
         }
 

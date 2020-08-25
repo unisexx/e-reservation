@@ -260,8 +260,8 @@ if (isset($rs->req_st_bureau_code)) {
                 <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
             </span>
 
-            <div style="margin-top: 10px;">
-                <label>พนักงานขับรถ<span class="Txt_red_12"> *</span></label>
+            <div id="selectDriver" style="margin-top: 10px;">
+                <label>พนักงานขับรถ</label>
                 <span class="form-inline">
                     <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
                         <option value="">+ พนักงานขับรถ +</option>
@@ -332,12 +332,12 @@ if (isset($rs->req_st_bureau_code)) {
 <script>
     $(document).ready(function() {
         // เช็กสถานะ
-        // chkStatus();
+        chkStatus();
 
         // กดเปลี่ยนสถานะ
-        // $('body').on('change', 'select[name=status]', function() {
-        //     chkStatus();
-        // });
+        $('body').on('change', 'select[name=status]', function() {
+            chkStatus();
+        });
 
         // โชว์รายการยานพาหนะตอนกดปุ่มเลือกห้องประชุม
         $('#openCbox').click(function() {
@@ -383,8 +383,10 @@ if (isset($rs->req_st_bureau_code)) {
         var status = $('select[name=status]').val();
         if (status == 'อนุมัติ') {
             $('#selectVehicleBlock').show();
+            $('#selectDriver').show();
         } else {
             $('#selectVehicleBlock').hide();
+            $('#selectDriver').hide();
         }
     }
 

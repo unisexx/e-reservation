@@ -118,6 +118,13 @@
     .fc-day-grid-event .fc-content {
         white-space: normal;
     }
+
+    .fc-day-top {
+        text-align: center !important;
+    }
+    .fc-ltr .fc-dayGrid-view .fc-day-top .fc-day-number{
+        float:none;
+    }
 </style>
 
 <div id="btnBox">
@@ -142,14 +149,14 @@
             <input id="searchTxt" type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง" name="search" value="{{ request('search') }}">
 
             <span class="form-inline dep-chain-group">
-                <select name="st_department_code"  class="chain-department selectpicker" data-live-search="true" title="กรม" required>
+                <select name="st_department_code"  class="chain-department selectpicker" data-live-search="true" title="กรม">
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == (request('st_department_code') ?? @old('st_department_code'))) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
 
-                <select name="st_bureau_code"  class="chain-bureau selectpicker" data-live-search="true" title="สำนัก" required>
+                <select name="st_bureau_code"  class="chain-bureau selectpicker" data-live-search="true" title="สำนัก">
                     <option value="">+ สำนัก +</option>
                     @if($st_department_code))
                     @foreach($st_bureaus as $item)
@@ -158,7 +165,7 @@
                     @endif
                 </select>
 
-                <select name="st_division_code"  class="chain-division selectpicker" data-live-search="true" title="กลุ่ม" required>
+                <select name="st_division_code"  class="chain-division selectpicker" data-live-search="true" title="กลุ่ม">
                     <option value="">+ กลุ่ม +</option>
                     @if($st_bureau_code)
                     @foreach($st_divisions as $item)
@@ -168,14 +175,70 @@
                 </select>
             </span>
 
+            <input type="hidden" name="searchform" value="1">
             <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
 
         </form>
     </div>
 </div>
 
-@include('include._color_status', [ 'allrow' => $rs_all ])
 
-<div id='calendar'></div>
+@if( @$_GET['searchform'] == 1)
+
+    {{-- แสดงผลแบบตาราง --}}
+    <a href="{{ $from == 'backend' ? url('booking-vehicle/show') : url('booking-vehicle-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
+    <h4>ผลการค้นหา</h4>
+    <table class="table table-bordered table-striped sortable tblist">
+        <thead>
+            <tr>
+                <th class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
+                <th class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
+                <th class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
+                <th class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
+                <th class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
+                <th class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
+                <th class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($rs as $key=>$row)
+            <tr @if(($key % 2)==1) class="odd" @endif>
+                <td nowrap="nowrap">{{ $row->code }}</td>
+                <td>
+                    <div class="topicMeeting">{{ $row->gofor }}</div>
+                    <div>
+                        @if(!empty($row->st_vehicle_id))
+                        {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ @$row->st_driver->name }}
+                        @else
+                        <b>(- ยังไม่ได้เลือกยานพาหนะ -)</b>
+                        @endif
+                    </div>
+                </td>
+                <td>
+                    <div class="boxStartEnd"><span class="request">วันที่ขอใช้</span> {{ DB2Date($row->request_date) }} {{ date("H:i", strtotime($row->request_time)) }} น.</div>
+                    <div class="boxStartEnd"><span class="start">วันที่ไป</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
+                    <div class="boxStartEnd"><span class="end">วันที่กลับ</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
+                </td>
+                <td>{{ $row->point_place }} เวลา {{ date("H:i", strtotime($row->point_time)) }} น.</td>
+                <td>{{ $row->destination }}</td>
+                <td>
+                    {{ $row->request_name }}
+                    @if(empty(request('export')))
+                    <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
+                    @endif
+                </td>
+                <td><span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span></td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+@else
+
+    {{-- แสดงผลแบบปฏิทิน --}}
+    @include('include._color_status', [ 'allrow' => $rs_all ])
+    <div id='calendar'></div>
+
+@endif
 
 @endsection

@@ -138,7 +138,8 @@ class BookingResourceController extends Controller
 
         if (!empty($keyword)) {
             $rs = $rs->where(function ($q) use ($keyword) {
-                $q->where('code', 'LIKE', "%$keyword%");
+                $q->where('code', 'LIKE', "%$keyword%")
+                    ->orWhere('request_name', 'LIKE', "%$keyword%");
             });
         }
 
