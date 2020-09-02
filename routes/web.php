@@ -37,6 +37,15 @@ Route::get('download/user', function () {
     return Response::download($file, 'ระบบการขอใช้ทรัพยากร (e-Reservation)-ผู้ใช้งาน.pdf', $headers);
 });
 
+Route::get('download/permform', function () {
+    $file = public_path() . "/manual/permission_form.pdf";
+    $headers = array(
+        'Content-Type: application/pdf',
+    );
+
+    return Response::download($file, 'แบบกำหนดสิทธิ MSOBooking_new26082563.pdf', $headers);
+});
+
 // Booking
 Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
 Route::get('booking-room-front/print/{id}', 'BookingRoomFrontController@print');

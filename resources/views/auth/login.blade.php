@@ -72,6 +72,9 @@
                     </form>
                 </div>
             </div>
+
+            <center style="margin-top:40px;"><h4><a href="{{ url('download/permform') }}">ดาวน์โหลดแบบกำหนดสิทธิ์การใช้งานระบบการขอใช้ทรัพยากร</a></h4></center>
+
         </div>
     </div>
 </div>
