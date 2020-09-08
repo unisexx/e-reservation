@@ -174,7 +174,7 @@
 @else
 
     {{-- แสดงผลแบบปฏิทิน --}}
-    @include('include._color_status', [ 'allrow' => $rs_all ])
+    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
 
     <div class="text-center">
         <select class="selectpicker goUrl" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
