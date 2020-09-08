@@ -178,7 +178,6 @@
 
     <div class="text-center">
         <select class="selectpicker goUrl" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
-            <option value="">+ ห้องประชุม +</option>
             @foreach($st_rooms as $item)
                 <option value="{{ url('booking-room-front/show?st_room_id='.$item->id.'&search='.request('search')) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
             @endforeach
