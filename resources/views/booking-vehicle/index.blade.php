@@ -125,6 +125,8 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
             </td>
             @if(empty(request('export')))
             <td>
+                <a href="{{ url('booking-vehicle-front/print/'.$row->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="width:24px; margin-right:5px;"></a>
+
                 @if(CanPerm('booking-vehicle-edit'))
                 <a href="{{ url('booking-vehicle/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
                     <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
