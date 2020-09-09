@@ -80,7 +80,7 @@ class BookingVehicleFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();
 
         return view('include.__booking-vehicle-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }

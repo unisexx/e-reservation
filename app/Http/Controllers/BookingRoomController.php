@@ -29,7 +29,7 @@ class BookingRoomController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingRoom::select('*');
+        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix')->select('*');
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -146,7 +146,7 @@ class BookingRoomController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('department', 'bureau', 'division', 'st_room')->get();
 
         return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('backend');
     }

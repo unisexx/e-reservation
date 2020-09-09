@@ -63,7 +63,7 @@ class BookingResourceFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('stResource')->get();
 
         return view('include.__booking-resource-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }

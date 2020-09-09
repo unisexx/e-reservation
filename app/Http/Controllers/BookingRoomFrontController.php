@@ -66,7 +66,7 @@ class BookingRoomFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('department', 'bureau', 'division', 'st_room')->get();
 
         return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }

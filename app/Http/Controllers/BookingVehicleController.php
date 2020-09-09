@@ -29,7 +29,7 @@ class BookingVehicleController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingVehicle::select('*');
+        $rs = BookingVehicle::with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->select('*');
 
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
@@ -95,7 +95,7 @@ class BookingVehicleController extends Controller
 
         } else {
 
-            $rs = $rs->orderBy('id', 'desc')->with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->paginate($perPage);
+            $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
 
             return view('booking-vehicle.index', compact('rs', 'rs_all'));
 
@@ -172,7 +172,7 @@ class BookingVehicleController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();
 
         return view('include.__booking-vehicle-show', compact('rs', 'rs_all'))->withFrom('backend');
     }

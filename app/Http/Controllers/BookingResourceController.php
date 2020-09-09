@@ -30,7 +30,7 @@ class BookingResourceController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingResource::select('*');
+        $rs = BookingResource::with('stResource', 'department', 'bureau', 'division', 'approver.prefix')->select('*');
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองทรัพยากร (Manage booking) ใน setting/st-resource ให้แสดงเฉพาะการจองของทรัพยากรที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -147,7 +147,7 @@ class BookingResourceController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs = $rs->orderBy('id', 'desc')->get();
+        $rs = $rs->orderBy('id', 'desc')->with('stResource')->get();
 
         return view('include.__booking-resource-show', compact('rs', 'rs_all'))->withFrom('backend');
     }
