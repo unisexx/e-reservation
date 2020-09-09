@@ -114,7 +114,11 @@ $st_resource = $q->orderBy('id','desc')->get();
                 {{ $row->request_tel }} {{ $row->request_email }}" />
                 @endif
             </td>
-            <td><span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span></td>
+            <td>
+                <span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span>
+                <div>{{ @$row->approver->prefix->title }} {{ @$row->approver->givename }} {{ @$row->approver->familyname }}</div>
+                <div>{{ DBToDate($row->approve_date,'true','true') }}</div>
+            </td>
             @if(empty(request('export')))
             <td>
                 @if(CanPerm('booking-resource-edit'))

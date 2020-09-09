@@ -58,7 +58,8 @@ class BookingVehicle extends Model
         'req_st_bureau_code',
         'req_st_division_code',
         'st_driver_id',
-
+        'approve_by_id',
+        'approve_date',
     ];
 
     // relation
@@ -102,6 +103,11 @@ class BookingVehicle extends Model
         return $this->belongsto('App\Model\StDriver', 'st_driver_id', 'id');
     }
 
+    public function approver()
+    {
+        return $this->belongsTo('App\User', 'approve_by_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'code',
@@ -126,6 +132,8 @@ class BookingVehicle extends Model
         'status',
         'st_vehicle_id',
         'st_driver_id',
+        'approve_by_id',
+        'approve_date',
     ];
     protected static $logOnlyDirty = true;
 }

@@ -52,7 +52,8 @@ class BookingRoom extends Model
         'status',
         'president_name',
         'president_position',
-
+        'approve_by_id',
+        'approve_date',
     ];
 
     // relation
@@ -71,8 +72,14 @@ class BookingRoom extends Model
         return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
     }
 
-    public function st_room(){
+    public function st_room()
+    {
         return $this->hasOne('App\Model\StRoom', 'id', 'st_room_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo('App\User', 'approve_by_id', 'id');
     }
 
     // logsActivity
@@ -97,6 +104,8 @@ class BookingRoom extends Model
         'status',
         'president_name',
         'president_position',
+        'approve_by_id',
+        'approve_date',
     ];
     protected static $logOnlyDirty = true;
 }

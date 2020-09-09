@@ -48,6 +48,8 @@ class BookingResource extends Model
         'request_email',
         'note',
         'status',
+        'approve_by_id',
+        'approve_date',
     ];
 
     // relation
@@ -71,6 +73,11 @@ class BookingResource extends Model
         return $this->hasOne('App\Model\StResource', 'id', 'st_resource_id');
     }
 
+    public function approver()
+    {
+        return $this->belongsTo('App\User', 'approve_by_id', 'id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'st_resource_id',
@@ -89,6 +96,8 @@ class BookingResource extends Model
         'request_email',
         'note',
         'status',
+        'approve_by_id',
+        'approve_date',
     ];
     protected static $logOnlyDirty = true;
 }

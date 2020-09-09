@@ -193,6 +193,8 @@ class BookingVehicleController extends Controller
         $requestData['request_date'] = Date2DB($request->request_date);
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
+        $requestData['approve_by_id'] = Auth::user()->id;
+        $requestData['approve_date'] = date('Y-m-d H:i:s');
 
         $rs = BookingVehicle::findOrFail($id);
 
