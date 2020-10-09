@@ -67,9 +67,9 @@ if(isset($rs->end_time)){
         <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" required >
 
         <input type="hidden" name="st_room_over_people" value="{{ $rs->st_room_over_people ?? old('st_room_over_people')}}">
-        <input type="hidden" name="st_room_id" value="{{ isset($rs->st_room_id) ? $rs->st_room_id : old('st_room_id') }}">
-        <input type="hidden" name="st_room_people" value="{{ isset($rs->st_room_id) ? $rs->st_room->people : old('st_room_people') }}">
-        <input type="hidden" name="st_room_is_internet" value="{{ isset($rs->st_room_id) ? $rs->st_room->is_internet : old('st_room_is_internet') }}">
+        <input type="hidden" name="st_room_id" value="{{ $rs->st_room_id ?? old('st_room_id') }}">
+        <input type="hidden" name="st_room_people" value="{{ $rs->st_room->people ?? old('st_room_people') }}">
+        <input type="hidden" name="st_room_is_internet" value="{{ $rs->st_room->is_internet ?? old('st_room_is_internet') }}">
 
         <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
     </div>
@@ -124,6 +124,7 @@ if(isset($rs->end_time)){
         <label>จำนวนผู้เข้าร่วมประชุม<span class="Txt_red_12"> *</span></label>
         <input name="number" type="number" min="1" class="form-control {{ $errors->has('number') ? 'has-error' : '' }}" placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" style="width:100px;" required>
         คน
+        <span id="overTxt" style="color:red; margin-left:10px;"></span>
     </div>
 
     <div id="is_internet_section" class="form-group form-inline col-md-12" style="{{ @$rs->st_room->is_internet == 1 || old('st_room_is_internet') == 1 ? 'display:block;' : 'display:none;' }}">
@@ -330,7 +331,8 @@ if(isset($rs->end_time)){
             $('input[name=st_room_is_internet]').val($(this).data('room-is-internet'));
 
             var overPeople = ($(this).data('room-over-people') == 1) ? 'ได้' :'ไม่ได้';
-            $('#tmpStRoomName').val($(this).data('room-name')+' (รองรับได้'+$(this).data('room-people')+' คน) (บันทึกเกิน'+overPeople+')');
+            $('#tmpStRoomName').val($(this).data('room-name'));
+            $('#overTxt').html('รองรับได้'+$(this).data('room-people')+' คน (บันทึกเกิน'+overPeople+')');
 
             // is_internet ถ้าเป็น 1 ให้้เสดง 0 ไม่แสดง
             if($(this).data('room-is-internet') == 1){
@@ -431,5 +433,38 @@ $(document).ready(function(){
     $('body').on('click', '#cboxCloseBtn', function() {
         $.colorbox.close();
     });
+});
+</script>
+
+@php
+if(@$_GET['st_room_id']){
+    $stRoom = App\Model\StRoom::find(@$_GET['st_room_id']);
+}
+@endphp
+<script>
+$(document).ready(function(){
+    var stRoomId = "{{ @$stRoom->id }}";
+    if(stRoomId != ''){
+        var stRoomPeople = "{{ @$stRoom->people }}";
+        var stRoomOverPeople = "{{ @$stRoom->over_people }}";
+        var stRoomIsInternet = "{{ @$stRoom->is_internet }}";
+        var stRoomName = "{{ @$stRoom->name }}";
+
+        $('input[name=st_room_id]').val(stRoomId);
+        $('input[name=st_room_people], input[name=number]').val(stRoomPeople);
+        $('input[name=st_room_over_people]').val(stRoomOverPeople);
+        $('input[name=st_room_is_internet]').val(stRoomIsInternet);
+
+        var overPeopleTxt = (stRoomOverPeople == 1) ? 'ได้' :'ไม่ได้';
+        $('#tmpStRoomName').val(stRoomName);
+        $('#overTxt').html('รองรับได้'+stRoomPeople+' คน (บันทึกเกิน'+overPeopleTxt+')');
+
+        // is_internet ถ้าเป็น 1 ให้้เสดง 0 ไม่แสดง
+        if(stRoomIsInternet == 1){
+            $('#is_internet_section').show();
+        }else{
+            $('#is_internet_section').hide();
+        }
+    }
 });
 </script>

@@ -8,10 +8,10 @@ return [
         'height'     => 36,
         'quality'    => 90,
         'math'       => true,
-        'lines'      => 1,
+        'lines'      => -1,
         'bgImage'    => false,
-        'bgColor'    => '#5cb85c',
-        'fontColors' => ['#333333'],
+        'bgColor'    => '#eeeeee',
+        'fontColors' => ['#2c3e50', '#c0392b', '#16a085', '#c0392b', '#8e44ad', '#303f9f', '#f57c00', '#795548'],
     ],
     'math'       => [
         'length'  => 9,

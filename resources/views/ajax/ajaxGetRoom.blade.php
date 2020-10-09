@@ -13,7 +13,7 @@
     </td>
     <td>{{ $item->name }}</td>
     <td>
-        <div>จำนวนคนที่รับรองได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
+        <div>จำนวนคนที่รองรับได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
         <div>อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
         <div>
             ผู้รับผิดชอบห้องประชุม : {{ !empty($item->res_name) ? $item->res_name : "-" }}

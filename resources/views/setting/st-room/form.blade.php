@@ -44,7 +44,7 @@ if (isset($stroom->st_bureau_code)) {
         </td>
     </tr>
     <tr>
-        <th>จำนวนคนที่รับรองได้<span class="Txt_red_12"> *</span></th>
+        <th>จำนวนคนที่รองรับได้<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
                 <input name="people" type="number" min="1" class="form-control {{ $errors->has('people') ? 'has-error' : '' }}" value="{{ isset($stroom->people) ? $stroom->people : old('people') }}" style="width:100px;" required /> คน

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Model\StRoom;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StRoomRequest extends FormRequest
 {
@@ -65,8 +65,8 @@ class StRoomRequest extends FormRequest
             'image.*.mimes'               => 'ภาพห้องประชุม เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
             'image.*.max'                 => 'ภาพห้องประชุม ขนาดต้องไม่เกิน 2048 kb',
             'name.required'               => 'ชื่อห้องประชุม ห้ามเป็นค่าว่าง',
-            'people.required'             => 'จำนวนคนที่รับรองได้ ห้ามเป็นค่าว่าง',
-            'people.numeric'              => 'จำนวนคนที่รับรองได้ ต้องเป็นตัวเลขเท่านั้น',
+            'people.required'             => 'จำนวนคนที่รองรับได้ ห้ามเป็นค่าว่าง',
+            'people.numeric'              => 'จำนวนคนที่รองรับได้ ต้องเป็นตัวเลขเท่านั้น',
             'equipment.required'          => 'อุปกรณ์ที่ติดตั้งในห้อง ห้ามเป็นค่าว่าง',
             'res_name.required'           => 'ชื่อผู้รับผิดชอบ ห้ามเป็นค่าว่าง',
             'res_tel.required'            => 'เบอร์ติดต่อผู้รับผิดชอบ ห้ามเป็นค่าว่าง',

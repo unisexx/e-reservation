@@ -6,7 +6,7 @@
         <div class="topicMeeting">{{ $row->title }}</div>
         <div>{{ $row->st_room->name }}</div>
         <div>
-            - จำนวนคนที่รับรองได้: {{ $row->st_room->people }} คน<br>
+            - จำนวนคนที่รองรับได้: {{ $row->st_room->people }} คน<br>
             - อุปกรณ์ที่ติดตั้งในห้อง: {{ $row->st_room->equipment }}<br>
             - ผู้รับผิดชอบห้องประชุม: {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
             - ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม: {{ $row->st_room->fee }}
