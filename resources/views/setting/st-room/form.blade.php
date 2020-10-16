@@ -147,19 +147,6 @@ if (isset($stroom->st_bureau_code)) {
             <input name="status" type="checkbox" id="status" checked value="1" {!! (@$stroom->status == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
         </td>
     </tr>
-    {{-- เฉพาะ Superadmin ให้ติกเลือกห้องเป็น defalut ที่ใช้แสดงผลที่หน้านี้ http://msobooking.m-society.go.th/booking-room-front/show?st_room_id=12&search= --}}
-    {{-- @if(CanPerm('is-superadmin'))
-    <tr>
-        <th>
-            set default (ค่าเริ่มต้นการแสดงผล)<br>
-            <small><u>หมายเหตุ</u> สามารถตั้งค่าได้ห้องเดียวเท่านั้น ถ้าติ๊กถูกที่ห้องนี้ ห้องอื่นที่เคยตั้งค่าไว้จะถูกลบออก</small>
-        </th>
-        <td>
-            <input name="is_default" type="hidden" value="0" checked="checked" />
-            <input name="is_default" type="checkbox" id="is_default" value="1" {!! (@$stroom->is_default == 1 || empty($stroom->id)) ? 'checked="checked"' : '' !!} />
-        </td>
-    </tr>
-    @endif --}}
 
     {{-- Admin ผู้จัดการห้อง คือ user ที่มีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
     {{-- Admin ผู้จัดการจองห้อง คือ user ที่ไม่มีมีสิทธิ์ในการเข้าถึงฟอร์มตั้งค่าห้องนี้ --}}
@@ -171,7 +158,7 @@ if (isset($stroom->st_bureau_code)) {
                     ->where('st_bureau_code', @Auth::user()->st_bureau_code)
                     ->whereIn('permission_group_id', function($query){
                         $query->select('id')->from('permission_groups')->whereNotIn('id', function($query){
-                            $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [17,18,19,20]);
+                            $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [15]);
                         });
                     })
                     ->orderBy('id', 'desc')

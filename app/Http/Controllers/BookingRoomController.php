@@ -48,6 +48,7 @@ class BookingRoomController extends Controller
                 });
             }
         }
+
         $rs_all = $rs->get();
 
         if (!empty($date_select)) {

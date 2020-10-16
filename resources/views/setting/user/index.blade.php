@@ -87,7 +87,7 @@
 @endif
 
 <div class="pagination-wrapper">
-    {!! $user->appends(['search' => Request::get('search')])->render() !!}
+    {!! $user->appends(@$_GET)->render() !!}
 </div>
 
 @endif
@@ -150,7 +150,7 @@
 
 @if(empty(request('export')))
 <div class="pagination-wrapper">
-    {!! $user->appends(['search' => Request::get('search')])->render() !!}
+    {!! $user->appends(@$_GET)->render() !!}
 </div>
 @endif
 

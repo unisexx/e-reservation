@@ -56,7 +56,7 @@ class AjaxController extends Controller
 
     public function ajaxGetRoom()
     {
-        $rs = StRoom::select('*')->where('status', '1');
+        $rs = StRoom::with('department', 'bureau', 'division')->select('*')->where('status', '1');
 
         /**
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด

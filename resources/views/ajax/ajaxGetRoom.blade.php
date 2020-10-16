@@ -20,8 +20,10 @@
             {{ !empty($item->st_department_code) ? $item->department->title : "-" }}
             {{ !empty($item->st_bureau_code) ? $item->bureau->title : "-" }}
             {{ !empty($item->st_division_code) ? $item->division->title : "-" }}
+            {{ !empty($item->res_tel) ? 'โทรศัพท์: '.$item->res_tel : "-" }}
         </div>
         <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($item->fee) ? $item->fee : "-" }}</div>
+        <div>หมายเหตุ : {{ !empty($item->note) ? $item->note : "-" }}</div>
     </td>
     <td>
         <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectRoomBtn" data-room-id="{{ $item->id }}" data-room-name="{{ $item->name }}" data-room-people="{{ $item->people }}" data-room-over-people="{{ $item->over_people }}" data-room-is-internet="{{ $item->is_internet }}">
