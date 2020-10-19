@@ -65,6 +65,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('ajaxGetBureau', 'AjaxController@ajaxGetBureau');
 Route::get('ajaxGetDivision', 'AjaxController@ajaxGetDivision');
 Route::get('ajaxGetRoom', 'AjaxController@ajaxGetRoom');
+Route::get('ajaxGetRoomDetail', 'AjaxController@ajaxGetRoomDetail');
 Route::get('ajaxGetVehicle', 'AjaxController@ajaxGetVehicle');
 Route::get('ajaxRoomChkOverlap', 'AjaxController@ajaxRoomChkOverlap');
 Route::get('ajaxVehicleChkOverlap', 'AjaxController@ajaxVehicleChkOverlap');

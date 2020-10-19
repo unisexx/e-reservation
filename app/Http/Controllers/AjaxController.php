@@ -84,6 +84,13 @@ class AjaxController extends Controller
         return view('ajax.ajaxGetRoom', compact('rs'));
     }
 
+    public function ajaxGetRoomDetail()
+    {
+        $rs = StRoom::with('department', 'bureau', 'division')->find(@$_GET['st_room_id']);
+
+        return view('ajax.ajaxGetRoomDetail', compact('rs'));
+    }
+
     public function ajaxGetVehicle()
     {
         $rs = StVehicle::select('*')->where('status', 'พร้อมใช้');

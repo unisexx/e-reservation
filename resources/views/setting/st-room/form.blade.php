@@ -155,12 +155,14 @@ if (isset($stroom->st_bureau_code)) {
     // DB::enableQueryLog();
         // หา user ที่ไม่มีสิทธิ์ในการตั้งค่าห้องประชุม
         $users = App\User::where('status', 1)
-                    ->where('st_bureau_code', @Auth::user()->st_bureau_code)
+                    // ->where('st_bureau_code', @Auth::user()->st_bureau_code)
                     ->whereIn('permission_group_id', function($query){
                         $query->select('id')->from('permission_groups')->whereNotIn('id', function($query){
                             $query->select('permission_group_id')->from('permission_roles')->whereIn('permission_id', [15]);
                         });
                     })
+                    ->where('st_bureau_code', $stroom->st_bureau_code)
+                    ->where('st_division_code', '!=', $stroom->st_division_code)
                     ->orderBy('id', 'desc')
                     ->get();
         // dd($users);

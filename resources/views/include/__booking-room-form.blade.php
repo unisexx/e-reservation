@@ -74,6 +74,8 @@ if(isset($rs->end_time)){
         <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
     </div>
 
+    <div id="roomDetailHere" @if($formWhere == 'frontend') style="padding: 0 15px;" @endif></div>
+
 
     <div class="form-group form-inline col-md-12">
         <label>ชื่อเรื่อง / หัวข้อการประชุม-อบรม<span class="Txt_red_12"> *</span></label>
@@ -341,6 +343,8 @@ if(isset($rs->end_time)){
                 $('#is_internet_section').hide();
             }
 
+            getRoomDetail($(this).data('room-id'));
+
             // ปิด colorbox
             $.colorbox.close();
         });
@@ -465,6 +469,32 @@ $(document).ready(function(){
         }else{
             $('#is_internet_section').hide();
         }
+
+        getRoomDetail(stRoomId);
     }
 });
+</script>
+
+
+<script>
+$(document).ready(function(){
+    var rsStRoomId = "{{ @$rs->st_room_id }}";
+    if(rsStRoomId != ''){
+        getRoomDetail(rsStRoomId);
+    }
+});
+</script>
+
+<script>
+function getRoomDetail(roomId){
+    $.ajax({
+        url: '{{ url("ajaxGetRoomDetail") }}',
+        data: {
+            st_room_id: roomId,
+        }
+    })
+    .done(function(data) {
+        $('#roomDetailHere').html(data);
+    });
+}
 </script>
