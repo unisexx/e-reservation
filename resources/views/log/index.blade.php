@@ -38,15 +38,6 @@
             <td>{{ DBToDate($item->created_at, true, true) }}</td>
             <td>{{ @$item->causer->name }}</td>
             <td>{{ thDescription($item->description) }} {{ modelNameTh($item->subject_type) }} (ID:{{$item->subject_id}})</td>
-            <!-- <td>{{ $item->subject_type }}</td>
-            <td>
-                <?php
-                    $properties = $item->properties;
-                    foreach($properties['attributes'] as $attribute => $old) {
-                        echo $attribute.': '.$old.' => '.$properties['attributes'][$attribute].'<br>';
-                    }
-                ?>
-            </td> -->
         </tr>
     @endforeach
 </table>

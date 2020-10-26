@@ -404,14 +404,14 @@ $('.range-date').each(function(k, v) {
 <!-- This contains the hidden content for inline calls ห้องประชุม-->
 <div style='display:none'>
     <div id='inline_dup' style='padding:5px; background:#fff;'>
-        <h3 style="margin:0 0 25px 0; padding:0; color:#636">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
+        <h3 style="margin:0 0 25px 0; padding:0; color:rgb(255, 0, 0)">พบรายการจองในช่วงเวลาที่ซ้ำ</h3>
 
         <table class="tblist">
             <thead>
                 <tr>
                     <th>ลำดับ</th>
                     <th>รหัสการจอง</th>
-                    <th>หัวข้อการประชุม / ห้องประชุม</th>
+                    <th>หัวข้อการประชุม</th>
                     <th>วัน เวลา ที่ต้องการใช้ห้อง</th>
                     <th>ผู้ขอใช้ห้องประชุม</th>
                     <th>สถานะ</th>
