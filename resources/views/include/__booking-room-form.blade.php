@@ -64,7 +64,7 @@ if(isset($rs->end_time)){
 
     <div class="form-group form-inline col-md-12">
         <label>เลือกห้องประชุม<span class="Txt_red_12"> *</span></label>
-        <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" required >
+        <input id="tmpStRoomName" name="tmpStRoomName" type="text" class="form-control {{ $errors->has('tmpStRoomName') ? 'has-error' : '' }}" readonly="readonly" value="{{ isset($rs->st_room_id) ? $rs->st_room->name : old('tmpStRoomName') }}" style="width:80%;" required>
 
         <input type="hidden" name="st_room_over_people" value="{{ $rs->st_room_over_people ?? old('st_room_over_people')}}">
         <input type="hidden" name="st_room_id" value="{{ $rs->st_room_id ?? old('st_room_id') }}">
@@ -79,13 +79,13 @@ if(isset($rs->end_time)){
 
     <div class="form-group form-inline col-md-12">
         <label>ชื่อเรื่อง / หัวข้อการประชุม-อบรม<span class="Txt_red_12"> *</span></label>
-        <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
+        <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="width:80%;" required>
     </div>
 
     <div class="form-group form-inline col-md-12">
         <label>ประธานการประชุม</label>
-        <input name="president_name" type="text" class="form-control {{ $errors->has('president_name') ? 'has-error' : '' }}" placeholder="ชื่อประธาน" value="{{ isset($rs->president_name) ? $rs->president_name : old('president_name') }}" style="min-width:300px;" required>
-        <input name="president_position" type="text" class="form-control {{ $errors->has('president_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งประธาน" value="{{ isset($rs->president_position) ? $rs->president_position : old('president_position') }}" style="min-width:300px;" required>
+        <input name="president_name" type="text" class="form-control {{ $errors->has('president_name') ? 'has-error' : '' }}" placeholder="ชื่อประธาน" value="{{ isset($rs->president_name) ? $rs->president_name : old('president_name') }}" required>
+        <input name="president_position" type="text" class="form-control {{ $errors->has('president_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งประธาน" value="{{ isset($rs->president_position) ? $rs->president_position : old('president_position') }}" required>
     </div>
 
     <div class="form-group form-inline col-md-12 input-daterange chkTime">
@@ -138,9 +138,9 @@ if(isset($rs->end_time)){
     <div class="form-group form-inline col-md-12">
         <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
         <div class="dep-chain-group" style="margin-bottom:5px;">
-            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
+            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
 
-            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;" required>
+            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" required>
 
             <div style="margin-top:5px;">
                 <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
@@ -170,13 +170,13 @@ if(isset($rs->end_time)){
             </div>
 
         </div>
-        <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;" required>
-        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" style="min-width:300px;" required>
+        <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" required>
+        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required>
     </div>
 
     <div class="form-group form-inline col-md-12">
         <label>หมายเหตุ / ความต้องการเพิ่มเติมอื่นๆ (ระบุรายละเอียด)</label>
-        <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
+        <textarea name="note" class="form-control " style="height:80px; width:80%;">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
     </div>
 
 

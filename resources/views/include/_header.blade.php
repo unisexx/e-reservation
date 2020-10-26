@@ -12,7 +12,7 @@
             <a class="navbar-brand">e-Reservation</a>
         </div>
 
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="app-navbar-collapse" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 
                 @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม/อบรม</a></li>@endif

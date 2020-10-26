@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Model\ActivityLog;
 
 // logsActivity
 // use Spatie\Activitylog\Models\Activity;
 
-use App\Model\ActivityLog;
+use Illuminate\Http\Request;
 
 class LogController extends Controller
 {
@@ -23,7 +21,7 @@ class LogController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -38,15 +36,15 @@ class LogController extends Controller
         $description = $request->get('description');
         $perPage = 10;
 
-        $log = new ActivityLog;
+        $log = ActivityLog::with('causer');
 
-        if(!empty($keyword)) {
-            $log = $log->whereHas('user', function($q) use($keyword){
-                    $q->where('name', 'LIKE', "%$keyword%");
-                });
+        if (!empty($keyword)) {
+            $log = $log->whereHas('user', function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', "%$keyword%");
+            });
         }
 
-        if(!empty($description)) {
+        if (!empty($description)) {
             $log = $log->where('description', "$description");
         }
 

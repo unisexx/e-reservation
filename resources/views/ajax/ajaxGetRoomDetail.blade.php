@@ -10,7 +10,7 @@
                 @endforeach
             @endif
         </td>
-        <td>
+        <td class="col-xs-12">
             <div>จำนวนคนที่รองรับได้ : {{ !empty($rs->people) ? $rs->people : "-" }} คน</div>
             <div>อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($rs->equipment) ? $rs->equipment : "-" }}</div>
             <div>
