@@ -5,50 +5,48 @@
 <h3>จองห้องประชุม/อบรม</h3>
 
 @if(empty(request('export')))
+    <div id="search">
+        <div id="searchBox">
+            <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
 
-<div id="search">
-    <div id="searchBox">
-        <form method="GET" action="{{ url('booking-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
+                <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อการประชุม / ผู้ขอใช้ห้องประชุม" name="search" value="{{ request('search') }}">
 
-            <input type="text" class="form-control" style="width:370px;" placeholder="รหัสการจอง / หัวข้อการประชุม / ผู้ขอใช้ห้องประชุม" name="search" value="{{ request('search') }}">
+                <select name="date_type" class="form-control">
+                    <option value="start_date" @if(request('date_type')=='start_date' ) selected @endif>วันที่เริ่ม</option>
+                    <option value="end_date" @if(request('date_type')=='end_date' ) selected @endif>วันที่สิ้นสุด</option>
+                </select>
 
-            <select name="date_type" class="form-control">
-                <option value="start_date" @if(request('date_type')=='start_date' ) selected @endif>วันที่เริ่ม</option>
-                <option value="end_date" @if(request('date_type')=='end_date' ) selected @endif>วันที่สิ้นสุด</option>
-            </select>
+                <input name="date_select" type="text" class="form-control fdate datepicker" value="{{ request('date_select') }}" style="width:100px;" />
 
-            <input name="date_select" type="text" class="form-control fdate datepicker" value="{{ request('date_select') }}" style="width:100px;" />
-
-            <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
-        </form>
+                <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
+            </form>
+        </div>
     </div>
-</div>
 
 
-<div id="btnBox">
-    <a href="{{ url('/booking-room/show') }}">
-        <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
-    </a>
-    <?php
-    $get = '';
-    foreach (@$_GET as $key => $value) {
-        $get .= ($get) ? '&' . $key . '=' . $value : $key . '=' . $value;
-    }
-    ?>
-    <a href="{{ url('booking-room?export=excel&'.$get) }}">
-        <input type="button" title="export excel" value="export excel" class="btn vtip" />
-    </a>
-    @if(CanPerm('booking-room-create'))
-    <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
-    @endif
-</div>
+    <div id="btnBox">
+        <a href="{{ url('/booking-room/show') }}">
+            <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
+        </a>
+        <?php
+        $get = '';
+        foreach (@$_GET as $key => $value) {
+            $get .= ($get) ? '&' . $key . '=' . $value : $key . '=' . $value;
+        }
+        ?>
+        <a href="{{ url('booking-room?export=excel&'.$get) }}">
+            <input type="button" title="export excel" value="export excel" class="btn vtip" />
+        </a>
+        @if(CanPerm('booking-room-create'))
+        <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+        @endif
+    </div>
 
-@include('include._color_status', [ 'allrow' => $rs_all ])
+    @include('include._color_status', [ 'allrow' => $rs_all ])
 
-<div class="pagination-wrapper">
-    {!! $rs->appends(@$_GET)->render() !!}
-</div>
-
+    <div class="pagination-wrapper">
+        {!! $rs->appends(@$_GET)->render() !!}
+    </div>
 @endif
 <!-- export -->
 
@@ -78,14 +76,14 @@
             </td>
             <td nowrap="nowrap">{{ $row->code }}</td>
             <td>
-                <div class="topicMeeting">{{ $row->title }}</div>
-                {{ $row->st_room->name }}
+                <div class="topicMeeting">{{ @$row->title }}</div>
+                {{ @$row->st_room->name }}
                 @if(empty(request('export')))
-                <img src="{{ url('images/detail.png') }}" class="vtip" title="
-                <u>จำนวนคนที่รองรับได้</u> {{ $row->st_room->people }} คน<br>
-                <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
-                <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
-                <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+                    <img src="{{ url('images/detail.png') }}" class="vtip" title="
+                    <u>จำนวนคนที่รองรับได้</u> {{ $row->st_room->people }} คน<br>
+                    <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
+                    <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
+                    <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
                 @endif
             </td>
             <td>
