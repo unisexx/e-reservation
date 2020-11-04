@@ -36,7 +36,7 @@
         <tr @if(($key % 2) == 1) class="odd" @endif>
             <td>{{ (($logs->currentPage() - 1 ) * $logs->perPage() ) + $loop->iteration }}</td>
             <td>{{ DBToDate($item->created_at, true, true) }}</td>
-            <td>{{ @$item->causer->name }}</td>
+            <td>{{ @$item->causer->prefix->title }}{{ @$item->causer->givename }} {{ @$item->causer->familyname }}</td>
             <td>{{ thDescription($item->description) }} {{ modelNameTh($item->subject_type) }} (ID:{{$item->subject_id}})</td>
         </tr>
     @endforeach

@@ -47,6 +47,7 @@ class StRoom extends Model
         'over_people',
         'is_default',
         'is_internet',
+        'is_conference',
     ];
 
     /** Dear Custom Function */

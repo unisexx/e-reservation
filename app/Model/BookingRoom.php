@@ -54,6 +54,7 @@ class BookingRoom extends Model
         'president_position',
         'approve_by_id',
         'approve_date',
+        'use_conference',
     ];
 
     // relation
@@ -106,6 +107,7 @@ class BookingRoom extends Model
         'president_position',
         'approve_by_id',
         'approve_date',
+        'use_conference',
     ];
     protected static $logOnlyDirty = true;
 }

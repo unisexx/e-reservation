@@ -26,7 +26,7 @@
         <div>หมายเหตุ : {{ !empty($item->note) ? $item->note : "-" }}</div>
     </td>
     <td>
-        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectRoomBtn" data-room-id="{{ $item->id }}" data-room-name="{{ $item->name }}" data-room-people="{{ $item->people }}" data-room-over-people="{{ $item->over_people }}" data-room-is-internet="{{ $item->is_internet }}">
+        <input type="button" title="เลือก" value="เลือก" class="btn btn-primary vtip selectRoomBtn" data-room-id="{{ $item->id }}" data-room-name="{{ $item->name }}" data-room-people="{{ $item->people }}" data-room-over-people="{{ $item->over_people }}" data-room-is-internet="{{ $item->is_internet }}" data-room-is-conference="{{ $item->is_conference }}">
     </td>
 </tr>
 @endforeach

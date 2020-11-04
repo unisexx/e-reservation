@@ -36,7 +36,7 @@ class LogController extends Controller
         $description = $request->get('description');
         $perPage = 10;
 
-        $log = ActivityLog::with('causer');
+        $log = ActivityLog::with('causer.prefix')->whereNotNull('causer_id');
 
         if (!empty($keyword)) {
             $log = $log->whereHas('user', function ($q) use ($keyword) {

@@ -63,10 +63,21 @@ if (isset($stroom->st_bureau_code)) {
         </td>
     </tr>
     <tr>
+        <th>ขอใช้งานระบบ Conference<span class="Txt_red_12"> *</span></th>
+        <td>
+            <label style="margin-right:20px;">
+                <input name="is_conference" type="radio" value="1" {!! @$stroom->is_conference == '1' ? 'checked="checked"' : '' !!} required/> แสดง
+            </label>
+            <label>
+                <input name="is_conference" type="radio" value="0" {!! @$stroom->is_conference == '0' ? 'checked="checked"' : '' !!}/> ไม่แสดง
+            </label>
+        </td>
+    </tr>
+    <tr>
         <th>ขอ User เพื่อใช้งานอินเทอร์เน็ต<span class="Txt_red_12"> *</span></th>
         <td>
             <label style="margin-right:20px;">
-                <input name="is_internet" type="radio" value="1" {!! @$stroom->is_internet == '1' ? 'checked="checked"' : '' !!}/> แสดง
+                <input name="is_internet" type="radio" value="1" {!! @$stroom->is_internet == '1' ? 'checked="checked"' : '' !!} required/> แสดง
             </label>
             <label>
                 <input name="is_internet" type="radio" value="0" {!! @$stroom->is_internet == '0' ? 'checked="checked"' : '' !!}/> ไม่แสดง

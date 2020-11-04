@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Spatie\Activitylog\Contracts\Activity as ActivityContract;
 
 class ActivityLog extends Model implements ActivityContract
@@ -19,7 +19,7 @@ class ActivityLog extends Model implements ActivityContract
 
     public function __construct(array $attributes = [])
     {
-        if (! isset($this->table)) {
+        if (!isset($this->table)) {
             $this->setTable(config('activitylog.table_name'));
         }
 
@@ -47,7 +47,7 @@ class ActivityLog extends Model implements ActivityContract
 
     public function changes(): Collection
     {
-        if (! $this->properties instanceof Collection) {
+        if (!$this->properties instanceof Collection) {
             return new Collection();
         }
 

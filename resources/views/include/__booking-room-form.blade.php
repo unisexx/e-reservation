@@ -135,6 +135,14 @@ if(isset($rs->end_time)){
         คน
     </div>
 
+    <div id="is_conference_section" class="form-group form-inline col-md-12" style="{{ @$rs->st_room->is_conference == 1 || old('st_room_is_conference') == 1 ? 'display:block;' : 'display:none;' }}">
+        <label>ขอใช้งานระบบ Conference</label>
+        <select class="form-control" name="use_conference">
+            <option value="0" {{ @$rs->use_conference == 0 ? "selected" : ""}}>ไม่ใช้งาน</option>
+            <option value="1" {{ @$rs->use_conference == 1 ? "selected" : ""}}>ใช้งาน</option>
+        </select>
+    </div>
+
     <div class="form-group form-inline col-md-12">
         <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
         <div class="dep-chain-group" style="margin-bottom:5px;">
@@ -341,6 +349,13 @@ if(isset($rs->end_time)){
                 $('#is_internet_section').show();
             }else{
                 $('#is_internet_section').hide();
+            }
+
+            // is_conference ถ้าเป็น 1 ให้้เสดง 0 ไม่แสดง
+            if($(this).data('room-is-conference') == 1){
+                $('#is_conference_section').show();
+            }else{
+                $('#is_conference_section').hide();
             }
 
             getRoomDetail($(this).data('room-id'));
