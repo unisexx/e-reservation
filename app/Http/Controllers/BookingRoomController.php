@@ -212,6 +212,7 @@ class BookingRoomController extends Controller
 
     public function sendEmailStatus($rs)
     {
-        Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-room'));
+        $recipient = [$rs->request_email, 'puwadon.k@m-society.go.th', 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Status($rs->id, 'booking-room'));
     }
 }
