@@ -86,7 +86,11 @@
 </tr>
 <tr>
     <th>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (คน)</th>
-    <td>{{ $rs->internet_number }}</td>
+    <td>{{ $rs->internet_number ?? '-' }}</td>
+</tr>
+<tr>
+    <th>ขอใช้งานระบบ Conference</th>
+    <td>{{ $rs->getConferenceTxt() }}</td>
 </tr>
 <tr>
     <th>ข้อมูลการติดต่อผู้ขอใช้</th>

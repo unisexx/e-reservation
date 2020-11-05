@@ -49,6 +49,14 @@ class BookingRoomController extends Controller
             }
         }
 
+        /**
+         * ถ้า user มีการตั้งค่า (ดูได้เฉพาะรายการที่มีการจอง conference) ให้ เลือกเฉพาะรายการจองที่มีการใช้งาน conference เท่านั้น
+         * use_conference = 1
+         */
+        if (CanPerm('booking-room-view-conference')) {
+            $rs = $rs->where('use_conference', 1);
+        }
+
         $rs_all = $rs->get();
 
         if (!empty($date_select)) {

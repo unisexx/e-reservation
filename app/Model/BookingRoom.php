@@ -83,6 +83,16 @@ class BookingRoom extends Model
         return $this->belongsTo('App\User', 'approve_by_id', 'id');
     }
 
+    public function getConferenceTxt()
+    {
+        $data = array(
+            0 => 'ไม่ใช้งาน',
+            1 => 'ใช้งาน',
+        );
+
+        return $data[$this->use_conference];
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'code',

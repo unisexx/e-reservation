@@ -77,5 +77,14 @@ $(document).ready(function(){
     if(permissionGroupId == ''){
         $('.perm_id_20').find('input[type=checkbox]:eq(0)').attr("checked","checked");
     }
+
+    // คลิกดูเฉพาะห้องที่มีการจอง conference
+    $('body').on('click' ,'input[name="pm[]"][value="72"]', function(){
+        if($(this).is(':checked')){
+            $('input[name="pm[]"][value="1"]').prop('checked', true);
+        }else{
+            $('input[name="pm[]"][value="1"]').prop('checked', false);
+        }
+    });
 });
 </script>
