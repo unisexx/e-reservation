@@ -179,7 +179,7 @@ if(isset($rs->end_time)){
 
         </div>
         <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" required>
-        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required>
+        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required style="width:270px;">
     </div>
 
     <div class="form-group form-inline col-md-12">
@@ -468,6 +468,7 @@ $(document).ready(function(){
         var stRoomOverPeople = "{{ @$stRoom->over_people }}";
         var stRoomIsInternet = "{{ @$stRoom->is_internet }}";
         var stRoomName = "{{ @$stRoom->name }}";
+        var stRoomIsConference = "{{ @$stRoom->is_conference }}";
 
         $('input[name=st_room_id]').val(stRoomId);
         $('input[name=st_room_people], input[name=number]').val(stRoomPeople);
@@ -483,6 +484,13 @@ $(document).ready(function(){
             $('#is_internet_section').show();
         }else{
             $('#is_internet_section').hide();
+        }
+
+        // is_conference ถ้าเป็น 1 ให้้เสดง 0 ไม่แสดง
+        if(stRoomIsConference == 1){
+            $('#is_conference_section').show();
+        }else{
+            $('#is_conference_section').hide();
         }
 
         getRoomDetail(stRoomId);

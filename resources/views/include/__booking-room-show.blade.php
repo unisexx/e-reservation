@@ -224,7 +224,7 @@ $(document).ready(function(){
 @push('css')
 <style>
     .bootstrap-select.btn-group .dropdown-toggle .filter-option{
-        font-size: 30px;
+        font-size: 25px;
     }
     .bootstrap-select > .dropdown-toggle{
         height: 55px !important;
