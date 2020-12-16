@@ -135,7 +135,12 @@ class BookingRoomController extends Controller
         $rs = BookingRoom::select('*');
         $rs_all = $rs->get();
 
-        if (!empty($st_room_id)) {
+        // ถ้าเป็น conference ให้แสดงเฉพาะห้องที่มีการตั้งค่า conference (ใน st_rooms ที่มีค่า is_conference = 1)
+        if (@$request->is_conference == 1) {
+            $rs = $rs->whereHas('st_room', function ($q) {
+                $q->where('is_conference', 1);
+            });
+        } elseif (!empty($st_room_id)) { // ถ้าไม่ได้มาจากช่องค้นหา ให้ select room ตามค่าที่ตั้ง default ไว้ในเมนูตั้งค่าห้อง
             $rs = $rs->where('st_room_id', $st_room_id);
         } else {
             $rs = $rs->whereHas('st_room', function ($q) {
@@ -163,7 +168,7 @@ class BookingRoomController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-edit', 'booking-room');
+        // ChkPerm('booking-room-edit', 'booking-room');
 
         $rs = BookingRoom::findOrFail($id);
 

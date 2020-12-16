@@ -194,52 +194,73 @@ if(isset($rs->end_time)){
 
     {{-- แอดมิน หลังบ้านเห็นเท่านั้น --}}
     @if($formWhere == 'backend')
-    {{-- ตรวจสอบการอนุมัติ ห้องเดียวกัน เวลาเดียวกัน ไม่สามารถอนุมัติซ้อนกันได้ --}}
-    @php
-        $st_room_id = @$rs->st_room_id;
-        $start_date = @$rs->start_date;
-        $end_date = @$rs->end_date;
-        $start_time = @$rs->start_time;
-        $end_time = @$rs->end_time;
-        $id = @$rs->id;
 
-        $chkOverlap = App\Model\BookingRoom::select('*')->where('status', 'อนุมัติ')->where('st_room_id', $st_room_id)
-            ->where(function ($q) use ($start_date, $end_date) {
-                $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
-            })
-            ->where(function ($q) use ($start_time, $end_time) {
-                $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
-            });
+        {{-- ตรวจสอบการอนุมัติ ห้องเดียวกัน เวลาเดียวกัน ไม่สามารถอนุมัติซ้อนกันได้ --}}
+        @php
+            $st_room_id = @$rs->st_room_id;
+            $start_date = @$rs->start_date;
+            $end_date = @$rs->end_date;
+            $start_time = @$rs->start_time;
+            $end_time = @$rs->end_time;
+            $id = @$rs->id;
 
-        if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
-            $chkOverlap = $chkOverlap->where('id', '<>', $id);
-        }
+            $chkOverlap = App\Model\BookingRoom::select('*')->where('status', 'อนุมัติ')->where('st_room_id', $st_room_id)
+                ->where(function ($q) use ($start_date, $end_date) {
+                    $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
+                })
+                ->where(function ($q) use ($start_time, $end_time) {
+                    $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
+                });
 
-        $chkOverlap = $chkOverlap->get();
-    @endphp
-    <div class="form-group form-inline col-md-12">
-        <fieldset>
-        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
-            <label>สถานะ</label>
-            <select name="status" class="form-control" style="width:auto;">
-                <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-                @if($chkOverlap->count() < 1)
-                    <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+            if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
+                $chkOverlap = $chkOverlap->where('id', '<>', $id);
+            }
+
+            $chkOverlap = $chkOverlap->get();
+        @endphp
+        <div class="form-group form-inline col-md-12">
+            <fieldset>
+            <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+
+                <div class="col-md-2">
+                    <label>สถานะ</label>
+                    <select name="status" class="form-control" style="width:100%;" {{ !CanPerm('booking-room-edit')?'disabled':'' }} >
+                        <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
+                        @if($chkOverlap->count() < 1)
+                            <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+                        @endif
+                        <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
+                        <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
+                    </select>
+                    {!! !CanPerm('booking-room-edit')?'<input type="hidden" name="status" value="'.@$rs->status.'">':'' !!}
+
+                    @if($chkOverlap->count() >= 1)
+                    <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
+                    <ul>
+                        @foreach($chkOverlap as $overlap)
+                        <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </div>
+
+
+                {{-- Approve Conference สำหรับเจ้าหน้าที่ที่สิทธิ์การใช้งานติ๊ก (ดูเฉพาะที่มีการจอง conference) --}}
+                @if(@$rs->st_room->is_conference == 1)
+                <div class="col-md-2">
+                    <label>สถานะ Conference</label>
+                    <select name="status_conference" class="form-control" style="width:100%;" {{ !CanPerm('booking-room-view-conference')?'disabled':'' }}>
+                        <option value="รออนุมัติ" {{ @$rs->status_conference == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
+                        <option value="อนุมัติ" {{ @$rs->status_conference == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+                        <option value="ไม่อนุมัติ" {{ @$rs->status_conference == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
+                    </select>
+                </div>
+                {!! !CanPerm('booking-room-view-conference')?'<input type="hidden" name="status_conference" value="'.@$rs->status_conference.'">':'' !!}
                 @endif
-                <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-                <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
-            </select>
 
-            @if($chkOverlap->count() >= 1)
-            <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
-            <ul>
-                @foreach($chkOverlap as $overlap)
-                <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
-                @endforeach
-            </ul>
-            @endif
-        </fieldset>
-    </div>
+            </fieldset>
+        </div>
+
     @endif
     {{-- แอดมิน หลังบ้านเห็นเท่านั้น --}}
 
@@ -317,7 +338,7 @@ if(isset($rs->end_time)){
 
         // ค้นหาห้องประชุม
         $('body').on('click', '#searchRoomBtn', function() {
-            $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></i>');
+            $('#getRoomData').html('<i class="fas fa-spinner fa-pulse"></input>');
 
             $.ajax({
                 url: '{{ url("ajaxGetRoom") }}',
@@ -520,4 +541,11 @@ function getRoomDetail(roomId){
         $('#roomDetailHere').html(data);
     });
 }
+</script>
+
+
+<script>
+// $(document).ready(function(){
+//     $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").attr('disabled', 'disabled');
+// });
 </script>

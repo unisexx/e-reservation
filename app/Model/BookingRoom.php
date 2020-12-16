@@ -55,6 +55,7 @@ class BookingRoom extends Model
         'approve_by_id',
         'approve_date',
         'use_conference',
+        'status_conference',
     ];
 
     // relation
@@ -90,7 +91,7 @@ class BookingRoom extends Model
             1 => 'ใช้งาน',
         );
 
-        return $data[$this->use_conference];
+        return @$data[$this->use_conference];
     }
 
     // logsActivity

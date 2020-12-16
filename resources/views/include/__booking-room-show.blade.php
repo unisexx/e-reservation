@@ -4,7 +4,12 @@
 
 @php
     $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
-    $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
+
+    if(request('is_conference') == 1){
+        $st_rooms = App\Model\StRoom::where('status', 1)->where('is_conference', 1)->orderBy('name', 'asc')->get();
+    }else{
+        $st_rooms = App\Model\StRoom::where('status', 1)->orderBy('name', 'asc')->get();
+    }
     $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
 @endphp
 
@@ -51,10 +56,11 @@
                 @foreach($rs as $key => $row) {
                     shortTitle: '[{{ displyDateTime($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}] [{{ $row->code }}] {{ $row->title }} ({{ $row->status }})',
                     title: '{{ $row->code }}\nสถานะ: {{ $row->status }}\nเรื่อง/หัวข้อการประชุม-อบรม: {{ $row->title }}\nประธานการประชุม: {{ $row->president_name }} ({{ $row->president_position }}) \nวัน-เวลา: {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\nผู้ขอใช้: {{ $row->request_name }} ({{ $row->request_position }})\nหน่วยงานผู้ขอใช้: {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\nโทรศัพท์: {{ $row->request_tel }}\nอีเมล์: {{ $row->request_email }}\nจำนวน: {{ $row->number }} คน {!! @$row->internet_number > 0 ? "และขอใช้งานอินเตอร์เน็ต: ".$row->internet_number." คน" : "" !!} \nห้องประชุม: {{ $row->st_room->name }}\nผู้รับผิดชอบห้องประชุม: {{ $row->st_room->res_name }}, โทร: {{ $row->st_room->res_tel }}',
-                    titleColorBox: '{{ $row->code }}\n<span style="color:#c9884c; font-size:16px;">สถานะ:</span> {{ $row->status }}\n<span style="color:#c9884c; font-size:16px;">เรื่อง/หัวข้อการประชุม-อบรม:</span> {{ $row->title }}\n<span style="color:#c9884c; font-size:16px;">ประธานการประชุม:</span> {{ $row->president_name }} ({{ $row->president_position }}) \n<span style="color:#c9884c; font-size:16px;">วัน-เวลา:</span> {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\n<span style="color:#c9884c; font-size:16px;">ผู้ขอใช้:</span> {{ $row->request_name }} ({{ $row->request_position }})\n<span style="color:#c9884c; font-size:16px;">หน่วยงานผู้ขอใช้:</span> {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\n<span style="color:#c9884c; font-size:16px;">โทรศัพท์:</span> {{ $row->request_tel }}\n<span style="color:#c9884c; font-size:16px;">อีเมล์:</span> {{ $row->request_email }}\n<span style="color:#c9884c; font-size:16px;">จำนวน:</span> {{ $row->number }} คน {!! @$row->internet_number > 0 ? "และขอใช้งานอินเตอร์เน็ต: ".$row->internet_number." คน" : "" !!} \n<span style="color:#c9884c; font-size:16px;">ห้องประชุม:</span> {{ $row->st_room->name }}\n<span style="color:#c9884c; font-size:16px;">ผู้รับผิดชอบห้องประชุม:</span> {{ $row->st_room->res_name }}, โทร: {{ $row->st_room->res_tel }}',
+                    titleColorBox: '{{ $row->code }}\n<span style="color:#c9884c; font-size:16px;">สถานะ:</span> {{ $row->status }}\n<span style="color:#c9884c; font-size:16px;">เรื่อง/หัวข้อการประชุม-อบรม:</span> {{ $row->title }}\n<span style="color:#c9884c; font-size:16px;">ประธานการประชุม:</span> {{ $row->president_name }} ({{ $row->president_position }}) \n<span style="color:#c9884c; font-size:16px;">วัน-เวลา:</span> {{ displyDateTime2($row->start_date,$row->start_time,$row->end_date,$row->end_time) }}\n<span style="color:#c9884c; font-size:16px;">ผู้ขอใช้:</span> {{ $row->request_name }} ({{ $row->request_position }})\n<span style="color:#c9884c; font-size:16px;">หน่วยงานผู้ขอใช้:</span> {{ $row->department->title }}, {{ $row->bureau->title }}, {{ $row->division->title }}\n<span style="color:#c9884c; font-size:16px;">โทรศัพท์:</span> {{ $row->request_tel }}\n<span style="color:#c9884c; font-size:16px;">อีเมล์:</span> {{ $row->request_email }}\n<span style="color:#c9884c; font-size:16px;">จำนวน:</span> {{ $row->number }} คน {!! @$row->internet_number > 0 ? "และขอใช้งานอินเตอร์เน็ต: ".$row->internet_number." คน" : "" !!} \n<span style="color:#c9884c; font-size:16px;">ห้องประชุม:</span> {{ $row->st_room->name }}\n<span style="color:#c9884c; font-size:16px;">ผู้รับผิดชอบห้องประชุม:</span> {{ $row->st_room->res_name }}, โทร: {{ $row->st_room->res_tel }} \n{!! @$row->st_room->is_conference == 1 ? "<span style=\"color:#c9884c; font-size:16px;\">ขอใช้งาน conference:</span> ".$row->getConferenceTxt() : "" !!}',
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",
+                    imageurl: "{!! @$row->use_conference == 1 ? url('images/videoconference.png') : '' !!}",
                 },
                 @endforeach
             ],
@@ -64,6 +70,9 @@
             },
             eventRender: function(info) {
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
+                if(info.event.extendedProps.imageurl){
+                    $(info.el.childNodes).find('.fc-title').prepend(" <img src='" + info.event.extendedProps.imageurl +"' width='20' height='20'> ");
+                }
             },
             eventClick: function(info) {
                 // alert(info.event.title);
@@ -178,10 +187,13 @@
     {{-- แสดงผลแบบปฏิทิน --}}
     @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
 
+    @php
+        $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';
+    @endphp
     <div class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
             @foreach($st_rooms as $item)
-                <option value="{{ url('booking-room-front/show?st_room_id='.$item->id.'&search='.request('search')) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                <option value="{{ url($action.'/show?st_room_id='.$item->id.'&search='.request('search').@$conference_path) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
             @endforeach
         </select>
     </div>

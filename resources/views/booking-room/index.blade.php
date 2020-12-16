@@ -25,8 +25,11 @@
 
 
     <div id="btnBox">
+        <a href="{{ url('/booking-room/show?is_conference=1') }}">
+            <img src="{{ url('images/online-meeting.png') }}" class="vtip" title="มุมมองปฎิทิน Conference" width="48" />
+        </a>
         <a href="{{ url('/booking-room/show') }}">
-            <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
+            <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="มุมมองปฎิทิน" />
         </a>
         <?php
         $get = '';
@@ -105,7 +108,7 @@
             <td>
                 <a href="{{ url('booking-room-front/print/'.$row->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="width:24px; margin-right:5px;"></a>
 
-                @if(CanPerm('booking-room-edit'))
+                @if(CanPerm('booking-room-edit') || CanPerm('booking-room-view-conference'))
                 <a href="{{ url('booking-room/' . $row->id . '/edit') }}" title="แก้ไขรายการนี้">
                     <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
                 </a>
