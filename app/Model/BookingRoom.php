@@ -94,6 +94,19 @@ class BookingRoom extends Model
         return @$data[$this->use_conference];
     }
 
+    public function getStatusConferenceIcon()
+    {
+        $status_conference = $this->status_conference == '' ? 'รออนุมัติ' : $this->status_conference;
+
+        $data = array(
+            'รออนุมัติ'  => 'vdo-conference-gray.png',
+            'อนุมัติ'    => 'vdo-conference2.png',
+            'ไม่อนุมัติ' => 'vdo-conference-not.png',
+        );
+
+        return @$data[$status_conference];
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'code',

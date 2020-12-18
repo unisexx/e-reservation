@@ -60,7 +60,7 @@
                     start: '{{ $row->start_date }}T{{ $row->start_time }}',
                     end: '{{ $row->end_date }}T{{ $row->end_time }}',
                     color: "{{ colorStatus($row->status) }}",
-                    imageurl: "{!! @$row->use_conference == 1 ? url('images/videoconference.png') : '' !!}",
+                    imageurl: "{!! @$row->use_conference == 1 ? url('images/'.@$row->getStatusConferenceIcon()) : '' !!}",
                 },
                 @endforeach
             ],
@@ -71,7 +71,7 @@
             eventRender: function(info) {
                 $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
                 if(info.event.extendedProps.imageurl){
-                    $(info.el.childNodes).find('.fc-title').prepend(" <img src='" + info.event.extendedProps.imageurl +"' width='20' height='20'> ");
+                    $(info.el.childNodes).find('.fc-title').prepend(" <img src='" + info.event.extendedProps.imageurl +"' width='32' height='32'> ");
                 }
             },
             eventClick: function(info) {
@@ -186,10 +186,12 @@
 
     {{-- แสดงผลแบบปฏิทิน --}}
     @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
+    @include('include._conference_status')
 
     @php
         $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';
     @endphp
+    @if(!request('is_conference'))
     <div class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
             @foreach($st_rooms as $item)
@@ -197,6 +199,11 @@
             @endforeach
         </select>
     </div>
+    @else
+    <div class="text-center" style="width:50%; margin: 0 auto;">
+        <h1>รายการห้อง Conference</h1>
+    </div>
+    @endif
 
     <div id='calendar'></div>
 

@@ -924,9 +924,9 @@ table a:hover {
     font-size: 1.3em !important;
 }
 
-.fc-event {
+/* .fc-event {
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .14), 0 7px 10px -5px hsla(0, 0%, 60%, .4) !important;
-}
+} */
 
 
 /* à¹€à¸žà¸´à¹ˆà¸¡ style à¸ªà¸³à¸«à¸£à¸±à¸šà¸«à¸™à¹‰à¸² form */
@@ -1073,4 +1073,21 @@ table a:hover {
     .fc-center h2 {
         font-size: 12px !important;
     }
+}
+
+
+.fc-event,
+.fc-event:hover {
+    color: #333333 !important;
+}
+
+.fc-content {
+    line-height: 26px;
+    font-size: 16px !important;
+    padding: 10px;
+}
+
+.fc-day-number {
+    font-size: 20px !important;
+    /* font-weight: bold !important; */
 }
