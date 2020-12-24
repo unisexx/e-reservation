@@ -71,7 +71,9 @@ if(isset($rs->end_time)){
         <input type="hidden" name="st_room_people" value="{{ $rs->st_room->people ?? old('st_room_people') }}">
         <input type="hidden" name="st_room_is_internet" value="{{ $rs->st_room->is_internet ?? old('st_room_is_internet') }}">
 
-        <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
+        @if($formWhere == 'frontend')
+            <a id="openCbox" class='inline' href="#inline_room"><input type="button" title="เลือกห้องประชุม" value="เลือกห้องประชุม" class="btn btn-info vtip" /></a>
+        @endif
     </div>
 
     <div id="roomDetailHere" @if($formWhere == 'frontend') style="padding: 0 15px;" @endif></div>
@@ -233,15 +235,6 @@ if(isset($rs->end_time)){
                         <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
                     </select>
                     {!! !CanPerm('booking-room-edit')?'<input type="hidden" name="status" value="'.@$rs->status.'">':'' !!}
-
-                    @if($chkOverlap->count() >= 1)
-                    <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
-                    <ul>
-                        @foreach($chkOverlap as $overlap)
-                        <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
-                        @endforeach
-                    </ul>
-                    @endif
                 </div>
 
 
@@ -256,7 +249,28 @@ if(isset($rs->end_time)){
                     </select>
                 </div>
                 {!! !CanPerm('booking-room-view-conference')?'<input type="hidden" name="status_conference" value="'.@$rs->status_conference.'">':'' !!}
+
+                    {{-- ถ้าเจ้าหน้าที่มีสิทธิ์เฉพาะ approve conference อย่างเดียว (ให้ปิดฟอร์ม เปิดแค่ select สถานะ conference) --}}
+                    @if(CanPerm('booking-room-view-conference') && !CanPerm('booking-room-edit'))
+                        <script>
+                        $(document).ready(function(){
+                            $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").attr('disabled', 'disabled');
+                        });
+                        </script>
+                    @endif
                 @endif
+
+
+                <div class="col-md-12">
+                    @if($chkOverlap->count() >= 1)
+                    <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
+                    <ul>
+                        @foreach($chkOverlap as $overlap)
+                        <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
+                        @endforeach
+                    </ul>
+                    @endif
+                </div>
 
             </fieldset>
         </div>
@@ -389,6 +403,8 @@ if(isset($rs->end_time)){
             if($formWhere == 'frontend'){
                 chkOverlap();
             }else{
+                $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").removeAttr('disabled');
+                $('#submitFormBtn').attr('disabled','disabled');
                 $('form').submit();
             }
         });
