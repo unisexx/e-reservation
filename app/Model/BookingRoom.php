@@ -56,6 +56,9 @@ class BookingRoom extends Model
         'approve_date',
         'use_conference',
         'status_conference',
+        'approve_conference_by_id',
+        'approve_conference_date',
+
     ];
 
     // relation
@@ -82,6 +85,11 @@ class BookingRoom extends Model
     public function approver()
     {
         return $this->belongsTo('App\User', 'approve_by_id', 'id');
+    }
+
+    public function conferenceApprover()
+    {
+        return $this->belongsTo('App\User', 'approve_conference_by_id', 'id');
     }
 
     public function getConferenceTxt()
@@ -132,6 +140,8 @@ class BookingRoom extends Model
         'approve_by_id',
         'approve_date',
         'use_conference',
+        'approve_conference_by_id',
+        'approve_conference_date',
     ];
     protected static $logOnlyDirty = true;
 }

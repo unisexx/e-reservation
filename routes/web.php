@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('setting/st-vehicle-type', 'Setting\\StVehicleTypeController');
     Route::resource('setting/st-driver', 'Setting\\StDriverController');
     Route::resource('setting/st-resource', 'Setting\\StResourceController');
+    Route::resource('setting/st-boss', 'Setting\\StBossController');
+    Route::resource('setting/st-position-level', 'Setting\\StPositionLevelController');
 
     // จองห้องประชุม/อบรม
     Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');

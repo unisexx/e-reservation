@@ -52,6 +52,8 @@
                         @if(CanPerm('st-vehicle-type-view'))<li><a href="{{ url('/setting/st-vehicle-type') }}">ประเภทรถ</a></li>@endif
                         <li role="separator" class="divider"></li>
                         @if(CanPerm('st-resource-view'))<li><a href="{{ url('/setting/st-resource') }}">ทรัพยากร</a></li>@endif
+                        <li><a href="{{ url('/setting/st-boss') }}">ผู้บริหาร</a></li>
+                        <li><a href="{{ url('/setting/st-position-level') }}">ระดับตำแหน่งผู้บริหาร</a></li>
                     </ul>
                 </li>
                 <?php endif;?>
