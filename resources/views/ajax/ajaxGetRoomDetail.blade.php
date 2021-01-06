@@ -21,7 +21,7 @@
                 {{ !empty($rs->res_tel) ? 'โทรศัพท์: '.$rs->res_tel : "-" }}
             </div>
             <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($rs->fee) ? $rs->fee : "-" }}</div>
-            <div>หมายเหตุ : {{ !empty($rs->note) ? $rs->note : "-" }}</div>
+            <div style="color:red;">หมายเหตุ : {{ !empty($rs->note) ? $rs->note : "-" }}</div>
         </td>
     </tr>
 </table>

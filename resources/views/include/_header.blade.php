@@ -19,6 +19,8 @@
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 
+                <li><a href="{{ url('booking-boss') }}"><img src="{{ url('images/booking_boss.png') }}" width="32" height="32">จองวาระผู้บริหาร</a></li>
+
                 @if(CanPerm('booking-resource-view'))<li><a href="{{ url('/booking-resource') }}"><img src="{{ url('images/booking_rt.png') }}" width="32" height="32" /> จองทรัพยากรอื่นๆ</a></li>@endif
 
                 <?php
