@@ -92,7 +92,10 @@ if(isset($rs->end_time)){
 
     <div class="form-group form-inline col-md-12 input-daterange chkTime">
         <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label>
-        <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" style="width:120px;" required/>
+        @php
+            @$start_date = $rs->start_date ?? $_GET['start_date'];
+        @endphp
+        <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}" style="width:120px;" required/>
         <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
             @foreach(getHour() as $item)
             <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>

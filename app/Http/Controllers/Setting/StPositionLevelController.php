@@ -17,7 +17,7 @@ class StPositionLevelController extends Controller
     public function index(Request $req)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-view');
+        ChkPerm('st-position-level-view');
 
         $rs = StPositionLevel::where(function ($q) use ($req) {
             if ($req->search) {
@@ -31,7 +31,7 @@ class StPositionLevelController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-create', 'setting/st-resource');
+        ChkPerm('st-position-level-create', 'setting/st-position-level');
 
         return view('setting.st-position-level.create');
     }
@@ -48,7 +48,7 @@ class StPositionLevelController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-edit','setting/st-resource');
+        ChkPerm('st-position-level-edit', 'setting/st-position-level');
 
         $rs = StPositionLevel::findOrFail($id);
 
@@ -71,7 +71,7 @@ class StPositionLevelController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-delete','setting/st-resource');
+        ChkPerm('st-position-level-delete', 'setting/st-position-level');
 
         StPositionLevel::destroy($id);
 

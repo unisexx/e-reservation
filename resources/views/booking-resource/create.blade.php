@@ -8,7 +8,6 @@
     {{ csrf_field() }}
 
     @include ('include.__booking-resource-form', ['formMode' => 'create', 'formWhere' => 'backend'])
-
 </form>
 
 @endsection

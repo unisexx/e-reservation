@@ -50,7 +50,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr + "&st_room_id={{ @$req_st_room_id }}";
             },
             events: [
                 @foreach($rs as $key => $row) {

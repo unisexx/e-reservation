@@ -17,7 +17,7 @@ class StBossController extends Controller
     public function index(Request $req)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-view');
+        ChkPerm('st-boss-view');
 
         $rs = StBoss::where(function ($q) use ($req) {
             if ($req->search) {
@@ -31,7 +31,7 @@ class StBossController extends Controller
     public function create()
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-create', 'setting/st-resource');
+        ChkPerm('st-boss-create', 'setting/st-boss');
 
         return view('setting.st-boss.create');
     }
@@ -48,7 +48,7 @@ class StBossController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-edit','setting/st-resource');
+        ChkPerm('st-boss-edit', 'setting/st-boss');
 
         $rs = StBoss::findOrFail($id);
 
@@ -71,7 +71,7 @@ class StBossController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        // ChkPerm('st-resource-delete','setting/st-resource');
+        ChkPerm('st-boss-delete', 'setting/st-boss');
 
         StBoss::destroy($id);
 

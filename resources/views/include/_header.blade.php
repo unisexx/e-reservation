@@ -19,7 +19,7 @@
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 
-                <li><a href="{{ url('booking-boss') }}"><img src="{{ url('images/booking_boss.png') }}" width="32" height="32">จองวาระผู้บริหาร</a></li>
+                @if(CanPerm('booking-boss-view'))<li><a href="{{ url('booking-boss') }}"><img src="{{ url('images/booking_boss.png') }}" width="32" height="32">จองวาระผู้บริหาร</a></li>@endif
 
                 @if(CanPerm('booking-resource-view'))<li><a href="{{ url('/booking-resource') }}"><img src="{{ url('images/booking_rt.png') }}" width="32" height="32" /> จองทรัพยากรอื่นๆ</a></li>@endif
 
@@ -54,8 +54,8 @@
                         @if(CanPerm('st-vehicle-type-view'))<li><a href="{{ url('/setting/st-vehicle-type') }}">ประเภทรถ</a></li>@endif
                         <li role="separator" class="divider"></li>
                         @if(CanPerm('st-resource-view'))<li><a href="{{ url('/setting/st-resource') }}">ทรัพยากร</a></li>@endif
-                        <li><a href="{{ url('/setting/st-boss') }}">ผู้บริหาร</a></li>
-                        <li><a href="{{ url('/setting/st-position-level') }}">ระดับตำแหน่งผู้บริหาร</a></li>
+                        @if(CanPerm('st-boss-view'))<li><a href="{{ url('/setting/st-boss') }}">ผู้บริหาร</a></li>@endif
+                        @if(CanPerm('st-position-level-view'))<li><a href="{{ url('/setting/st-position-level') }}">ระดับตำแหน่งผู้บริหาร</a></li>@endif
                     </ul>
                 </li>
                 <?php endif;?>

@@ -12,12 +12,12 @@
     </div>
 </div>
 
-{{-- @if(CanPerm('st-boss-create')) --}}
+@if(CanPerm('st-boss-create'))
 <div id="btnBox">
     <input type="button" title="เพิ่มผู้บริหาร" value="เพิ่มผู้บริหาร" onclick="document.location='{{ url('/setting/st-boss/create') }}'"
         class="btn btn-warning vtip" />
 </div>
-{{-- @endif --}}
+@endif
 
 <div class="pagination-wrapper"> 
     {!! $rs->appends(@$_GET)->render() !!} 
@@ -41,13 +41,13 @@
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
 
-                {{-- @if(CanPerm('st-boss-edit')) --}}
+                @if(CanPerm('st-boss-edit'))
                 <a href="{{ url('/setting/st-boss/' . $item->id . '/edit') }}" title="แก้ไข">
                     <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
                 </a>
-                {{-- @endif --}}
+                @endif
 
-                {{-- @if(CanPerm('st-boss-delete')) --}}
+                @if(CanPerm('st-boss-delete'))
                 <form method="POST" action="{{ url('/setting/st-boss' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
                     {{ method_field('DELETE') }}
                     {{ csrf_field() }}
@@ -55,7 +55,7 @@
                         <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
                     </button>
                 </form>
-                {{-- @endif --}}
+                @endif
             </td>
         </tr>
     @endforeach

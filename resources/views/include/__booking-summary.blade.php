@@ -205,6 +205,79 @@
 
 
 
+@if($type == 'boss')
+<h3>จองวาระผู้บริหาร</h3>
+
+สรุปรายละเอียดการจองวาระผู้บริหาร
+<table class="table table-striped table-bordered">
+<tr>
+    <th>รหัสการจอง</th>
+    <td>{{ @$rs->code }}</td>
+</tr>
+<tr>
+    <th>เลือกผู้บริหาร</th>
+    <td>{{ @$rs->stBoss->name }}</td>
+</tr>
+<tr>
+    <th>สถานะ</th>
+    <td>{{ @$rs->getBossStatusTxt() }}</td>
+</tr>
+<tr>
+    <th>ชื่อเรื่อง / หัวข้อการประชุม</th>
+    <td>{{ @$rs->title }}</td>
+</tr>
+<tr>
+    <th>ชื่อห้องประชุม</th>
+    <td>{{ @$rs->room_name }}</td>
+</tr>
+<tr>
+    <th>สถานที่</th>
+    <td>{{ @$rs->place }}</td>
+</tr>
+<tr>
+    <th>ชื่อเจ้าของงาน</th>
+    <td>{{ @$rs->owner }}</td>
+</tr>
+<tr>
+    <th>เบอร์</th>
+    <td>{{ @$rs->tel }}</td>
+</tr>
+<tr>
+    <th>วันที่เริ่มต้น</th>
+    <td>{{ isset($rs->start_date) ? DB2Date($rs->start_date) : '-' }} เวลา {{ isset($rs->start_time) ? date("H:i", strtotime($rs->start_time)) : '-' }} น.</td>
+</tr>
+<tr>
+    <th>วันที่เริ่มสินสุด</th>
+    <td>{{ isset($rs->end_date) ? DB2Date($rs->end_date) : '-' }} เวลา {{ isset($rs->end_time) ? date("H:i", strtotime($rs->end_time)) : '-' }} น.</td>
+</tr>
+<tr>
+    <th>ข้อมูลการติดต่อผู้ขอใช้</th>
+    <td>
+        {{ $rs->request_name }} ({{ $rs->request_position }})<br>
+        {{ $rs->department->title }} {{ $rs->bureau->title }} {{ $rs->division->title }}<br>
+        {{ $rs->request_tel }}, {{ $rs->request_email }}
+    </td>
+</tr>
+<tr>
+    <th>หมายเหตุ หรือรายละเอียดอื่นๆ</th>
+    <td>{{ isset($rs->note) ? $rs->note : '-' }}</td>
+</tr>
+<tr>
+    <th>สถานะ</th>
+    <td>{{ $rs->status }}</td>
+</tr>
+</table>
+
+<div id="btnBoxAdd">
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ $from == 'backend' ? url('/booking-boss') : url('/booking-boss-front/show') }}'" class="btn btn-default" style="width:100px;" />
+
+    {{-- <a href="{{ url('booking-boss-front/print/'.$rs->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="width:48px; margin-left:10px;"></a> --}}
+</div>
+@endif
+
+
+
+
 
 
 @endsection

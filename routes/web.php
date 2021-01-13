@@ -58,6 +58,10 @@ Route::resource('booking-vehicle-front', 'BookingVehicleFrontController');
 Route::get('booking-resource-front/summary/{id}', 'BookingResourceFrontController@summary');
 Route::resource('booking-resource-front', 'BookingResourceFrontController');
 
+Route::get('booking-boss-front/summary/{id}', 'BookingBossFrontController@summary');
+Route::get('booking-boss-front/print/{id}', 'BookingBossFrontController@print');
+Route::resource('booking-boss-front', 'BookingBossFrontController');
+
 // Dashboard
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -99,6 +103,10 @@ Route::middleware(['auth'])->group(function () {
     // จองทรัพยากรอื่นๆ
     Route::get('booking-resource/summary/{id}', 'BookingResourceController@summary');
     Route::resource('booking-resource', 'BookingResourceController');
+
+    // จองวาระผู้บริหาร
+    Route::get('booking-boss/summary/{id}', 'BookingBossController@summary');
+    Route::resource('booking-boss', 'BookingBossController');
 
     // log
     Route::resource('log', 'LogController');
