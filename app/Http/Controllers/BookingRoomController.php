@@ -170,7 +170,7 @@ class BookingRoomController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-edit', 'booking-room');
+        // ChkPerm('booking-room-edit', 'booking-room');
 
         $rs = BookingRoom::findOrFail($id);
 
