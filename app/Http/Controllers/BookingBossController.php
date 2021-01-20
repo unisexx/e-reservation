@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingBossRequest;
+use App\Mail\Status;
 use App\Model\BookingBoss;
 use Auth;
 use Illuminate\Http\Request;
+use Mail;
 
 class BookingBossController extends Controller
 {
@@ -116,9 +118,9 @@ class BookingBossController extends Controller
         $rs->update($requestData);
 
         // ฟอร์มอีเมล์
-        // if ($email == 1) {
-        //     $this->sendEmailStatus($rs);
-        // }
+        if ($email == 1) {
+            $this->sendEmailStatus($rs);
+        }
         //-- END ฟอร์มอีเมล์
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
@@ -134,11 +136,11 @@ class BookingBossController extends Controller
         $rs->save();
     }
 
-    // public function sendEmailStatus($rs)
-    // {
-    //     $recipient = [$rs->request_email, 'puwadon.k@m-society.go.th', 'tsd.ictc@m-society.go.th'];
-    //     Mail::to($recipient)->queue(new Status($rs->id, 'booking-room'));
-    // }
+    public function sendEmailStatus($rs)
+    {
+        $recipient = [$rs->request_email, 'puwadon.k@m-society.go.th', 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Status($rs->id, 'booking-boss'));
+    }
 
     public function destroy($id)
     {
@@ -157,6 +159,10 @@ class BookingBossController extends Controller
         $rs_all = BookingBoss::get();
 
         $rs = BookingBoss::with('stBoss')->where(function ($q) use ($req) {
+
+            if ($req->st_boss_id) {
+                $q->where('st_boss_id', $req->st_boss_id);
+            }
 
             if ($req->keyword) {
                 $q->where(function ($q) use ($req) {

@@ -4,7 +4,7 @@
 
 @php
     $action = ($from == 'backend' ? 'booking-boss' : 'booking-boss-front');
-    $st_boss = App\Model\StBoss::where('status', 1)->orderBy('id', 'asc')->get();
+    $st_bosses = App\Model\StBoss::where('status', 1)->orderBy('id', 'asc')->get();
 
     // หน่วยงานที่รับผิดชอบ
     $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
@@ -28,7 +28,7 @@
             },
             customButtons: {
                 addBtn: {
-                    text: '+ ขอจองยานพาหนะ',
+                    text: '+ จองวาระผู้บริหาร',
                     click: function() {
                         window.location.href = "/{{ $action }}/create";
                     }
@@ -131,7 +131,7 @@
  <a href="{{ $from == 'backend' ? url('booking-vehicle') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองยานพาหนะ</h3>
+<h3>จองวาระผู้บริหาร</h3>
 
 <div id="search">
     <div id="searchBox">
@@ -186,48 +186,48 @@
 @if( @$_GET['searchform'] == 1)
 
     {{-- แสดงผลแบบตาราง --}}
-    <a href="{{ $from == 'backend' ? url('booking-vehicle/show') : url('booking-vehicle-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
+    <a href="{{ $from == 'backend' ? url('booking-boss/show') : url('booking-boss-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
     <h4>ผลการค้นหา</h4>
     <table class="table table-bordered table-striped sortable tblist">
         <thead>
             <tr>
-                <th class="nosort" data-sortcolumn="1" data-sortkey="1-0">รหัสการจอง</th>
-                <th class="nosort" data-sortcolumn="2" data-sortkey="2-0">ไปเพื่อ / รายละเอียดรถ / ชื่อผู้ขับ</th>
-                <th class="nosort" data-sortcolumn="3" data-sortkey="3-0">วันที่</th>
-                <th class="nosort" data-sortcolumn="4" data-sortkey="4-0">จุดขึ้นรถ</th>
-                <th class="nosort" data-sortcolumn="4" data-sortkey="5-0">สถานที่ไป</th>
-                <th class="nosort" data-sortcolumn="5" data-sortkey="6-0">ผู้ขอใช้ยานพาหนะ</th>
-                <th class="nosort" data-sortcolumn="6" data-sortkey="7-0">สถานะ</th>
+                <th style="width:5%">ลำดับ</th>
+                <th style="width:8%">รหัสการจอง</th>
+                <th style="width:15%">ชื่อผู้บริหาร</th>
+                <th style="width:25%">ข้อมูลการจอง</th>
+                <th style="width:15%">วัน เวลา นัดหมาย</th>
+                <th style="width:15%">รายละเอียดผู้จอง</th>
+                <th style="width:5%">สถานะ</th>
             </tr>
         </thead>
         <tbody>
             @foreach($rs as $key=>$row)
             <tr @if(($key % 2)==1) class="odd" @endif>
+                <td>{{ $key+1 }}</td>
                 <td nowrap="nowrap">{{ $row->code }}</td>
+                <td>{{ @$row->stBoss->name }} ({{ @$row->getBossStatusTxt() }})</td>
                 <td>
-                    <div class="topicMeeting">{{ $row->gofor }}</div>
-                    <div>
-                        @if(!empty($row->st_vehicle_id))
-                        {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ @$row->st_driver->name }}
-                        @else
-                        <b>(- ยังไม่ได้เลือกยานพาหนะ -)</b>
-                        @endif
-                    </div>
+                    <div class="topicMeeting">{{ @$row->title }}</div>
+                    <div>{{ @$row->place }}</div>
+                    <div>{{ @$row->owner }}</div>
+                    <div>{{ @$row->tel }}</div>
                 </td>
                 <td>
-                    <div class="boxStartEnd"><span class="request">วันที่ขอใช้</span> {{ DB2Date($row->request_date) }} {{ date("H:i", strtotime($row->request_time)) }} น.</div>
-                    <div class="boxStartEnd"><span class="start">วันที่ไป</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
-                    <div class="boxStartEnd"><span class="end">วันที่กลับ</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
+                    <div class="boxStartEnd"><span class="start">เริ่ม</span> {{ DB2Date($row->start_date) }} {{ date("H:i", strtotime($row->start_time)) }} น.</div>
+                    <div class="boxStartEnd"><span class="end">สิ้นสุด</span> {{ DB2Date($row->end_date) }} {{ date("H:i", strtotime($row->end_time)) }} น.</div>
                 </td>
-                <td>{{ $row->point_place }} เวลา {{ date("H:i", strtotime($row->point_time)) }} น.</td>
-                <td>{{ $row->destination }}</td>
                 <td>
                     {{ $row->request_name }}
                     @if(empty(request('export')))
-                    <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br> {{ $row->request_tel }} {{ $row->request_email }}">
+                    <img src="{{ url('images/detail.png') }}" class="vtip" title="{{ $row->department->title }} {{ $row->bureau->title }} {{ $row->division->title }}<br>
+                    {{ $row->request_tel }} {{ $row->request_email }}" />
                     @endif
                 </td>
-                <td><span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span></td>
+                <td>
+                    <span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span>
+                    <div>{{ @$row->approver->prefix->title }} {{ @$row->approver->givename }} {{ @$row->approver->familyname }}</div>
+                    <div>{{ DBToDate($row->approve_date,'true','true') }}</div>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -237,8 +237,43 @@
 
     {{-- แสดงผลแบบปฏิทิน --}}
     @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
+
+    <div id="bossSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
+        <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ผู้บริหาร +">
+            @foreach($st_bosses as $item)
+                <option value="{{ url($action.'/show?st_boss_id='.$item->id.'&search='.request('search').'&st_department_code='.request('st_department_code').'&st_bureau_code='.request('st_bureau_code').'&st_division_code='.request('st_division_code')) }}" @if(@request('st_boss_id') == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <div id='calendar'></div>
 
 @endif
 
 @endsection
+
+@push('js')
+<script>
+    $(function(){
+        // bind change event to select
+        $('select.goUrl').on('change', function () {
+            var url = $(this).val(); // get selected value
+            if (url) { // require a URL
+                window.location = url; // redirect
+            }
+            return false;
+        });
+    });
+</script>
+@endpush
+
+@push('css')
+<style>
+    #bossSelectDiv .bootstrap-select.btn-group .dropdown-toggle .filter-option{
+        font-size: 25px;
+    }
+    #bossSelectDiv .bootstrap-select > .dropdown-toggle{
+        height: 55px !important;
+    }
+</style>
+@endpush

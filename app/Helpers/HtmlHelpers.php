@@ -3,10 +3,9 @@
 if (!function_exists('colorStatus')) {
     function colorStatus($status_txt)
     {
-        // $color = array("รออนุมัติ" => "#f8b239", "อนุมัติ" => "#3fc075", "ไม่อนุมัติ" => "#f6675f", "ยกเลิก" => "#999999");
         $color = array("รออนุมัติ" => "#fcdda7", "อนุมัติ" => "#d5e8d1", "ไม่อนุมัติ" => "#f7a9a9", "ยกเลิก" => "#e2e3e3");
 
-        return $color[$status_txt];
+        return @$color[@$status_txt];
     }
 }
 
@@ -15,7 +14,7 @@ if (!function_exists('colorStatus2')) {
     {
         $color = array("รออนุมัติ" => "#f4c158", "อนุมัติ" => "#aed0a0", "ไม่อนุมัติ" => "#e5615f", "ยกเลิก" => "#c0c3c3");
 
-        return $color[$status_txt];
+        return @$color[@$status_txt];
     }
 }
 

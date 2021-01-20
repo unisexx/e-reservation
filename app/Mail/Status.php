@@ -2,14 +2,13 @@
 
 namespace App\Mail;
 
+use App\Model\BookingBoss;
+use App\Model\BookingResource;
+use App\Model\BookingRoom;
+use App\Model\BookingVehicle;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-
-use App\Model\BookingRoom;
-use App\Model\BookingVehicle;
-use App\Model\BookingResource;
 
 class Status extends Mailable
 {
@@ -25,19 +24,22 @@ class Status extends Mailable
 
     public function build()
     {
-        if($this->bookingType == 'booking-room'){
+        if ($this->bookingType == 'booking-room') {
             $rs = BookingRoom::findOrFail($this->bookingId);
             $type = 'ห้องประชุม/อบรม';
-        }elseif($this->bookingType == 'booking-vehicle'){
+        } elseif ($this->bookingType == 'booking-vehicle') {
             $rs = BookingVehicle::findOrFail($this->bookingId);
             $type = 'ยานพาหนะ';
-        }elseif($this->bookingType == 'booking-resource'){
+        } elseif ($this->bookingType == 'booking-resource') {
             $rs = BookingResource::findOrFail($this->bookingId);
             $type = 'ทรัพยากร';
+        } elseif ($this->bookingType == 'booking-boss') {
+            $rs = BookingBoss::findOrFail($this->bookingId);
+            $type = 'วาระผู้บริหาร';
         }
-        
+
         return $this->from('mso.reservation@gmail.com', 'ระบบจองทรัพยากร (msobooking)')
-                    ->subject('อัพเดทสถานะการจอง'.$type)
-                    ->view('email.status', compact('rs'))->withType($this->bookingType);
+            ->subject('อัพเดทสถานะการจอง' . $type)
+            ->view('email.status', compact('rs'))->withType($this->bookingType);
     }
 }

@@ -94,5 +94,30 @@ tr:nth-child(even) {background: #f9f9f9}
     สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-resource-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
 @endif
 
+@if($type == 'booking-boss')
+    <h3>สรุปสถานะการจองวาระผู้บริหาร</h3>
+
+    <table border="1">
+    <tr>
+        <th>รหัสการจอง</th>
+        <td>{{ @$rs->code }}</td>
+    </tr>
+    <tr>
+        <th>ผู้บริหาร</th>
+        <td>{{ @$rs->stBoss->name }}</td>
+    </tr>
+    <tr>
+        <th>หัวข้อ</th>
+        <td>{{ @$rs->title }}</td>
+    </tr>
+    <tr>
+        <th>สถานะการจอง</th>
+        <td>{{ @$rs->status }}</td>
+    </tr>
+    </table>
+    <br>
+    สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-boss-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
+@endif
+
 </body>
 </html>

@@ -49,7 +49,7 @@
 
 <div class="form-group form-inline col-md-4">
     <label>ชื่อเรื่อง / หัวข้อการประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}"  placeholder="ชื่อห้องประชุม" value="{{ $rs->title ?? old('title') }}" style="min-width:500px;">
+    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}"  placeholder="ชื่อเรื่อง / หัวข้อการประชุม" value="{{ $rs->title ?? old('title') }}" style="min-width:500px;">
 </div>
 
 <div class="form-group form-inline col-md-6">
@@ -120,9 +120,9 @@
 <div class="form-group form-inline col-md-12">
         <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
         <div class="dep-chain-group" style="margin-bottom:5px;">
-            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
+            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอจองวาระผู้บริหาร" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
 
-            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" required>
+            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอจองวาระผู้บริหาร" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" required>
 
             <div style="margin-top:5px;">
                 <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>

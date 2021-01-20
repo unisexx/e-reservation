@@ -39,7 +39,7 @@
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     {{-- @if(CanPerm('booking-boss-create')) --}}
-    <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม"
+    <input type="button" title="+ จองวาระผู้บริหาร" value="+ จองวาระผู้บริหาร"
         onclick="document.location='{{ url('/booking-boss/create') }}'" class="btn btn-success vtip" />
     {{-- @endif --}}
 </div>

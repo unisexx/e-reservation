@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\EmailForQueuing;
+use App\Model\BookingBoss;
 use App\Model\BookingResource;
 use App\Model\BookingRoom;
 use App\Model\BookingVehicle;
@@ -36,6 +37,8 @@ class SendEmail implements ShouldQueue
             $rs = BookingVehicle::findOrFail($this->bookingId);
         } elseif ($this->bookingType == 'booking-resource') {
             $rs = BookingResource::findOrFail($this->bookingId);
+        } elseif ($this->bookingType == 'booking-boss') {
+            $rs = BookingBoss::findOrFail($this->bookingId);
         }
 
         $email = new EmailForQueuing($this->bookingId, $this->bookingType);
