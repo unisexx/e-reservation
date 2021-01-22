@@ -40,6 +40,7 @@ class Status extends Mailable
 
         return $this->from('mso.reservation@gmail.com', 'ระบบจองทรัพยากร (msobooking)')
             ->subject('อัพเดทสถานะการจอง' . $type)
-            ->view('email.status', compact('rs'))->withType($this->bookingType);
+        // ->markdown('vendor.notifications.email_status', compact('rs'))->withType($this->bookingType);
+            ->view('email.booking-summary', compact('rs'))->withType($this->bookingType);
     }
 }
