@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Mail\Summary;
 use App\Model\BookingResource;
 use Illuminate\Http\Request;
-
-// use Mail;
+use Mail;
 
 class BookingResourceFrontController extends Controller
 {
@@ -32,7 +32,7 @@ class BookingResourceFrontController extends Controller
         $rs->save();
 
         // ส่งเมล์
-        $this->sendEmailSummary($rs);
+        $this->sendEmail($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
@@ -75,8 +75,20 @@ class BookingResourceFrontController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs)
+    // public function sendEmailSummary($rs)
+    // {
+    //     SendEmail::dispatch($rs->id, 'booking-resource');
+    // }
+
+    public function sendEmail($rs)
     {
-        SendEmail::dispatch($rs->id, 'booking-resource');
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-resource', 'create'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingResource::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

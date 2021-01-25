@@ -28,9 +28,10 @@
                 ?>
                 <li><a href="{{ url('/report') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ url('images/report.png') }}" width="32" height="32" /> รายงาน <span class="caret"></span></a>
                     <ul class="dropdown-menu submenu" style="height:auto; max-height:450px; overflow-x: hidden;">
-                        @if(CanPerm('report-1-view'))<li><a href="{{ url('report1') }}">รายงานการใช้ห้องประชุม</a></li>@endif
-                        @if(CanPerm('report-2-view'))<li><a href="{{ url('report2') }}">รายงานการใช้ยานพาหนะ</a></li>@endif
-                        @if(CanPerm('report-3-view'))<li><a href="{{ url('report3') }}">รายงานการใช้ทรัพยากร</a></li>@endif
+                        @if(CanPerm('report-1-view'))<li><a href="{{ url('report1') }}">รายงานการจองห้องประชุม</a></li>@endif
+                        @if(CanPerm('report-2-view'))<li><a href="{{ url('report2') }}">รายงานการจองยานพาหนะ</a></li>@endif
+                        @if(CanPerm('report-3-view'))<li><a href="{{ url('report3') }}">รายงานการจองทรัพยากร</a></li>@endif
+                        @if(CanPerm('report-4-view'))<li><a href="{{ url('report4') }}">รายงานการจองผู้บริหาร</a></li>@endif
                         @if(CanPerm('log-view'))<li><a href="{{ url('/log') }}">ประวัติการใช้งาน</a></li>@endif
                     </ul>
                 </li>

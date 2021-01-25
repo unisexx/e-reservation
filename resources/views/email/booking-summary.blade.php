@@ -49,108 +49,6 @@
 
 
 
-
-                                        {{-- @if($type == 'booking-room')
-                                            <h3>สรุปสถานะการจองห้องประชุม/อบรม</h3>
-                                            <table class="table">
-                                                <tr>
-                                                    <th align="right">รหัสการจอง</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->code }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">หัวข้อการประชุม</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->title }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">ห้องประชุม</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->st_room->name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">สถานะการจอง</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->status }}</td>
-                                                </tr>
-                                            </table>
-                                            <br>
-                                            สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-room-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
-                                        @endif
-
-
-                                        @if($type == 'booking-vehicle')
-                                            <h3>สรุปสถานะการจองยานพาหนะ</h3>
-
-                                            <table class="table">
-                                            <tr>
-                                                <th align="right">รหัสการจอง</th>
-                                                <td style="padding-left:5px;">{{ @$rs->code }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">ไปเพื่อ</th>
-                                                <td style="padding-left:5px;">{{ isset($rs->gofor) ? $rs->gofor : '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">สถานที่ขึ้นรถ</th>
-                                                <td style="padding-left:5px;">{{ isset($rs->point_place) ? $rs->point_place : '-' }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">สถานะ</th>
-                                                <td style="padding-left:5px;">{{ @$rs->status }}</td>
-                                            </tr>
-                                            </table>
-                                            <br>
-                                            สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-vehicle/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
-                                        @endif
-
-
-                                        @if($type == 'booking-resource')
-                                            <h3>สรุปสถานะการจองทรัพยากร</h3>
-
-                                            <table class="table">
-                                            <tr>
-                                                <th align="right">รหัสการจอง</th>
-                                                <td style="padding-left:5px;">{{ @$rs->code }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">ทรัพยากร</th>
-                                                <td style="padding-left:5px;">{{ @$rs->stResource->name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">หัวข้อ</th>
-                                                <td style="padding-left:5px;">{{ @$rs->title }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th align="right">สถานะการจอง</th>
-                                                <td style="padding-left:5px;">{{ @$rs->status }}</td>
-                                            </tr>
-                                            </table>
-                                            <br>
-                                            สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-resource-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
-                                        @endif
-
-                                        @if($type == 'booking-boss')
-                                            <h3>สรุปสถานะการจองวาระผู้บริหาร</h3>
-
-                                            <table class="table">
-                                                <tr>
-                                                    <th align="right">รหัสการจอง:</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->code }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">ผู้บริหาร:</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->stBoss->name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">หัวข้อ:</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->title }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th align="right">สถานะการจอง:</th>
-                                                    <td style="padding-left:5px;">{{ @$rs->status }}</td>
-                                                </tr>
-                                            </table>
-                                            <br>
-                                            สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-boss-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
-                                        @endif --}}
-
 @if($type == 'booking-room')
     <h3>สรุปรายละเอียดการจองห้องประชุม/อบรม</h3>
     <table class="table" style="padding-left:5px;">
@@ -179,10 +77,18 @@
             <th align="right">จำนวนผู้เข้าร่วมประชุม (คน):</th>
             <td style="padding-left:5px;">{{ @$rs->number }}</td>
         </tr>
+        @if($rs->st_room->is_internet == 1)
         <tr>
             <th align="right">ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (คน):</th>
-            <td style="padding-left:5px;">{{ @$rs->internet_number }}</td>
+            <td style="padding-left:5px;">{{ $rs->internet_number ?? '-' }}</td>
         </tr>
+        @endif
+        @if($rs->st_room->is_conference == 1)
+        <tr>
+            <th align="right">ขอใช้งานระบบ Conference:</th>
+            <td style="padding-left:5px;">{{ $rs->getConferenceTxt() }}</td>
+        </tr>
+        @endif
         <tr>
             <th align="right">ข้อมูลการติดต่อผู้ขอใช้:</th>
             <td style="padding-left:5px;">
@@ -204,6 +110,9 @@
     <br>
     สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-room-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
 @endif
+
+
+
 
 
 @if($type == 'booking-vehicle')
@@ -281,6 +190,10 @@
     สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-vehicle-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
 @endif
 
+
+
+
+
 @if($type == 'booking-resource')
     <h3>สรุปรายละเอียดการจองทรัพยากร</h3>
     <table class="table">
@@ -321,6 +234,10 @@
     <br>
     สามารถดูรายละเอียดการจองได้ที่: <a href="{{ url('booking-resource-front/show') }}" target="_blank">http://msobooking.m-society.go.th/</a>
 @endif
+
+
+
+
 
 @if($type == 'booking-boss')
 <h3>จองวาระผู้บริหาร</h3>

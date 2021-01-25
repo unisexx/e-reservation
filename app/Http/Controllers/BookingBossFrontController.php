@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingBossRequest;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Mail\Summary;
 use App\Model\BookingBoss;
 use Illuminate\Http\Request;
+use Mail;
 
 class BookingBossFrontController extends Controller
 {
@@ -26,7 +28,7 @@ class BookingBossFrontController extends Controller
         $this->genCode($rs);
 
         // ส่งเมล์
-        $this->sendEmailSummary($rs);
+        $this->sendEmail($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
@@ -81,14 +83,26 @@ class BookingBossFrontController extends Controller
         $rs->save();
     }
 
-    public function sendEmailSummary($rs)
-    {
-        SendEmail::dispatch($rs->id, 'booking-boss');
-    }
+    // public function sendEmailSummary($rs)
+    // {
+    //     SendEmail::dispatch($rs->id, 'booking-boss');
+    // }
 
     function print($id) {
         $rs = BookingBoss::with('st_room', 'division', 'bureau', 'department')->findOrFail($id);
 
         return view('include.__booking-print', compact('rs'))->withType('boss')->withFrom('frontend');
+    }
+
+    public function sendEmail($rs)
+    {
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-boss', 'create'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingBoss::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

@@ -81,6 +81,16 @@ Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 Route::get('ajaxSetDefaultRoom', 'AjaxController@ajaxSetDefaultRoom');
 Route::get('ajaxBossChkOverlap', 'AjaxController@ajaxBossChkOverlap');
 
+// test email
+Route::get('email-room-front/{bookingId}', 'BookingRoomFrontController@testEmail');
+Route::get('email-room-back/{bookingId}', 'BookingRoomController@testEmail');
+Route::get('email-boss-front/{bookingId}', 'BookingBossFrontController@testEmail');
+Route::get('email-boss-back/{bookingId}', 'BookingBossController@testEmail');
+Route::get('email-vehicle-front/{bookingId}', 'BookingVehicleFrontController@testEmail');
+Route::get('email-vehicle-back/{bookingId}', 'BookingVehicleController@testEmail');
+Route::get('email-resource-front/{bookingId}', 'BookingResourceFrontController@testEmail');
+Route::get('email-resource-back/{bookingId}', 'BookingResourceController@testEmail');
+
 Route::middleware(['auth'])->group(function () {
     // ตั้งค่า
     Route::resource('setting/user', 'Setting\\UserController');

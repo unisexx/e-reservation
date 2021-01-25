@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingVehicleRequest;
-use App\Mail\Status;
+use App\Mail\Summary;
 use App\Model\BookingVehicle;
 use Auth;
 use Illuminate\Http\Request;
@@ -208,7 +208,7 @@ class BookingVehicleController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-            $this->sendEmailStatus($rs);
+            $this->sendEmail($rs);
             // Mail::send([], [], function ($message) use ($rs) {
             //     $message->to($rs->request_email)
             //         ->subject('อัพเดทสถานะการจองยานพาหนะ')
@@ -249,8 +249,20 @@ class BookingVehicleController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs)
+    // public function sendEmailStatus($rs)
+    // {
+    //     Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-vehicle'));
+    // }
+
+    public function sendEmail($rs)
     {
-        Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-vehicle'));
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-vehicle', 'update'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingVehicle::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

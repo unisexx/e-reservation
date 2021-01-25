@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingVehicleRequest;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Mail\Summary;
 use App\Model\BookingVehicle;
 use Illuminate\Http\Request;
+use Mail;
 
 class BookingVehicleFrontController extends Controller
 {
@@ -30,7 +32,7 @@ class BookingVehicleFrontController extends Controller
         $rs->save();
 
         // ส่งเมล์
-        $this->sendEmailSummary($rs);
+        $this->sendEmail($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
@@ -92,14 +94,26 @@ class BookingVehicleFrontController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('vehicle')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs)
-    {
-        SendEmail::dispatch($rs->id, 'booking-vehicle');
-    }
+    // public function sendEmailSummary($rs)
+    // {
+    //     SendEmail::dispatch($rs->id, 'booking-vehicle');
+    // }
 
     function print($id) {
         $rs = BookingVehicle::with('st_vehicle', 'division', 'bureau', 'department')->findOrFail($id);
 
         return view('include.__booking-print', compact('rs'))->withType('vehicle')->withFrom('frontend');
+    }
+
+    public function sendEmail($rs)
+    {
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-vehicle', 'create'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingVehicle::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Status extends Mailable
+class Summary extends Mailable
 {
     use Queueable, SerializesModels;
 

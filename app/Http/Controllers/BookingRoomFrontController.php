@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Mail\Summary;
 use App\Model\BookingRoom;
 use Illuminate\Http\Request;
+use Mail;
 
 class BookingRoomFrontController extends Controller
 {
@@ -29,7 +31,7 @@ class BookingRoomFrontController extends Controller
         $rs->save();
 
         // ส่งเมล์
-        $this->sendEmailSummary($rs);
+        $this->sendEmail($rs);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
@@ -78,14 +80,25 @@ class BookingRoomFrontController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('frontend');
     }
 
-    public function sendEmailSummary($rs)
+    public function sendEmail($rs)
     {
-        SendEmail::dispatch($rs->id, 'booking-room');
+        if ($rs->use_conference == 1) {
+            $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th', 'puwadon.k@m-society.go.th'];
+        } else {
+            $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        }
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-room', 'create'));
     }
 
     function print($id) {
         $rs = BookingRoom::with('st_room', 'division', 'bureau', 'department')->findOrFail($id);
 
         return view('include.__booking-print', compact('rs'))->withType('room')->withFrom('frontend');
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingRoom::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

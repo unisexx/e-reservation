@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
-use App\Mail\Status;
+use App\Mail\Summary;
 use App\Model\BookingRoom;
 use App\Model\ManageRoom;
 use Auth;
@@ -204,7 +204,7 @@ class BookingRoomController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-            $this->sendEmailStatus($rs);
+            $this->sendEmail($rs);
         }
         //-- END ฟอร์มอีเมล์
 
@@ -232,9 +232,19 @@ class BookingRoomController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('room')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs)
+    public function sendEmail($rs)
     {
-        $recipient = [$rs->request_email, 'puwadon.k@m-society.go.th', 'tsd.ictc@m-society.go.th'];
-        Mail::to($recipient)->queue(new Status($rs->id, 'booking-room'));
+        if ($rs->use_conference == 1) {
+            $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th', 'puwadon.k@m-society.go.th'];
+        } else {
+            $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        }
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-room', 'update'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingRoom::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

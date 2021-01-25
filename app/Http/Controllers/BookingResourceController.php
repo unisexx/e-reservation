@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingResourceRequest;
-use App\Mail\Status;
+use App\Mail\Summary;
 use App\Model\BookingResource;
 use App\Model\ManageResource;
 use Auth;
@@ -182,7 +182,7 @@ class BookingResourceController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-            $this->sendEmailStatus($rs);
+            $this->sendEmail($rs);
         }
         //-- END ฟอร์มอีเมล์
 
@@ -210,8 +210,20 @@ class BookingResourceController extends Controller
         return view('include.__booking-summary', compact('rs'))->withType('resource')->withFrom('backend');
     }
 
-    public function sendEmailStatus($rs)
+    // public function sendEmailStatus($rs)
+    // {
+    //     Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-resource'));
+    // }
+
+    public function sendEmail($rs)
     {
-        Mail::to($rs->request_email)->queue(new Status($rs->id, 'booking-resource'));
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-resource', 'update'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingResource::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

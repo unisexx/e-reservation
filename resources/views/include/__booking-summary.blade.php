@@ -84,14 +84,18 @@
     <th>จำนวนผู้เข้าร่วมประชุม (คน)</th>
     <td>{{ $rs->number }}</td>
 </tr>
+@if($rs->st_room->is_internet == 1)
 <tr>
     <th>ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต (คน)</th>
     <td>{{ $rs->internet_number ?? '-' }}</td>
 </tr>
+@endif
+@if($rs->st_room->is_conference == 1)
 <tr>
     <th>ขอใช้งานระบบ Conference</th>
     <td>{{ $rs->getConferenceTxt() }}</td>
 </tr>
+@endif
 <tr>
     <th>ข้อมูลการติดต่อผู้ขอใช้</th>
     <td>

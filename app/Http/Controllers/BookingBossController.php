@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingBossRequest;
-use App\Mail\Status;
+use App\Mail\Summary;
 use App\Model\BookingBoss;
 use Auth;
 use Illuminate\Http\Request;
@@ -119,7 +119,7 @@ class BookingBossController extends Controller
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
-            $this->sendEmailStatus($rs);
+            $this->sendEmail($rs);
         }
         //-- END ฟอร์มอีเมล์
 
@@ -134,12 +134,6 @@ class BookingBossController extends Controller
         $rs = BookingBoss::find($rs->id);
         $rs->code = 'BS' . sprintf("%05d", $rs->id);
         $rs->save();
-    }
-
-    public function sendEmailStatus($rs)
-    {
-        $recipient = [$rs->request_email, 'puwadon.k@m-society.go.th', 'tsd.ictc@m-society.go.th'];
-        Mail::to($recipient)->queue(new Status($rs->id, 'booking-boss'));
     }
 
     public function destroy($id)
@@ -185,5 +179,17 @@ class BookingBossController extends Controller
         })->get();
 
         return view('include.__booking-boss-show', compact('rs', 'rs_all'))->withFrom('backend');
+    }
+
+    public function sendEmail($rs)
+    {
+        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        Mail::to($recipient)->queue(new Summary($rs->id, 'booking-boss', 'update'));
+    }
+
+    public function testEmail($id)
+    {
+        $rs = BookingBoss::findOrFail($id);
+        $this->sendEmail($rs);
     }
 }

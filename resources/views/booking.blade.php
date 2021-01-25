@@ -76,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="animated rotateInDownLeft slow">
                         <div class="service-box">
                             <div class="service-icon">
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="col-md-3">
                         <div class="animated rotateInDownLeft slow">
