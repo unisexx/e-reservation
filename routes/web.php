@@ -79,6 +79,7 @@ Route::get('ajaxGetDriver', 'AjaxController@ajaxGetDriver');
 Route::get('ajaxGetBureauVehicle', 'AjaxController@ajaxGetBureauVehicle');
 Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 Route::get('ajaxSetDefaultRoom', 'AjaxController@ajaxSetDefaultRoom');
+Route::get('ajaxBossChkOverlap', 'AjaxController@ajaxBossChkOverlap');
 
 Route::middleware(['auth'])->group(function () {
     // ตั้งค่า

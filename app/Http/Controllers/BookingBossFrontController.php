@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingBossRequest;
+use App\Jobs\SendEmail;
 use App\Model\BookingBoss;
 use Illuminate\Http\Request;
 
@@ -10,57 +11,59 @@ class BookingBossFrontController extends Controller
 {
     public function create()
     {
-        return view('booking-resource-front.create');
+        return view('booking-boss-front.create');
     }
 
-    public function store(BookingBossRequest $request)
+    public function store(BookingBossRequest $req)
     {
-        // $requestData = $request->all();
-        // $requestData['start_date'] = Date2DB($request->start_date);
-        // $requestData['end_date'] = Date2DB($request->end_date);
-        // $requestData['status'] = 'รออนุมัติ';
-        // $data = BookingResource::create($requestData);
+        $requestData = $req->all();
+        $requestData['start_date'] = Date2DB($req->start_date);
+        $requestData['end_date'] = Date2DB($req->end_date);
+        $requestData['status'] = 'รออนุมัติ';
+        $rs = BookingBoss::create($requestData);
 
-        // // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
-        // $rs = BookingResource::find($data->id);
-        // $rs->code = $data->stResource->code . sprintf("%05d", $data->id);
-        // $rs->save();
+        // รหัสการจอง
+        $this->genCode($rs);
 
-        // // ส่งเมล์
-        // $this->sendEmailSummary($rs);
+        // ส่งเมล์
+        $this->sendEmailSummary($rs);
 
-        // set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+        set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
-        // return redirect('booking-resource-front/summary/' . $rs->id);
+        return redirect('booking-boss-front/summary/' . $rs->id);
     }
 
-    public function show(Request $request)
+    public function show(Request $req)
     {
-        // $keyword = $request->get('search');
-        // $st_resource_id = $request->get('st_resource_id');
-        // $status = $request->get('status');
+        $rs_all = BookingBoss::get();
 
-        // $rs = BookingResource::select('*');
-        // $rs_all = $rs->get();
+        $rs = BookingBoss::with('stBoss')->where(function ($q) use ($req) {
 
-        // if (!empty($st_resource_id)) {
-        //     $rs = $rs->where('st_resource_id', $st_resource_id);
-        // }
+            if ($req->st_boss_id) {
+                $q->where('st_boss_id', $req->st_boss_id);
+            }
 
-        // if (!empty($keyword)) {
-        //     $rs = $rs->where(function ($q) use ($keyword) {
-        //         $q->where('code', 'LIKE', "%$keyword%")
-        //             ->orWhere('request_name', 'LIKE', "%$keyword%");
-        //     });
-        // }
+            if ($req->search) {
+                $q->where(function ($q) use ($req) {
+                    $q->where('code', 'like', '%' . $req->search . '%')
+                        ->orWhere('title', 'like', '%' . $req->search . '%')
+                        ->orWhere('room_name', 'like', '%' . $req->search . '%')
+                        ->orWhereHas('stBoss', function ($q) use ($req) {
+                            $q->where('name', 'like', '%' . $req->search . '%');
+                        });
+                });
+            }
 
-        // if (!empty($status)) {
-        //     $rs = $rs->where('status', $status);
-        // }
+            if ($req->date_select) {
+                if ($req->data_type == 'start_date') {
+                    $q->where('start_date', Date2DB($req->date_select));
+                } elseif ($req->data_type == 'end_date') {
+                    $q->where('end_date', Date2DB($req->date_select));
+                }
+            }
+        })->get();
 
-        // $rs = $rs->orderBy('id', 'desc')->with('stResource')->get();
-
-        // return view('include.__booking-resource-show', compact('rs', 'rs_all'))->withFrom('frontend');
+        return view('include.__booking-boss-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }
 
     public function summary($id)
@@ -68,6 +71,19 @@ class BookingBossFrontController extends Controller
         $rs = BookingBoss::findOrFail($id);
 
         return view('include.__booking-summary', compact('rs'))->withType('boss')->withFrom('frontend');
+    }
+
+    public function genCode($rs)
+    {
+        // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
+        $rs = BookingBoss::find($rs->id);
+        $rs->code = 'BS' . sprintf("%05d", $rs->id);
+        $rs->save();
+    }
+
+    public function sendEmailSummary($rs)
+    {
+        SendEmail::dispatch($rs->id, 'booking-boss');
     }
 
     function print($id) {

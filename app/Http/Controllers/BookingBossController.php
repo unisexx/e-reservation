@@ -164,13 +164,13 @@ class BookingBossController extends Controller
                 $q->where('st_boss_id', $req->st_boss_id);
             }
 
-            if ($req->keyword) {
+            if ($req->search) {
                 $q->where(function ($q) use ($req) {
-                    $q->where('code', 'like', '%' . $req->keyword . '%')
-                        ->orWhere('title', 'like', '%' . $req->keyword . '%')
-                        ->orWhere('room_name', 'like', '%' . $req->keyword . '%')
+                    $q->where('code', 'like', '%' . $req->search . '%')
+                        ->orWhere('title', 'like', '%' . $req->search . '%')
+                        ->orWhere('room_name', 'like', '%' . $req->search . '%')
                         ->orWhereHas('stBoss', function ($q) use ($req) {
-                            $q->where('name', 'like', '%' . $req->keyword . '%');
+                            $q->where('name', 'like', '%' . $req->search . '%');
                         });
                 });
             }

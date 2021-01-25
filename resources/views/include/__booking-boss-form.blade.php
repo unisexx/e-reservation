@@ -187,6 +187,7 @@
             }
 
             $chkOverlap = $chkOverlap->get();
+
         @endphp
         <div class="form-group form-inline col-md-12">
             <fieldset>
@@ -203,16 +204,16 @@
                     </select>
                     {!! !CanPerm('booking-room-edit')?'<input type="hidden" name="status" value="'.@$rs->status.'">':'' !!}
                 </div>
-                {{-- <div class="col-md-12">
+                <div class="col-md-12">
                     @if($chkOverlap->count() >= 1)
                     <p class="text-danger" style="margin-top:20px;"><b><u>หมายเหตุ</u></b> พบรายการจองในช่วงเวลาที่ซ้ำ ที่มีสถานะเป็นอนุมัติแล้ว ไม่สามารถทำการอนุมัติซ้อนกันได้อีก</p>
                     <ul>
                         @foreach($chkOverlap as $overlap)
-                        <li><a href="{{ url('booking-room/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
+                        <li><a href="{{ url('booking-boss/'.$overlap->id.'/edit') }}" target="_blank">{{ $overlap->code }} {{ $overlap->title }}</a></li>
                         @endforeach
                     </ul>
                     @endif
-                </div> --}}
+                </div>
             </fieldset>
         </div>
     @endif
@@ -266,7 +267,7 @@
             })
             .done(function(data) {
                 if( data == 'ไม่เหลื่อม' ){
-                    $('form').submit();
+                    $('form#bookingBossForm').submit();
                 }else{
                     $('#getDupData').html(data);
                     $.colorbox({inline:true, width:"95%", height:"95%", open:true, href:"#inline_dup" }); 

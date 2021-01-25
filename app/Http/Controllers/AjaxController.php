@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\BookingBoss;
 use App\Model\BookingResource;
 use App\Model\BookingRoom;
 use App\Model\BookingVehicle;
@@ -252,6 +253,37 @@ class AjaxController extends Controller
 
         if ($rs->count() >= 1) {
             return view('ajax.ajaxResourceChkOverlap', compact('rs'));
+        } else {
+            return 'ไม่เหลื่อม';
+        }
+    }
+
+    public function ajaxBossChkOverlap()
+    {
+        $st_boss_id = $_GET['st_boss_id'];
+        $start_date = Date2DB($_GET['start_date']);
+        $end_date = Date2DB($_GET['end_date']);
+        $start_time = $_GET['start_time'];
+        $end_time = $_GET['end_time'];
+        $id = $_GET['id'];
+
+        $rs = BookingBoss::select('*')
+            ->where('st_boss_id', $st_boss_id)
+            ->where(function ($q) use ($start_date, $end_date) {
+                $q->whereRaw('start_date <= ? and end_date >= ? or start_date <= ? and end_date >= ? ', [$start_date, $start_date, $end_date, $end_date]);
+            })
+            ->where(function ($q) use ($start_time, $end_time) {
+                $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
+            });
+
+        if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
+            $rs = $rs->where('id', '<>', $id);
+        }
+
+        $rs = $rs->get();
+
+        if ($rs->count() >= 1) {
+            return view('ajax.ajaxBossChkOverlap', compact('rs'));
         } else {
             return 'ไม่เหลื่อม';
         }

@@ -47,48 +47,65 @@
             <div class="container">
 
                 <div class="row animatedParent">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="animated rotateInDownLeft">
-                            <div class="service-box">
-                                <div class="service-icon">
-                                    <img src="images/icon01.png">
-                                </div>
-                                <div class="service-desc">
-                                    <h5>จองห้องประชุม/อบรม</h5>
-                                    <div class="divider-header"></div>
-                                    <a href="booking-room-front/show" class="btn btn-skin">booking</a>
-                                </div>
+                        <div class="service-box">
+                            <div class="service-icon">
+                            <img src="images/icon01.png" width="200px" style="margin-top: 30px;">
+                            </div>
+                            <div class="service-desc">
+                            <h5>จองห้องประชุม</h5>
+                            <div class="divider-header"></div>
+                            <a href="{{ url('booking-room-front/show') }}" class="btn btn-skin">booking</a>
                             </div>
                         </div>
+                        </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="animated rotateInDownLeft slow">
-                            <div class="service-box">
-                                <div class="service-icon">
-                                    <img src="images/icon02.png">
-                                </div>
-                                <div class="service-desc">
-                                    <h5>จองยานพาหนะ</h5>
-                                    <div class="divider-header"></div>
-                                    <a href="booking-vehicle-front/show" class="btn btn-skin">booking</a>
-                                </div>
+                        <div class="service-box">
+                            <div class="service-icon">
+                            <img src="images/icon02.png" width="200px" style="margin-top: 30px;">
+                            </div>
+                            <div class="service-desc">
+                            <h5>จองยานพาหนะ</h5>
+                            <div class="divider-header"></div>
+                            <a href="{{ url('booking-vehicle-front/show') }}" class="btn btn-skin">booking</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="animated rotateInDownLeft">
-                            <div class="service-box">
-                                <div class="service-icon">
-                                    <img src="images/resource.png">
-                                </div>
-                                <div class="service-desc">
-                                    <h5>จองทรัพยากรอื่นๆ</h5>
-                                    <div class="divider-header"></div>
-                                    <a href="booking-resource-front/show" class="btn btn-skin">booking</a>
-                                </div>
-                            </div>
                         </div>
                     </div>
+
+                    <div class="col-md-3">
+                        <div class="animated rotateInDownLeft slow">
+                        <div class="service-box">
+                            <div class="service-icon">
+                            <img src="images/icon03.png" width="200px">
+                            </div>
+                            <div class="service-desc">
+                            <h5>จองวาระผู้บริหาร</h5>
+                            <div class="divider-header"></div>
+                            <a href="{{ url('booking-boss-front/show') }}" class="btn btn-skin">booking</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="animated rotateInDownLeft slow">
+                        <div class="service-box">
+                            <div class="service-icon">
+                            <img src="images/resource.png" width="200px" style="margin-top: 30px;">
+                            </div>
+                            <div class="service-desc">
+                            <h5>จองทรัพยากรอื่นๆ</h5>
+                            <div class="divider-header"></div>
+                            <a href="{{ url('booking-resource-front/show') }}" class="btn btn-skin">booking</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
