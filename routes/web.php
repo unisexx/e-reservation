@@ -127,6 +127,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report1_detail', 'ReportController@report1_detail');
     Route::get('report2', 'ReportController@report2');
     Route::get('report2_detail', 'ReportController@report2_detail');
+    Route::get('report3', 'ReportController@report3');
+    Route::get('report3_detail', 'ReportController@report3_detail');
+    Route::get('report4', 'ReportController@report4');
+    Route::get('report4_detail', 'ReportController@report4_detail');
 
     // profile
     Route::get('profile', 'HomeController@profile');

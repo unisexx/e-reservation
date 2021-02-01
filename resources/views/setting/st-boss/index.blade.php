@@ -27,6 +27,7 @@
     <tr>
         <th>ลำดับ</th>
         <th>ชื่อผู้บริหาร</th>
+        <th>ระดับตำแหน่ง</th>
         <th>ตำแหน่ง</th>
         <th>ข้อมูลติดต่อ</th>
         <th>สถานะ</th>
@@ -36,7 +37,8 @@
         <tr @if(($key % 2) == 1) class="odd" @endif>
             <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
             <td>{{ $item->name }}</td>
-            <td>{{ $item->position }}</td>
+            <td>{{ @$item->stPositionLevel->name ?? '-' }}</td>
+            <td>{{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}</td>
             <td>{{ $item->tel }}</td>
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>

@@ -256,7 +256,7 @@ class BookingVehicleController extends Controller
 
     public function sendEmail($rs)
     {
-        $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+        $recipient = [$rs->request_email];
         Mail::to($recipient)->queue(new Summary($rs->id, 'booking-vehicle', 'update'));
     }
 

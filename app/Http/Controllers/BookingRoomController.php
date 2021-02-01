@@ -237,7 +237,7 @@ class BookingRoomController extends Controller
         if ($rs->use_conference == 1) {
             $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th', 'puwadon.k@m-society.go.th'];
         } else {
-            $recipient = [$rs->request_email, 'tsd.ictc@m-society.go.th'];
+            $recipient = [$rs->request_email];
         }
         Mail::to($recipient)->queue(new Summary($rs->id, 'booking-room', 'update'));
     }

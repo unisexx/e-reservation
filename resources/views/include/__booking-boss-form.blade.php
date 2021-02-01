@@ -49,7 +49,7 @@
 
 <div class="form-group form-inline col-md-4">
     <label>ชื่อเรื่อง / หัวข้อการประชุม<span class="Txt_red_12"> *</span></label>
-    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}"  placeholder="ชื่อเรื่อง / หัวข้อการประชุม" value="{{ $rs->title ?? old('title') }}" style="min-width:500px;">
+    <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}"  placeholder="ชื่อเรื่อง / หัวข้อการประชุม" value="{{ $rs->title ?? old('title') }}" style="min-width:400px;">
 </div>
 
 <div class="form-group form-inline col-md-6">

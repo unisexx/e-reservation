@@ -132,10 +132,7 @@ if (isset($stroom->st_bureau_code)) {
                     @endforeach
                     @endif
                 </select>
-
             @endif
-
-
         </td>
     </tr>
     <tr>

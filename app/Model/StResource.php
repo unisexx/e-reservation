@@ -20,10 +20,10 @@ class StResource extends Model
     protected $table = 'st_resources';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -32,21 +32,21 @@ class StResource extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 
-        'code', 
-        'status', 
-        'st_department_code', 
-        'st_bureau_code', 
+        'name',
+        'code',
+        'status',
+        'st_department_code',
+        'st_bureau_code',
         'st_division_code',
     ];
 
     // logsActivity
     protected static $logAttributes = [
-        'name', 
-        'code', 
-        'status', 
-        'st_department_code', 
-        'st_bureau_code', 
+        'name',
+        'code',
+        'status',
+        'st_department_code',
+        'st_bureau_code',
         'st_division_code',
     ];
     protected static $logOnlyDirty = true;
@@ -54,5 +54,25 @@ class StResource extends Model
     public function manageResource()
     {
         return $this->hasMany('App\Model\ManageResource', 'st_resource_id', 'id');
+    }
+
+    public function department()
+    {
+        return $this->hasOne('App\Model\StDepartment', 'code', 'st_department_code');
+    }
+
+    public function bureau()
+    {
+        return $this->hasOne('App\Model\StBureau', 'code', 'st_bureau_code');
+    }
+
+    public function division()
+    {
+        return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
+    }
+
+    public function bookingResource()
+    {
+        return $this->hasMany('App\Model\BookingResource', 'st_resource_id', 'id');
     }
 }

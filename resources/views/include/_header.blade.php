@@ -31,7 +31,7 @@
                         @if(CanPerm('report-1-view'))<li><a href="{{ url('report1') }}">รายงานการจองห้องประชุม</a></li>@endif
                         @if(CanPerm('report-2-view'))<li><a href="{{ url('report2') }}">รายงานการจองยานพาหนะ</a></li>@endif
                         @if(CanPerm('report-3-view'))<li><a href="{{ url('report3') }}">รายงานการจองทรัพยากร</a></li>@endif
-                        @if(CanPerm('report-4-view'))<li><a href="{{ url('report4') }}">รายงานการจองผู้บริหาร</a></li>@endif
+                        @if(CanPerm('report-4-view'))<li><a href="{{ url('report4') }}">รายงานการจองวาระผู้บริหาร</a></li>@endif
                         @if(CanPerm('log-view'))<li><a href="{{ url('/log') }}">ประวัติการใช้งาน</a></li>@endif
                     </ul>
                 </li>

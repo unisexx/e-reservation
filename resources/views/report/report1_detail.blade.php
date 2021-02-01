@@ -60,7 +60,11 @@
                 {{ $row->request_tel }} {{ $row->request_email }}" />
             @endif
         </td>
-        <td>{{ $row->status }}</td>
+        <td>
+            <span style="background-color:{{ @colorStatus($row->status_conference) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status_conference }}</span>
+            <div>{{ @$row->conferenceApprover->prefix->title }} {{ @$row->conferenceApprover->givename }} {{ @$row->conferenceApprover->familyname }}</div>
+            <div>{{ DBToDate($row->approve_conference_date,'true','true') }}</div>
+        </td>
     </tr>
     @endforeach
     </tbody>

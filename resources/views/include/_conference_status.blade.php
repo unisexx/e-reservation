@@ -1,4 +1,4 @@
-{{-- <h5><b>ความหมายสีสถานะ</b></h5> --}}
+<h5><b>สถานะของ Conference</b></h5>
 <ul class="list-unstyled list-inline">
     <li>
         <img src="{{ asset('images/vdo-conference-gray.png') }}" width="32" height="32"> รออนุมัติ
