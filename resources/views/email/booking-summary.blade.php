@@ -253,7 +253,7 @@
         <td style="padding-left:5px;">{{ @$rs->stBoss->name }}</td>
     </tr>
     <tr>
-        <th align="right">สถานะ:</th>
+        <th align="right">สถานะผู้บริหาร:</th>
         <td style="padding-left:5px;">{{ @$rs->getBossStatusTxt() }}</td>
     </tr>
     <tr>

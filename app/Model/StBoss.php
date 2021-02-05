@@ -49,4 +49,9 @@ class StBoss extends Model
     {
         return $this->hasMany('App\Model\BookingBoss', 'st_boss_id', 'id');
     }
+
+    public function stBossRes()
+    {
+        return $this->hasMany('App\Model\StBossRes');
+    }
 }

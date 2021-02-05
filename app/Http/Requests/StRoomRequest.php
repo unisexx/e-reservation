@@ -36,6 +36,7 @@ class StRoomRequest extends FormRequest
             'st_department_code' => 'required',
             'st_bureau_code'     => 'required',
             'st_division_code'   => 'required',
+            'st_province_id'     => 'required',
         ];
 
         if ($this->segment(3) != '') { // ถ้าเป็นการ edit, $this->segment(3) คือ ไอดี
@@ -74,6 +75,7 @@ class StRoomRequest extends FormRequest
             'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
             'st_division_code.required'   => 'กลุ่ม ห้ามเป็นค่าว่าง',
+            'st_province_id.required'     => 'จังหวัดที่ตั้งห้องประชุม ห้ามเป็นค่าว่าง',
         ];
     }
 }

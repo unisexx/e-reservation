@@ -39,12 +39,18 @@
 @endphp
 
 <div class="form-group form-inline col-md-12">
+    <label>ระดับตำแหน่งผู้บริหาร<span class="Txt_red_12"> *</span></label>
+    {{ Form::select("st_position_level_id", \App\Model\StPositionLevel::where('status', 1)->pluck('name', 'id'), @$rs->st_position_level_id, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
+</div>
+
+<div class="form-group form-inline col-md-12">
     <label>เลือกผู้บริหาร<span class="Txt_red_12"> *</span></label>
-    <select name="st_boss_id" class="form-control">
+    {{-- <select name="st_boss_id" class="form-control">
         @foreach ($st_boss as $item)
             <option value="{{ $item->id }}">{{ $item->name }}</option>
         @endforeach
-    </select>
+    </select> --}}
+    {{ Form::select("st_boss_id", \App\Model\StBoss::where('status', 1)->pluck('name', 'id'), @$rs->st_boss_id, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8', 'data-width'=>'400']) }}
 </div>
 
 <div class="form-group form-inline col-md-4">
@@ -53,7 +59,7 @@
 </div>
 
 <div class="form-group form-inline col-md-6">
-    <label>สถานะ</label>
+    <label>สถานะผู้บริหาร</label>
     <select name="boss_status" class="form-control" style="width:auto;">
         <option value="1" @if(@$rs->boss_status == '1') selected @endif>เป็นประธาน</option>
         <option value="2" @if(@$rs->boss_status == '2') selected @endif>เป็นรองประธาน</option>
@@ -118,7 +124,18 @@
     </div>
 
 <div class="form-group form-inline col-md-12">
-        <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
+        <label>
+            ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span> 
+        </label>
+        @if($formWhere == 'backend') 
+            <input type="hidden" name="self_booking" value="0">
+            @if(@$rs->booking_user_id == @Auth::user()->id)
+                <div style="margin-bottom:15px;">{{ Form::checkbox('self_booking', '1', @$rs->self_booking, ['id'=>'selfBookingChkbox']) }} ท่านเป็นผู้จองเอง</div> 
+            @else
+                <div style="margin-bottom:15px;">{{ Form::checkbox('self_booking', '1', '', ['id'=>'selfBookingChkbox']) }} ท่านเป็นผู้จองเอง</div> 
+            @endif
+        @endif
+
         <div class="dep-chain-group" style="margin-bottom:5px;">
             <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอจองวาระผู้บริหาร" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
 
@@ -150,7 +167,6 @@
                     @endif
                 </select>
             </div>
-
         </div>
         <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" required>
         <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required style="width:270px;">
@@ -333,4 +349,25 @@ $(document).ready(function(){
         $.colorbox.close();
     });
 });
+</script>
+
+<script>
+$(document).ready(function(){
+    $('#selfBookingChkbox').click(function(){
+        chkUserBooking();
+    });
+});
+
+function chkUserBooking(){
+    if ($('#selfBookingChkbox').is(':checked')) {
+        $('input[name=request_name]').val('{{ @Auth::user()->prefix->title }}{{ @Auth::user()->givename }} {{ @Auth::user()->familyname }}');
+        $('input[name=request_position]').val('');
+        $('input[name=request_tel]').val('{{ @Auth::user()->tel }}');
+        $('input[name=request_email]').val('{{ @Auth::user()->email }}');
+        $('select[name=st_department_code]').val('{{ @Auth::user()->st_department_code }}');
+        $('.selectpicker').selectpicker('refresh')
+        getBureau($('select[name=st_department_code]'), '{{ @Auth::user()->st_bureau_code }}');
+        getDivision($('select[name=st_bureau_code]'), '{{ @Auth::user()->st_division_code }}');
+    }
+}
 </script>

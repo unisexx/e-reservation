@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Setting;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StBossRequest;
 use App\Model\StBoss;
+use App\Model\StBossRes;
 use Illuminate\Http\Request;
 
 class StBossController extends Controller
@@ -63,6 +64,9 @@ class StBossController extends Controller
         $rs = StBoss::findOrFail($id);
         $rs->update($requestData);
 
+        // บันทึกสถานะ
+        $this->saveRes($request, $rs);
+
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
 
         return redirect('setting/st-boss');
@@ -78,5 +82,31 @@ class StBossController extends Controller
         set_notify('success', 'ลบข้อมูลสำเร็จ');
 
         return redirect('setting/st-boss');
+    }
+
+    public function saveRes(Request $request, $rs)
+    {
+        // ลบรายการ (ถ้ามี)
+        if (isset($request->removeRes['id'])) {
+            StBossRes::whereIn('id', $request->removeRes['id'])->delete();
+        }
+
+        if (is_array($request->res)):
+            foreach ($request->res['res_name'] as $i => $item) {
+                StBossRes::updateOrCreate(
+                    [
+                        'id' => @$request->res['id'][$i],
+                    ],
+                    [
+                        'st_boss_id'         => $rs->id,
+                        'res_name'           => @$item,
+                        'res_tel'            => @$request->res['res_tel'][$i],
+                        'st_department_code' => @$request->res['st_department_code'][$i],
+                        'st_bureau_code'     => @$request->res['st_bureau_code'][$i],
+                        'st_division_code'   => @$request->res['st_division_code'][$i],
+                    ]
+                );
+            }
+        endif;
     }
 }

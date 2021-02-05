@@ -85,11 +85,11 @@ if (!function_exists('getBossCboxDetail')) {
         }
 
         $txt = '';
-        $txt .= "shortTitle: '[" . displyDateTime($row->start_date, $row->start_time, $row->end_date, $row->end_time) . "] [" . $row->code . "] " . $row->stBoss->name . " (" . $row->status . ")',";
+        $txt .= "shortTitle: '[" . displyDateTime($row->start_date, $row->start_time, $row->end_date, $row->end_time) . "] [" . $row->code . "] " . $row->stBoss->name . " (" . @$row->stBoss->stBossPosition->name . ") (" . $row->status . ")',";
         $txt .= "title: '" . $row->code .
         "<br><span style=\"color:#c9884c; font-size:16px;\">สถานะการจอง:</span> " . @$row->status .
         "<br><span style=\"color:#c9884c; font-size:16px;\">ผู้บริหาร:</span> " . @$row->stBoss->name .
-        "<br><span style=\"color:#c9884c; font-size:16px;\">สถานะ:</span> " . @$row->getBossStatusTxt() .
+        "<br><span style=\"color:#c9884c; font-size:16px;\">สถานะผู้บริหาร:</span> " . @$row->getBossStatusTxt() .
         "<br><span style=\"color:#c9884c; font-size:16px;\">ชื่อเรื่อง / หัวข้อการประชุม:</span> " . @$row->title .
         "<br><span style=\"color:#c9884c; font-size:16px;\">ชื่อห้องประชุม:</span> " . @$row->room_name .
         "<br><span style=\"color:#c9884c; font-size:16px;\">สถานที่:</span> " . @$row->place .

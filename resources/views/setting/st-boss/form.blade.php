@@ -20,14 +20,14 @@ if (isset($rs->st_bureau_code)) {
 }
 ?>
 <table class="tbadd">
-    <tr>
+    {{-- <tr>
         <th>ระดับตำแหน่ง<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
                 {{ Form::select("st_position_level_id", \App\Model\StPositionLevel::where('status', 1)->pluck('name', 'id'), @$rs->st_position_level_id, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
             </div>
         </td>
-    </tr>
+    </tr> --}}
     <tr>
         <th>ชื่อ-สกุล<span class="Txt_red_12"> *</span></th>
         <td>
@@ -54,49 +54,18 @@ if (isset($rs->st_bureau_code)) {
     </tr>
     <tr>
         <th>ผู้ดูแลผู้บริหาร<span class="Txt_red_12"> *</span></th>
-        <td class="dep-chain-group">
-            <div class="form-inline" style="margin-bottom:5px;">
-                {{ Form::text("res_name", @$rs->res_name, ['class'=>'form-control', 'placeholder'=>'ชื่อผู้ดูแล', 'style'=>'width:300px', 'required'=>'required']) }}
-                {{ Form::text("res_tel", @$rs->res_tel, ['class'=>'form-control', 'placeholder'=>'เบอร์ติดต่อ', 'style'=>'width:200px', 'required'=>'required']) }}
-            </div>
-            
+        <td>
+            <div id="addRes" style="cursor: pointer; margin-bottom:10px;">+ เพิ่มผู้ดูแล</div>
 
-            @if(CanPerm('access-self'))
-
-                {{ Form::select("st_department_code", \App\Model\StDepartment::where('code', @Auth::user()->st_department_code)->pluck('title', 'id'), @$rs->st_department_code, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
-
-                {{ Form::select("st_bureau_code", \App\Model\StBureau::where('code', @Auth::user()->st_bureau_code)->pluck('title', 'id'), @$rs->st_bureau_code, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
-
-                {{ Form::select("st_division_code", \App\Model\StDivision::where('code', @Auth::user()->st_division_code)->pluck('title', 'id'), @$rs->st_division_code, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
-
-            @elseif(CanPerm('access-all'))
-
-                <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" data-size="8" title="กรม" required>
-                    <option value="">+ กรม +</option>
-                    @foreach($st_departments as $item)
-                    <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
-                    @endforeach
-                </select>
-
-                <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" data-size="8" title="สำนัก" required>
-                    <option value="">+ สำนัก +</option>
-                    @if(old('st_department_code') || isset($rs->st_department_code))
-                    @foreach($st_bureaus as $item)
-                    <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
-                    @endforeach
-                    @endif
-                </select>
-
-                <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" data-size="8" title="กลุ่ม" required>
-                    <option value="">+ กลุ่ม +</option>
-                    @if(old('st_bureau_code') || isset($rs->st_bureau_code))
-                    @foreach($st_divisions as $item)
-                    <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
-                    @endforeach
-                    @endif
-                </select>
-
+            <div id="resHere">
+            @if(@count($rs->stBossRes))
+                @foreach($rs->stBossRes as $st_boss_res)
+                    @include('include.___res_form', ['st_boss_res' => $st_boss_res])
+                @endforeach
+            @else
+                @include('include.___res_form')
             @endif
+            </div>
         </td>
     </tr>
     <tr>
@@ -111,3 +80,37 @@ if (isset($rs->st_bureau_code)) {
     <input name="input" type="submit" title="บันทึก" value="บันทึก" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ url('/setting/st-boss') }}'" class="btn btn-default" style="width:100px;" />
 </div>
+
+@push('js')
+<script>
+    $(document).ready(function(){
+        // กดปุ่มเพิ่มตัวชี้วัด
+        $('body').on('click','#addRes',function(){
+            $('#resHere').append($('<div>').load('{{ url("load-bossres") }}'));
+        });
+    });
+
+    // กดปุ่มลบผู้ดูแล
+    $('body').on('click', '.removeRes', function(){
+        Swal.fire({
+        title: 'ยืนยันการลบข้อมูล?',
+        text: "หลังจากที่ลบไปแล้วจะไม่สามารถดึงข้อมูลนี้กลับมาได้อีก!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ลบเลย',
+        cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.value) {
+                // create remove input
+                if($(this).attr('data-id').length){
+                    $("<input type='hidden' name='removeRes[id][]' value='"+$(this).attr('data-id')+"'>").appendTo("form");
+                }
+                // remove item
+                $(this).closest('.dep-chain-group').remove();
+            }
+        });
+    });
+</script>
+@endpush

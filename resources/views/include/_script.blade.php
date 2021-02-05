@@ -294,10 +294,10 @@
         });
     });
 
-    function getBureau($department) {
+    function getBureau($department, $st_bureau_code_select = false) {
         $thisGroup = $department.closest('.dep-chain-group');
         $thisGroup.find('select.chain-bureau, select.chain-division').empty().selectpicker('refresh');
-
+        var st_bureau_code_select = $st_bureau_code_select;
         $.ajax({
             method: "GET",
             url: "{{ url('ajaxGetBureau') }}",
@@ -308,14 +308,15 @@
             $.map(data, function(i) {
                 $thisGroup.find('select.chain-bureau').append('<option value="' + i.code + '">' + i.title + '</option>');
             });
+            $thisGroup.find('select.chain-bureau').val(st_bureau_code_select);
             $thisGroup.find('select.chain-bureau').selectpicker('refresh');
         });
     }
 
-    function getDivision($bureau) {
+    function getDivision($bureau, $st_division_code_select = false) {
         $thisGroup = $bureau.closest('.dep-chain-group');
         $thisGroup.find('select.chain-division').empty().selectpicker('refresh');
-
+        var st_division_code_select = $st_division_code_select;
         $.ajax({
             method: "GET",
             url: "{{ url('ajaxGetDivision') }}",
@@ -326,6 +327,7 @@
             $.map(data, function(i) {
                 $thisGroup.find('select.chain-division').append('<option value="' + i.code + '">' + i.title + '</option>');
             });
+            $thisGroup.find('select.chain-division').val(st_division_code_select);
             $thisGroup.find('select.chain-division').selectpicker('refresh');
         });
     }
@@ -454,3 +456,10 @@ function thToTimeStamp(thDate){
     return new Date((parseInt(dateArray[2])-543), dateArray[1], dateArray[0]).getTime();
 }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<style>
+    .swal2-popup {
+        font-size: 1.6rem !important;
+    }
+</style>

@@ -32,7 +32,8 @@ class StRoom extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'people',
+        'name',
+        'people',
         'equipment',
         'res_name',
         'res_tel',
@@ -48,6 +49,7 @@ class StRoom extends Model
         'is_default',
         'is_internet',
         'is_conference',
+        'st_province_id',
     ];
 
     /** Dear Custom Function */
@@ -102,6 +104,8 @@ class StRoom extends Model
         'over_people',
         'is_default',
         'is_internet',
+        'is_conference',
+        'st_province_id',
     ];
     protected static $logOnlyDirty = true;
 }

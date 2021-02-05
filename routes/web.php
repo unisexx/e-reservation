@@ -18,6 +18,11 @@ Route::get('/', function () {
     return view('booking');
 });
 
+// ่jquery load view
+Route::get('load-bossres', function () {
+    return view('include.___res_form');
+});
+
 // คู่มือ
 Route::get('download/admin', function () {
     $file = public_path() . "/manual/admin.pdf";

@@ -79,6 +79,11 @@ class BookingBossController extends Controller
         $requestData = $req->all();
         $requestData['start_date'] = Date2DB($req->start_date);
         $requestData['end_date'] = Date2DB($req->end_date);
+        if ($requestData['self_booking'] == 1) {
+            $requestData['booking_user_id'] = @Auth::user()->id;
+        } else {
+            $requestData['booking_user_id'] = '';
+        }
         $rs = BookingBoss::create($requestData);
 
         // รหัสการจอง
@@ -102,8 +107,14 @@ class BookingBossController extends Controller
     public function update(BookingBossRequest $req, $id)
     {
         $requestData = $req->all();
+        // dd($requestData['self_booking']);
         $requestData['start_date'] = Date2DB($req->start_date);
         $requestData['end_date'] = Date2DB($req->end_date);
+        if ($requestData['self_booking'] == 1) {
+            $requestData['booking_user_id'] = @Auth::user()->id;
+        } else {
+            $requestData['booking_user_id'] = null;
+        }
 
         $rs = BookingBoss::findOrFail($id);
 
