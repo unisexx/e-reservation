@@ -40,7 +40,11 @@ class StBossController extends Controller
     public function store(StBossRequest $request)
     {
         $requestData = $request->all();
-        StBoss::create($requestData);
+        $rs = StBoss::create($requestData);
+
+        // บันทึกสถานะ
+        $this->saveRes($request, $rs);
+
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
         return redirect('setting/st-boss');
