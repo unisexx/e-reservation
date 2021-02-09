@@ -91,7 +91,7 @@ class BookingBossController extends Controller
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
-        return redirect('booking-boss-front/summary/' . $rs->id);
+        return redirect('booking-boss/summary/' . $rs->id);
     }
 
     public function edit($id)
@@ -202,5 +202,12 @@ class BookingBossController extends Controller
     {
         $rs = BookingBoss::findOrFail($id);
         $this->sendEmail($rs);
+    }
+
+    public function summary($id)
+    {
+        $rs = BookingBoss::findOrFail($id);
+
+        return view('include.__booking-summary', compact('rs'))->withType('boss')->withFrom('backend');
     }
 }

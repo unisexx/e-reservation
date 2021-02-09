@@ -89,7 +89,7 @@ class BookingBossFrontController extends Controller
     // }
 
     function print($id) {
-        $rs = BookingBoss::with('st_room', 'division', 'bureau', 'department')->findOrFail($id);
+        $rs = BookingBoss::with('stBoss', 'division', 'bureau', 'department')->findOrFail($id);
 
         return view('include.__booking-print', compact('rs'))->withType('boss')->withFrom('frontend');
     }

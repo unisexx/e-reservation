@@ -55,7 +55,8 @@ if (isset($rs->st_bureau_code)) {
     <tr>
         <th>ผู้ดูแลผู้บริหาร<span class="Txt_red_12"> *</span></th>
         <td>
-            <div id="addRes" style="cursor: pointer; margin-bottom:10px;">+ เพิ่มผู้ดูแล</div>
+            {{-- <div id="addRes" style="cursor: pointer; margin-bottom:10px;">+ เพิ่มผู้ดูแล</div> --}}
+            <button type="button" id="addRes" class="btn btn-warning">+ เพิ่มผู้ดูแล</button>
 
             <div id="resHere">
             @if(@count($rs->stBossRes))
@@ -109,8 +110,18 @@ if (isset($rs->st_bureau_code)) {
                 }
                 // remove item
                 $(this).closest('.dep-chain-group').remove();
+
+                // เช็กว่าเป็นแถวสุดท้ายหรือไม่
+                chkResRow();
             }
         });
     });
+
+    // ถ้าไม่มีแถวฟอร์มผู้ดูแล ให้เพิ่มอัติโนมัติ 1 แถว
+    function chkResRow(){
+        if($('.dep-chain-group').length == 0){
+            $('#resHere').append($('<div>').load('{{ url("load-bossres") }}'));
+        }
+    }
 </script>
 @endpush

@@ -34,7 +34,7 @@ if (isset($st_boss_res->st_bureau_code)) {
 
         <select name="res[st_bureau_code][]" id="lunch" class="chain-bureau selectpicker" data-live-search="true" data-size="8" title="สำนัก" required>
             <option value="">+ สำนัก +</option>
-            @if(old('st_department_code') || isset($rs->st_department_code))
+            @if(old('st_department_code') || isset($st_boss_res->st_department_code))
             @foreach($st_bureaus as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$st_boss_res->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach
@@ -43,7 +43,7 @@ if (isset($st_boss_res->st_bureau_code)) {
 
         <select name="res[st_division_code][]" id="lunch" class="chain-division selectpicker" data-live-search="true" data-size="8" title="กลุ่ม" required>
             <option value="">+ กลุ่ม +</option>
-            @if(old('st_bureau_code') || isset($rs->st_bureau_code))
+            @if(old('st_bureau_code') || isset($st_boss_res->st_bureau_code))
             @foreach($st_divisions as $item)
             <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$st_boss_res->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
             @endforeach

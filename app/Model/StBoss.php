@@ -54,4 +54,12 @@ class StBoss extends Model
     {
         return $this->hasMany('App\Model\StBossRes');
     }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($q) {
+            $q->stBossRes()->delete();
+        });
+    }
 }
