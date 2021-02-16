@@ -112,6 +112,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');
     Route::resource('booking-room', 'BookingRoomController');
 
+    // จองห้องประชุม conference
+    Route::resource('booking-room-conference', 'BookingRoomConferenceController');
+
     // จองยานพาหนะ
     Route::get('booking-vehicle/summary/{id}', 'BookingVehicleController@summary');
     Route::resource('booking-vehicle', 'BookingVehicleController');

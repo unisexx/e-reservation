@@ -245,16 +245,16 @@ if(isset($rs->end_time)){
                 @if(@$rs->st_room->is_conference == 1)
                 <div class="col-md-2">
                     <label>สถานะ Conference</label>
-                    <select name="status_conference" class="form-control" style="width:100%;" {{ !CanPerm('booking-room-view-conference')?'disabled':'' }}>
+                    <select name="status_conference" class="form-control" style="width:100%;" {{ !CanPerm('booking-room-conference-view')?'disabled':'' }}>
                         <option value="รออนุมัติ" {{ @$rs->status_conference == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
                         <option value="อนุมัติ" {{ @$rs->status_conference == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
                         <option value="ไม่อนุมัติ" {{ @$rs->status_conference == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
                     </select>
                 </div>
-                {!! !CanPerm('booking-room-view-conference')?'<input type="hidden" name="status_conference" value="'.@$rs->status_conference.'">':'' !!}
+                {!! !CanPerm('booking-room-conference-view')?'<input type="hidden" name="status_conference" value="'.@$rs->status_conference.'">':'' !!}
 
                     {{-- ถ้าเจ้าหน้าที่มีสิทธิ์เฉพาะ approve conference อย่างเดียว (ให้ปิดฟอร์ม เปิดแค่ select สถานะ conference) --}}
-                    @if(CanPerm('booking-room-view-conference') && !CanPerm('booking-room-edit'))
+                    @if(CanPerm('booking-room-conference-view') && !CanPerm('booking-room-edit'))
                         <script>
                         $(document).ready(function(){
                             $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").attr('disabled', 'disabled');

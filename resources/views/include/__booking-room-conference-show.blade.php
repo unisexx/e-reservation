@@ -3,9 +3,9 @@
 @section('content')
 
 @php
-    $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
+    $action = ($from == 'backend' ? 'booking-room-conference' : 'booking-room-conference-front');
 
-    $st_rooms = App\Model\StRoom::where('status', 1)->where('is_conference', '<>', 1)->orderBy('name', 'asc')->get();
+    $st_rooms = App\Model\StRoom::where('status', 1)->where('is_conference', 1)->orderBy('name', 'asc')->get();
     $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
 @endphp
 
@@ -116,7 +116,7 @@
 </style>
 
 <div id="btnBox">
-    <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+    <a href="{{ $from == 'backend' ? url('booking-room-conference') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
 <h3>จองห้องประชุม/อบรม</h3>
@@ -135,7 +135,7 @@
 @if( @$_GET['searchform'] == 1)
 
     {{-- แสดงผลแบบตาราง --}}
-    <a href="{{ $from == 'backend' ? url('booking-room/show') : url('booking-room-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
+    <a href="{{ $from == 'backend' ? url('booking-room-conference/show') : url('booking-room-conference-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
     <h4>ผลการค้นหา</h4>
     <table class="table table-bordered table-striped sortable tblist">
         <thead>
@@ -144,7 +144,8 @@
                 <th style="width:30%" class="nosort" data-sortcolumn="2" data-sortkey="2-0">หัวข้อการประชุม / ห้องประชุม</th>
                 <th style="width:15%" class="nosort" data-sortcolumn="3" data-sortkey="3-0">วัน เวลา ที่ต้องการใช้ห้อง</th>
                 <th style="width:15%" class="nosort" data-sortcolumn="4" data-sortkey="4-0">ผู้ขอใช้ห้องประชุม</th>
-                <th style="width:5%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะ</th>
+                <th style="width:8%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะจองห้อง</th>
+                <th style="width:8%" class="nosort" data-sortcolumn="5" data-sortkey="5-0">สถานะ Conference</th>
             </tr>
         </thead>
         <tbody>
@@ -172,7 +173,16 @@
                     {{ $row->request_tel }} {{ $row->request_email }}" />
                     @endif
                 </td>
-                <td><span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span></td>
+                <td>
+                    <span style="background-color:{{ colorStatus($row->status) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status }}</span>
+                    <div>{{ @$row->approver->prefix->title }} {{ @$row->approver->givename }} {{ @$row->approver->familyname }}</div>
+                    <div>{{ DBToDate($row->approve_date,'true','true') }}</div>
+                </td>
+                <td>
+                    <span style="background-color:{{ @colorStatus($row->status_conference) }}; font-weight:bold; color:#000; padding:0 5px; border-radius:20px;">{{ $row->status_conference }}</span>
+                    <div>{{ @$row->conferenceApprover->prefix->title }} {{ @$row->conferenceApprover->givename }} {{ @$row->conferenceApprover->familyname }}</div>
+                    <div>{{ DBToDate($row->approve_conference_date,'true','true') }}</div>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -182,6 +192,7 @@
 
     {{-- แสดงผลแบบปฏิทิน --}}
     @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from, 'is_conference' => request('is_conference') ])
+    @include('include._conference_status')
 
     @php
         $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';

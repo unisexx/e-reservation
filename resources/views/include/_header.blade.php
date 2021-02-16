@@ -15,7 +15,18 @@
         <div id="app-navbar-collapse" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 
-                @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม/อบรม</a></li>@endif
+                {{-- @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}"><img src="{{ url('images/booking_room.png') }}" width="32" height="32" /> จองห้องประชุม/อบรม</a></li>@endif --}}
+
+                @if(CanPerm('booking-room-view') || CanPerm('booking-room-conference-view'))
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="{{ url('images/booking_room.png') }}" width="24" height="24" />
+                        จองห้องประชุม/อบรม <span class="caret"></span></a>
+                    <ul class="dropdown-menu submenu" style="height:auto; max-height:450px; overflow-x: hidden;">
+                        @if(CanPerm('booking-room-view'))<li><a href="{{ url('/booking-room') }}">ห้องประชุม</a></li>@endif
+                        @if(CanPerm('booking-room-conference-view'))<li><a href="{{ url('/booking-room-conference') }}">ห้อง Conference</a></li>@endif
+                    </ul>
+                </li>
+                @endif
 
                 @if(CanPerm('booking-vehicle-view'))<li><a href="{{ url('/booking-vehicle') }}"><img src="{{ url('images/booking_vehicle.png') }}" width="32" height="32" /> จองยานพาหนะ</a></li>@endif
 

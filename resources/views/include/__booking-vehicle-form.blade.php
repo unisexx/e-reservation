@@ -207,14 +207,14 @@ if (isset($rs->req_st_bureau_code)) {
             <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;">
 
             <div style="margin-top:5px;">
-                <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม">
+                <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" data-size="10">
                     <option value="">+ กรม +</option>
                     @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
                     @endforeach
                 </select>
 
-                <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก">
+                <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" data-size="10">
                     <option value="">+ สำนัก +</option>
                     @if(old('st_department_code') || isset($rs->st_department_code))
                     @foreach($st_bureaus as $item)
@@ -223,7 +223,7 @@ if (isset($rs->req_st_bureau_code)) {
                     @endif
                 </select>
 
-                <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม">
+                <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" data-size="10">
                     <option value="">+ กลุ่ม +</option>
                     @if(old('st_bureau_code') || isset($rs->st_bureau_code))
                     @foreach($st_divisions as $item)
@@ -244,34 +244,34 @@ if (isset($rs->req_st_bureau_code)) {
     </div>
 
     @if($formWhere == 'backend')
-    <div class="form-group form-inline col-md-12">
-        <fieldset>
-            <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
-            <label>สถานะ</label>
+    <fieldset class="col-md-12">
+        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
+        <label>สถานะ</label>
+        <div class="form-group form-inline col-md-12">
             <select name="status" class="form-control" style="width:auto;">
-                <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('รออนุมัติ') }}">รออนุมัติ</option>
-                <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('อนุมัติ') }}">อนุมัติ</option>
-                <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}} style="color:{{ colorStatus('ไม่อนุมัติ') }}">ไม่อนุมัติ</option>
-                <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}} style="color:{{ colorStatus('ยกเลิก') }}">ยกเลิก</option>
+                <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
+                <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
+                <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
+                <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
             </select>
+            <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกพนักงานขับรถ และยานพาหนะ</span>
+        </div>
 
-            <span id="selectVehicleBlock">
-                <input id="tmpStVehicleName" name="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @else {{ old('tmpStVehicleName') }} @endif">
-                <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
-                <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
-                <span class="note">* กรณีเลือกอนุมัติให้ admin เลือกยานพาหนะ</span>
-            </span>
+        <div id="selectDriver" class="form-group form-inline col-md-12">
+            <label>พนักงานขับรถ</label>
+            <span class="form-inline">
+                <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
+                    <option value="">+ พนักงานขับรถ +</option>
+                </select>
 
-            <div id="selectDriver" style="margin-top: 10px;">
-                <label>พนักงานขับรถ</label>
-                <span class="form-inline">
-                    <select name="st_driver_id" class="form-control {{ $errors->has('st_driver_id') ? 'has-error' : '' }}" required>
-                        <option value="">+ พนักงานขับรถ +</option>
-                    </select>
+                <span id="selectVehicleBlock">
+                    <input id="tmpStVehicleName" name="tmpStVehicleName" type="text" class="form-control {{ $errors->has('st_vehicle_id') ? 'has-error' : '' }}" style="min-width:400px;" readonly="readonly" value="@if(isset($rs->st_vehicle_id)) {{$rs->st_vehicle->st_vehicle_type->name}} {{$rs->st_vehicle->brand}} {{!empty($rs->st_vehicle->seat)?$rs->st_vehicle->seat:'-'}} ที่นั่ง สี{{$rs->st_vehicle->color}} ทะเบียน {{$rs->st_vehicle->reg_number}} @else {{ old('tmpStVehicleName') }} @endif">
+                    <input type="hidden" name="st_vehicle_id" value="{{ isset($rs->st_vehicle_id) ? $rs->st_vehicle_id : old('st_vehicle_id') }}">
+                    <a id="openCbox" class='inline' href="#inline_vehicle"><input type="button" title="เลือกยานพาหนะ" value="เลือกยานพาหนะ" class="btn btn-info vtip" /></a>
                 </span>
-            </div>
-        </fieldset>
-    </div>
+            </span>
+        </div>
+    </fieldset>
     @endif
 
 
@@ -372,7 +372,7 @@ if (isset($rs->req_st_bureau_code)) {
             // alert($(this).data('vehicle-id'));
             $('#tmpStVehicleName').val($(this).data('vehicle-name'));
             $('input[name=st_vehicle_id]').val($(this).data('vehicle-id'));
-            $('select[name=st_driver_id]').val($(this).data('st-driver-id'));
+            // $('select[name=st_driver_id]').val($(this).data('st-driver-id'));
             // ปิด colorbox
             $.colorbox.close();
         });

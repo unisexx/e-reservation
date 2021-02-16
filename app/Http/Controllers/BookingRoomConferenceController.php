@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
-use App\Mail\Summary;
 use App\Model\BookingRoom;
 use App\Model\ManageRoom;
 use Auth;
 use Illuminate\Http\Request;
-use Mail;
 
-class BookingRoomController extends Controller
+class BookingRoomConferenceController extends Controller
 {
     public function __construct()
     {
@@ -21,7 +19,7 @@ class BookingRoomController extends Controller
     public function index(Request $request)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-view');
+        ChkPerm('booking-room-conference-view');
 
         $keyword = $request->get('search');
         $data_type = $request->get('date_type');
@@ -29,7 +27,7 @@ class BookingRoomController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*')->where('use_conference', '<>', 1);
+        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*')->where('use_conference', 1);
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -81,24 +79,23 @@ class BookingRoomController extends Controller
 
             $rs = $rs->orderBy('id', 'desc')->get();
 
-            return view('booking-room.index', compact('rs'));
+            return view('booking-room-conference.index', compact('rs'));
 
         } else {
 
             $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
 
-            return view('booking-room.index', compact('rs', 'rs_all'));
+            return view('booking-room-conference.index', compact('rs', 'rs_all'));
 
         }
-
     }
 
     public function create()
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-create', 'booking-room');
+        ChkPerm('booking-room-conference-create', 'booking-room-conference');
 
-        return view('booking-room.create');
+        return view('booking-room-conference.create');
     }
 
     public function store(BookingRoomRequest $request)
@@ -115,7 +112,7 @@ class BookingRoomController extends Controller
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
 
-        return redirect('booking-room/summary/' . $rs->id);
+        return redirect('booking-room-conference/summary/' . $rs->id);
     }
 
     public function show(Request $request)
@@ -124,7 +121,7 @@ class BookingRoomController extends Controller
         $st_room_id = $request->get('st_room_id');
         $status = $request->get('status');
 
-        $rs = BookingRoom::select('*')->where('use_conference', '<>', 1);
+        $rs = BookingRoom::select('*')->where('use_conference', 1);
 
         // if (!empty($st_room_id)) { // ถ้าไม่ได้มาจากช่องค้นหา ให้ select room ตามค่าที่ตั้ง default ไว้ในเมนูตั้งค่าห้อง
         //     $rs = $rs->where('st_room_id', $st_room_id);
@@ -150,7 +147,7 @@ class BookingRoomController extends Controller
 
         $rs = $rs->orderBy('id', 'desc')->with('department', 'bureau', 'division', 'st_room')->get();
 
-        return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('backend');
+        return view('include.__booking-room-conference-show', compact('rs', 'rs_all'))->withFrom('backend');
     }
 
     public function edit($id)
@@ -160,7 +157,7 @@ class BookingRoomController extends Controller
 
         $rs = BookingRoom::findOrFail($id);
 
-        return view('booking-room.edit', compact('rs'));
+        return view('booking-room-conference.edit', compact('rs'));
     }
 
     public function update(BookingRoomRequest $request, $id)
@@ -196,19 +193,19 @@ class BookingRoomController extends Controller
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
 
-        return redirect('booking-room');
+        return redirect('booking-room-conference');
     }
 
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('booking-room-delete', 'booking-room');
+        ChkPerm('booking-room-conference-delete', 'booking-room');
 
         BookingRoom::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
 
-        return redirect('booking-room');
+        return redirect('booking-room-conference');
     }
 
     public function summary($id)

@@ -37,7 +37,9 @@
         @endphp
         <ul>
             @foreach($rs as $item)
-            <li>จองแล้ว ({{ $item->code }})</li>
+            <li>
+                จองแล้ว ({{ $item->code }}) (วันที่ {{ DB2Date($item->start_date) }} {{ date("H:i", strtotime($item->start_time)) }} น. - {{ DB2Date($item->end_date) }} {{ date("H:i", strtotime($item->end_time)) }} น.)
+            </li>
             @endforeach
         </ul>
     </td>

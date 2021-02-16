@@ -204,24 +204,17 @@ class BookingVehicleController extends Controller
             $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
         }
 
+        // ถ้าสถานะไม่ใช่อนุมัติ ให้ลบข้อมูลรถกับคนขับออก
+        if ($requestData['status'] != "อนุมัติ") {
+            $requestData['st_vehicle_id'] = null;
+            $requestData['st_driver_id'] = null;
+        }
+
         $rs->update($requestData);
 
         // ฟอร์มอีเมล์
         if ($email == 1) {
             $this->sendEmail($rs);
-            // Mail::send([], [], function ($message) use ($rs) {
-            //     $message->to($rs->request_email)
-            //         ->subject('อัพเดทสถานะการจองยานพาหนะ')
-            //         ->setBody(
-            //             'รหัสการจอง: ' . $rs->code . '<br>' .
-            //             'ไปเพื่อ: ' . $rs->gofor . '<br>' .
-            //             'จุดขึ้นรถ: ' . $rs->point_place . '<br>' .
-            //             'สถานที่ไป: ' . $rs->destination . '<br>' .
-            //             'สถานะการจอง: ' . $rs->status . '<br><br>' .
-            //             'สามารถดูรายละเอียดการจองได้ที่: <a href="' . url('booking-vehicle/show') . '" target="_blank">http://msobooking.m-society.go.th/</a>'
-            //             , 'text/html'); // for HTML rich messages
-            // });
-
         }
         //-- END ฟอร์มอีเมล์
 

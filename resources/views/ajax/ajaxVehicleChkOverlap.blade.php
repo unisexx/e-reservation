@@ -6,7 +6,7 @@
         <div class="topicMeeting">{{ $row->gofor }}</div>
         <div>
             @if(!empty($row->st_vehicle_id))
-            {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ $row->st_vehicle->st_driver->name }}
+            {{ $row->st_vehicle->st_vehicle_type->name }} {{ $row->st_vehicle->brand }} {{ $row->st_vehicle->seat }} ที่นั่ง {{ $row->st_vehicle->color }} ทะเบียน {{ $row->st_vehicle->reg_number }} <br>ชื่อผู้ขับ {{ @$row->st_vehicle->st_driver->name ?? "-" }}
             @endif
         </div>
     </td>
