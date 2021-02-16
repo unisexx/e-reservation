@@ -117,6 +117,13 @@ class BookingVehicleController extends Controller
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
         $requestData['request_time'] = date("H:i");
+
+        // ถ้าสถานะไม่ใช่อนุมัติ ให้ลบข้อมูลรถกับคนขับออก
+        if ($requestData['status'] != "อนุมัติ") {
+            $requestData['st_vehicle_id'] = null;
+            $requestData['st_driver_id'] = null;
+        }
+
         $data = BookingVehicle::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
