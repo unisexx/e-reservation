@@ -31,6 +31,7 @@ class BookingBoss extends Model
         'approve_date',
         'self_booking',
         'booking_user_id',
+        'st_position_level_id',
     ];
 
     public function department()

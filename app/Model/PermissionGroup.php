@@ -11,29 +11,22 @@ class PermissionGroup extends Model
 {
     // logsActivity
     use LogsActivity;
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'permission_groups';
-
-    /**
-    * The database primary key value.
-    *
-    * @var string
-    */
     protected $primaryKey = 'id';
-
-    /**
-     * Attributes that should be mass-assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['title','status'];
+    protected $fillable = ['title', 'status'];
 
     // logsActivity
-    protected static $logAttributes = ['title','status'];
+    protected static $logAttributes = ['title', 'status'];
     protected static $logOnlyDirty = true;
+
+    // relation
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function permissionRole()
+    {
+        return $this->hasMany('App\Model\PermissionRole');
+    }
 }

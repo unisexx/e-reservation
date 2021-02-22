@@ -90,24 +90,18 @@ class StBossController extends Controller
 
     public function saveRes(Request $request, $rs)
     {
-        // ลบรายการ (ถ้ามี)
-        if (isset($request->removeRes['id'])) {
-            StBossRes::whereIn('id', $request->removeRes['id'])->delete();
-        }
+        // ลบรายการทั้งหมดแล้วค่อยบันทึกใหม่
+        StBossRes::where('st_boss_id', $rs->id)->delete();
 
         if (is_array($request->res)):
-            foreach ($request->res['res_name'] as $i => $item) {
+            foreach ($request->res['user_id'] as $i => $item) {
                 StBossRes::updateOrCreate(
                     [
                         'id' => @$request->res['id'][$i],
                     ],
                     [
-                        'st_boss_id'         => $rs->id,
-                        'res_name'           => @$item,
-                        'res_tel'            => @$request->res['res_tel'][$i],
-                        'st_department_code' => @$request->res['st_department_code'][$i],
-                        'st_bureau_code'     => @$request->res['st_bureau_code'][$i],
-                        'st_division_code'   => @$request->res['st_division_code'][$i],
+                        'st_boss_id' => $rs->id,
+                        'user_id'    => $request->res['user_id'][$i],
                     ]
                 );
             }

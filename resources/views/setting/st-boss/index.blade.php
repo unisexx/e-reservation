@@ -26,6 +26,7 @@
 <table class="tblist">
     <tr>
         <th>ลำดับ</th>
+        <th>ระดับผู้บริหาร</th>
         <th>ชื่อผู้บริหาร</th>
         {{-- <th>ระดับตำแหน่ง</th> --}}
         <th>ตำแหน่ง</th>
@@ -36,6 +37,7 @@
     @foreach($rs as $key=>$item)
         <tr @if(($key % 2) == 1) class="odd" @endif>
             <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
+            <td>{{ @$item->stPositionLevel->name }}</td>
             <td>{{ $item->name }}</td>
             {{-- <td>{{ @$item->stPositionLevel->name ?? '-' }}</td> --}}
             <td>{{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}</td>

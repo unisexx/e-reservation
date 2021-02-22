@@ -1,3 +1,4 @@
+
 <?php
 // $st_resources = App\Model\StResource::where('status','1')->orderBy('id', 'asc')->get();
 
@@ -38,8 +39,16 @@ if(isset($rs->end_time)){
 }
 ?>
 
+<section class="pt-5 bg-image overlay-primary fixed overlay" style="background-image: url('{{ asset('images/resource.jpg') }}');">
 
-<div class="container bg-body-content">
+    <div class="container bg-white">
+
+    <h3>จองทรัพยากรอื่นๆ (เพิ่ม / แก้ไข) 
+        {{-- แสดงเฉพาะด้านหน้า --}}
+        @if($formWhere == 'frontend')
+        <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="36" style="float: right;"></a>
+        @endif
+    </h3>
 
     @if ($errors->any())
     <ul class="alert alert-danger list-unstyled">
@@ -49,133 +58,199 @@ if(isset($rs->end_time)){
         @endforeach
     </ul>
     @endif
-
-    <div class="form-group form-inline col-md-12">
-        <label>ทรัพยากร<span class="Txt_red_12"> *</span></label>
-        <select name="st_resource_id" class="form-control" style="width:auto;">
-            @foreach($st_resources as $row)
-            <option value="{{ $row->id }}" @if($row->id == @$rs->st_resource_id) selected @endif @if($row->id == @old('st_resource_id')) selected="selected" @endif >{{ $row->name }}</option>
-            @endforeach
-        </select>
-    </div>
-
-    <div class="form-group form-inline col-md-12">
-        <label>ชื่อเรื่อง<span class="Txt_red_12"> *</span></label>
-        <input name="title" type="text" class="form-control {{ $errors->has('title') ? 'has-error' : '' }}" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" style="min-width:500px;" required>
-    </div>
-
-    <div class="form-group form-inline col-md-12 input-daterange chkTime">
-        <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label>
-        <input id="sDate" name="start_date" type="text" class="form-control range-date {{ $errors->has('start_date') ? 'has-error' : '' }}" value="{{ old('start_date') ? old('start_date') : @DB2Date($rs->start_date) }}" style="width:120px;" required/>
-        <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
-            @foreach(getHour() as $item)
-            <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
-            @endforeach
-        </select>
-        :
-        <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true" required>
-            @foreach(getMinute() as $item)
-            <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
-            @endforeach
-        </select>
-        น.
-        <span style="margin:0 15px;">ถึง</span>
-        <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
-        <select id="eHour" name="eHour" class="selectpicker" data-size="10" data-live-search="true" required>
-            @foreach(getHour() as $item)
-            <option value="{{ $item }}" {{ $item == (@$eTimeArr[0] ?? old('eHour')) ? 'selected' : '' }}>{{ $item }}</option>
-            @endforeach
-        </select>
-        :
-        <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true" required>
-            @foreach(getMinute() as $item)
-            <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
-            @endforeach
-        </select>
-        น.
-
-        <input type="hidden" name="start_time" value="00:00">
-        <input type="hidden" name="end_time" value="00:00">
-    </div>
-
-    <div class="form-group form-inline col-md-12">
-        <label>ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12"> *</span></label>
-        <div class="dep-chain-group" style="margin-bottom:5px;">
-            <input name="request_name" type="text" class="form-control {{ $errors->has('request_name') ? 'has-error' : '' }}" placeholder="ชื่อผู้ขอใช้" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" style="min-width:300px;" required>
-
-            <input name="request_position" type="text" class="form-control {{ $errors->has('request_position') ? 'has-error' : '' }}" placeholder="ตำแหน่งผู้ขอใช้" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" style="min-width:300px;" required>
-
-            <div style="margin-top:5px;">
-            <select name="st_department_code" id="lunch" class="chain-department selectpicker {{ $errors->has('st_department_code') ? 'has-error' : '' }}" data-live-search="true" title="กรม" required>
-                <option value="">+ กรม +</option>
-                @foreach($st_departments as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-            </select>
-
-            <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker {{ $errors->has('st_bureau_code') ? 'has-error' : '' }}" data-live-search="true" title="สำนัก" required>
-                <option value="">+ สำนัก +</option>
-                @if(old('st_department_code') || isset($rs->st_department_code))
-                @foreach($st_bureaus as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-                @endif
-            </select>
-
-            <select name="st_division_code" id="lunch" class="chain-division selectpicker {{ $errors->has('st_division_code') ? 'has-error' : '' }}" data-live-search="true" title="กลุ่ม" required>
-                <option value="">+ กลุ่ม +</option>
-                @if(old('st_bureau_code') || isset($rs->st_bureau_code))
-                @foreach($st_divisions as $item)
-                <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
-                @endforeach
-                @endif
-            </select>
+    
+    <div class="p-1 mt-30">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>ทรัพยากร <span class="Txt_red_12">*</span></label>
+                    <select name="st_resource_id" class="form-control">
+                        @foreach($st_resources as $row)
+                            <option value="{{ $row->id }}" @if($row->id == @$rs->st_resource_id) selected @endif @if($row->id == @old('st_resource_id')) selected="selected" @endif >{{ $row->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-15">
+                <div class="col-md-12">
+                    <div class="form-group form-margin">
+                        <label class="control-label">ชื่อเรื่อง<span class="Txt_red_12">*</span></label>
+                        <input name="title" type="text" class="form-control " placeholder="ชื่อเรื่อง"
+                            value="{{ $rs->title ?? old('title') }}">
+                    </div>
+                </div>
             </div>
 
-        </div>
-        <input name="request_tel" type="text" class="form-control {{ $errors->has('request_tel') ? 'has-error' : '' }}" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" style="min-width:300px;" required>
-        <input name="request_email" type="text" class="form-control {{ $errors->has('request_email') ? 'has-error' : '' }}" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" style="min-width:300px;" required>
+            <div class="row input-daterange mt-20 chkTime">
+                <div class="col-md-12"> <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label><br>
+                </div>
+
+                <div class="col-xs-12 col-sm-8 col-md-5 input-daterange">
+                    <div class="col-xs-12 col-sm-4 col-md-5 p-0">
+                        <div class="form-group form-margin">
+                            <input id="sDate" name="start_date" type="text" class="form-control range-date" value="{{ old('start_date') ?? @DB2Date($rs->start_date) }}"
+                                required="" placeholder="วัน/เดือน/ปี">
+                        </div>
+                    </div>
+                    <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
+                        <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
+                            @foreach(getHour() as $item)
+                            <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pull-left pt-1 p-0 col-xs-1 w-10 colon">:</div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
+                        <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true" required>
+                            @foreach(getMinute() as $item)
+                            <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pull-right pt-1 p-0 col-xs-1 minute">น.</div>
+                </div>
+
+                <div class="pull-left pt-1 pr-1 pb-1 col-xs-12 col-md-1"><strong>ถึง</strong></div>
+
+                <div class="col-xs-12 col-sm-8 col-md-5">
+                    <div class="col-xs-12 col-sm-4 col-md-5 p-0">
+                        <div class="form-group form-margin">
+                            <input id="eDate" name="end_date" type="text" class="form-control range-date" value="{{ old('end_date') ?? @DB2Date($rs->end_date) }}"
+                                required="" placeholder="วัน/เดือน/ปี">
+                        </div>
+                    </div>
+                    <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
+                    <div class="col-xs-2 col-sm-2 col-md-2  pull-left">
+                        <select id="eHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
+                            @foreach(getHour() as $item)
+                            <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pull-left pt-1 p-0 col-xs-1 w-10 colon">:</div>
+                    <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
+                        <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true" required>
+                            @foreach(getMinute() as $item)
+                            <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pull-right pt-1 p-0 col-xs-1 minute">น.</div>
+
+                    <input type="hidden" name="start_time" value="00:00">
+                    <input type="hidden" name="end_time" value="00:00">
+                </div>
+
+            </div>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-margin">
+                        <label class="control-label">ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12">
+                                *</span></label>
+                        <input name="request_name" type="text" class="form-control " placeholder="ชื่อผู้ขอใช้"
+                            value="{{ $rs->request_name ?? old('request_name') }}">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="form-group form-margin">
+                        <input name="request_position" type="text" class="form-control "
+                            placeholder="ตำแหน่งผู้ขอใช้" value="{{ $rs->request_position ?? old('request_position') }}" required="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row dep-chain-group">
+                <div class="col-md-4 mt-10">
+                    <select name="st_department_code" class="chain-department selectpicker w-100" data-live-search="true" data-size="8" title="กรม" required>
+                        <option value="">+ กรม +</option>
+                        @foreach($st_departments as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 mt-10">
+                    <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker w-100" data-live-search="true" data-size="8" title="สำนัก" required>
+                        <option value="">+ สำนัก +</option>
+                        @if(old('st_department_code') || isset($rs->st_department_code))
+                        @foreach($st_bureaus as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_bureau_code')) selected="selected" @endif @if($item->code == @$rs->st_bureau_code) selected="selected" @endif>{{ $item->title }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="col-md-4 mt-10">
+                    <select name="st_division_code" id="lunch" class="chain-division selectpicker w-100" data-live-search="true" data-size="8" title="กลุ่ม" required>
+                        <option value="">+ กลุ่ม +</option>
+                        @if(old('st_bureau_code') || isset($rs->st_bureau_code))
+                        @foreach($st_divisions as $item)
+                        <option value="{{ $item->code }}" @if($item->code == @old('st_division_code')) selected="selected" @endif @if($item->code == @$rs->st_division_code) selected="selected" @endif>{{ $item->title }}</option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-20">
+                    <input name="request_tel" type="text" class="form-control " placeholder="เบอร์โทรศัพท์" value="{{ $rs->request_tel ?? old('request_tel') }}" required="">
+                </div>
+                <div class="col-md-6 mt-20">
+                    <input name="request_email" type="text" class="form-control " placeholder="อีเมล์" value="{{ $rs->request_email ?? old('request_email') }}" required="">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-30">
+                <div class="form-group form-margin">
+                    <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
+                    <textarea name="note" class="form-control" rows="5">{{ $rs->note ?? old('note') }}</textarea>
+                </div>
+            </div>
+            </div>
+            {{-- แสดงเฉพาะด้านหน้า --}}
+            @if($formWhere == 'frontend')
+            <div class="row">
+                <div class="col-md-3">
+                    <label>กรุณาใส่ผลบวกที่ถูกต้อง <span class="Txt_red_12"> *</span></label>
+                    <span class="form-inline">
+                        {!! captcha_img() !!}
+                        <input class="form-control" type="text" name="captcha" style="width:100px;">
+                    </span>
+                </div>
+            </div>
+            @endif
+            {{-- แสดงเฉพาะด้านหลัง --}}
+            @if($formWhere == 'backend')
+            <div class="mt-30"></div>
+            <h3>สำหรับเจ้าหน้าที่ดูแลระบบ</h3>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <label>สถานะ</label>
+                    @php
+                        $statusArray = ['รออนุมัติ'=>'รออนุมัติ','อนุมัติ'=>'อนุมัติ','ไม่อนุมัติ'=>'ไม่อนุมัติ','ยกเลิก'=>'ยกเลิก']
+                    @endphp
+                    {{ Form::select("status", $statusArray, @$rs->status, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8']) }}
+                </div>
+            </div>
+            @endif
+            <div class="row mt-30 mb-7">
+                <div class="col-md-4 col-md-offset-2">
+                    <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
+                </div>
+                <div class="col-md-4">
+                    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default btn-lg w-100 mt-15" >
+                </div>
+            </div>
+
     </div>
-
-    <div class="form-group form-inline col-md-12">
-        <label>หมายเหตุ หรือรายละเอียดอื่นๆ</label>
-        <textarea name="note" class="form-control " style="min-width:800px; height:80px">{{ isset($rs->note) ? $rs->note : old('note') }}</textarea>
-    </div>
-
-    @if($formWhere == 'backend')
-    <div class="form-group form-inline col-md-12">
-    <fieldset>
-        <legend>สำหรับเจ้าหน้าที่ดูแลระบบ</legend>
-            <label>สถานะ</label>
-            <select name="status" class="form-control" style="width:auto;">
-                <option value="รออนุมัติ" {{ @$rs->status == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-                <option value="อนุมัติ" {{ @$rs->status == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
-                <option value="ไม่อนุมัติ" {{ @$rs->status == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-                <option value="ยกเลิก" {{ @$rs->status == 'ยกเลิก' ? 'selected' : ''}}>ยกเลิก</option>
-            </select>
-        </fieldset>
-    </div>
-    @endif
-
-
-    @if($formWhere == 'frontend')
-    <div class="form-group form-inline col-md-12">
-        <label>กรุณาใส่ผลบวกที่ถูกต้อง<span class="Txt_red_12"> *</span></label>
-        <span class="form-inline">
-            {!! captcha_img() !!}
-            <input class="form-control" type="text" name="captcha" style="width:100px;">
-        </span>
-    </div>
-    @endif
-
-    <div id="btnBoxAdd">
-        <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary" style="width:100px;" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}" />
-        <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default" style="width:100px;" />
-    </div>
-
+    <!--container -->
 </div>
-{{-- END CONTAINER --}}
+</section>
 
+@push('js')
 <script>
     $(document).ready(function() {
         var $formWhere = "{{ $formWhere }}";
@@ -184,7 +259,7 @@ if(isset($rs->end_time)){
             if($formWhere == 'frontend'){
                 chkOverlap();
             }else{
-                $('form').submit();
+                $('#resourceForm').submit();
             }
         });
     });
@@ -265,10 +340,11 @@ $('.range-date').each(function(k, v) {
 <script>
 $(document).ready(function(){
     $('body').on('click', '#confirmSubmitBtn', function() {
-        $('form').submit();
+        $('#resourceForm').submit();
     });
     $('body').on('click', '#cboxCloseBtn', function() {
         $.colorbox.close();
     });
 });
 </script>
+@endpush

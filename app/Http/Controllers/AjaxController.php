@@ -6,6 +6,7 @@ use App\Model\BookingBoss;
 use App\Model\BookingResource;
 use App\Model\BookingRoom;
 use App\Model\BookingVehicle;
+use App\Model\StBoss;
 use App\Model\StBureau;
 use App\Model\StDivision;
 use App\Model\StDriver;
@@ -51,6 +52,13 @@ class AjaxController extends Controller
     public function ajaxGetDivisionVehicle()
     {
         $data['rs'] = StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $_GET['st_bureau_code'] . '%')->where('status', 'พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+
+        return $data['rs'];
+    }
+
+    public function ajaxGetBoss()
+    {
+        $data['rs'] = StBoss::where('status', 1)->where('st_position_level_id', $_GET['st_position_level_id'])->get();
 
         return $data['rs'];
     }

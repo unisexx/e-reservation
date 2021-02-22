@@ -20,14 +20,14 @@ if (isset($rs->st_bureau_code)) {
 }
 ?>
 <table class="tbadd">
-    {{-- <tr>
+    <tr>
         <th>ระดับตำแหน่ง<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
                 {{ Form::select("st_position_level_id", \App\Model\StPositionLevel::where('status', 1)->pluck('name', 'id'), @$rs->st_position_level_id, ['class'=>'form-control', 'style'=>'width:auto; display:inline;']) }}
             </div>
         </td>
-    </tr> --}}
+    </tr>
     <tr>
         <th>ชื่อ-สกุล<span class="Txt_red_12"> *</span></th>
         <td>
@@ -55,8 +55,7 @@ if (isset($rs->st_bureau_code)) {
     <tr>
         <th>ผู้ดูแลผู้บริหาร<span class="Txt_red_12"> *</span></th>
         <td>
-            {{-- <div id="addRes" style="cursor: pointer; margin-bottom:10px;">+ เพิ่มผู้ดูแล</div> --}}
-            <button type="button" id="addRes" class="btn btn-warning">+ เพิ่มผู้ดูแล</button>
+            {{-- <button type="button" id="addRes" class="btn btn-warning">+ เพิ่มผู้ดูแล</button>
 
             <div id="resHere">
             @if(@count($rs->stBossRes))
@@ -66,7 +65,22 @@ if (isset($rs->st_bureau_code)) {
             @else
                 @include('include.___res_form')
             @endif
-            </div>
+            </div> --}}
+
+            @php
+                // หา permission_group_id ที่มีสิทธิ์ในการดูแลผู้บริหาร (permission_id = 93)
+                $permission_group_ids = \App\Model\PermissionGroup::whereHas('permissionRole', function($q){
+                    $q->where('permission_id',93);
+                })->pluck('id');
+
+                // เอา permission_group_id ที่ได้มาหา user
+                $users = \App\User::whereIn('permission_group_id', $permission_group_ids)->where('status', 1)->get();
+            @endphp
+            @foreach($users as $user)
+                <label>
+                    {{ Form::checkbox('res[user_id][]', $user->id, @$rs->stBossRes->where('user_id', $user->id)->count() > 0 ? true : false) }} {{ @$user->prefix->title }} {{ @$user->givename }} {{ @$user->familyname }}
+                </label>
+            @endforeach
         </td>
     </tr>
     <tr>

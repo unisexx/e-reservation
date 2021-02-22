@@ -85,6 +85,7 @@ Route::get('ajaxGetBureauVehicle', 'AjaxController@ajaxGetBureauVehicle');
 Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 Route::get('ajaxSetDefaultRoom', 'AjaxController@ajaxSetDefaultRoom');
 Route::get('ajaxBossChkOverlap', 'AjaxController@ajaxBossChkOverlap');
+Route::get('ajaxGetBoss', 'AjaxController@ajaxGetBoss');
 
 // test email
 Route::get('email-room-front/{bookingId}', 'BookingRoomFrontController@testEmail');

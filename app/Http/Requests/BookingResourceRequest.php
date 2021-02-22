@@ -53,11 +53,11 @@ class BookingResourceRequest extends FormRequest
     {
         return [
             'st_resource_id.required'     => 'เลือกทรัพยากร ห้ามเป็นค่าว่าง',
-            'title.required'              => 'ชื่อเรื่อง / หัวข้อการประชุม ห้ามเป็นค่าว่าง',
-            'start_date.required'         => 'วันที่เริ่มใช้ห้องประชุม ห้ามเป็นค่าว่าง',
-            'start_time.required'         => 'เวลาที่เริ่มใช้ห้องประชุม ห้ามเป็นค่าว่าง',
-            'end_date.required'           => 'วันที่สิ้นสุดใช้ห้องประชุม ห้ามเป็นค่าว่าง',
-            'end_time.required'           => 'เวลาที่สิ้นสุดใช้ห้องประชุม ห้ามเป็นค่าว่าง',
+            'title.required'              => 'ชื่อเรื่อง ห้ามเป็นค่าว่าง',
+            'start_date.required'         => 'วันที่เริ่ม ห้ามเป็นค่าว่าง',
+            'start_time.required'         => 'เวลาที่เริ่ม ห้ามเป็นค่าว่าง',
+            'end_date.required'           => 'วันที่สิ้นสุด ห้ามเป็นค่าว่าง',
+            'end_time.required'           => 'เวลาที่สิ้นสุด ห้ามเป็นค่าว่าง',
             'request_name.required'       => 'ชื่อผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'request_position.required'   => 'ตำแหน่งผู้ขอใช้ ห้ามเป็นค่าว่าง',
             'request_tel.required'        => 'เบอร์ติดต่อผู้ขอใช้ ห้ามเป็นค่าว่าง',
