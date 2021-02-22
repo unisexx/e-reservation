@@ -241,7 +241,7 @@
     <div id="bossSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ผู้บริหาร +">
             @foreach($st_bosses as $item)
-                <option value="{{ url($action.'/show?st_boss_id='.$item->id.'&search='.request('search').'&st_department_code='.request('st_department_code').'&st_bureau_code='.request('st_bureau_code').'&st_division_code='.request('st_division_code')) }}" @if(@request('st_boss_id') == $item->id) selected="selected" @endif>{{ $item->name }} ({{ $item->position }})</option>
+                <option value="{{ url($action.'/show?st_boss_id='.$item->id.'&search='.request('search').'&st_department_code='.request('st_department_code').'&st_bureau_code='.request('st_bureau_code').'&st_division_code='.request('st_division_code')) }}" @if(@request('st_boss_id') == $item->id) selected="selected" @endif>{{ $item->name }} {{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}</option>
             @endforeach
         </select>
     </div>

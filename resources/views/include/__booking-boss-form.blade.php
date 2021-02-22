@@ -48,14 +48,14 @@
         @endif
 
             <div class="p-1 mt-30">
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group form-margin">
                             <label>ระดับตำแหน่งผู้บริหาร<span class="Txt_red_12"> *</span></label>
                             {{ Form::select("st_position_level_id", \App\Model\StPositionLevel::where('status', 1)->pluck('name', 'id'), @$rs->st_position_level_id, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8', 'title'=>'เลือกระดับตำแหน่ง']) }}
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
