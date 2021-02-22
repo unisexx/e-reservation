@@ -30,7 +30,12 @@ if(isset($rs->end_time)){
 
     <div class="container bg-white" >
 
-    <h3>จองห้องประชุม/อบรม (เพิ่ม / แก้ไข)</h3>
+    <h3>จองห้องประชุม/อบรม (เพิ่ม / แก้ไข)
+        {{-- แสดงเฉพาะด้านหน้า --}}
+        @if($formWhere == 'frontend')
+        <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="36" style="float: right;"></a>
+        @endif
+    </h3>
 
     @if ($errors->any())
     <ul class="alert alert-danger list-unstyled">
