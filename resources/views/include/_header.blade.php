@@ -60,6 +60,7 @@
                         @if(CanPerm('st-resource-view'))<li><a href="{{ url('/setting/st-resource') }}">ทรัพยากร</a></li>@endif
                         @if(CanPerm('st-boss-view'))<li><a href="{{ url('/setting/st-boss') }}">ผู้บริหาร</a></li>@endif
                         @if(CanPerm('st-position-level-view'))<li><a href="{{ url('/setting/st-position-level') }}">ระดับตำแหน่งผู้บริหาร</a></li>@endif
+                        <li><a href="{{ url('/setting/st-position-meeting') }}">ตำแหน่งการประชุม/พิธี</a></li>
                     </ul>
                 </li>
                 @endif

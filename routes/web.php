@@ -108,6 +108,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('setting/st-resource', 'Setting\\StResourceController');
     Route::resource('setting/st-boss', 'Setting\\StBossController');
     Route::resource('setting/st-position-level', 'Setting\\StPositionLevelController');
+    Route::resource('setting/st-position-meeting', 'Setting\\StPositionMeetingController');
 
     // จองห้องประชุม/อบรม
     Route::get('booking-room/summary/{id}', 'BookingRoomController@summary');

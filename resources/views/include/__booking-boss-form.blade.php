@@ -88,10 +88,7 @@
                     <div class="col-md-3">
                         <div class="form-group form-margin">
                             <label class="control-label">สถานะ</label>
-                            @php
-                                $bossStatusArray = ['1'=>'เป็นประธาน','2'=>'เป็นรองประธาน','3'=>'เป็นกรรมการ','4'=>'เป็นเกียรติ'];
-                            @endphp
-                            {{ Form::select("boss_status", $bossStatusArray, @$rs->boss_status, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8']) }}
+                            {{ Form::select("boss_status", \App\Model\StPositionMeeting::where('status', 1)->pluck('name', 'id'), @$rs->boss_status, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8']) }}
                         </div>
                     </div>
                     <div class="col-md-3">
