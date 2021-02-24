@@ -45,7 +45,8 @@
         @endif
     </div>
 
-    @include('include._color_status', [ 'allrow' => $rs_all ])
+    @include('include._color_status', ['type'=>'conference'])
+    @include('include._conference_status', ['type'=>'conference'])
 
     <div class="pagination-wrapper">
         {!! $rs->appends(@$_GET)->render() !!}

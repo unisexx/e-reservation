@@ -25,6 +25,8 @@ class BookingRoomConferenceController extends Controller
         $data_type = $request->get('date_type');
         $date_select = $request->get('date_select');
         $status = $request->get('status');
+        $status_conference = $request->get('status_conference');
+
         $perPage = 10;
 
         $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*')->where('use_conference', 1);
@@ -47,8 +49,6 @@ class BookingRoomConferenceController extends Controller
             }
         }
 
-        $rs_all = $rs->get();
-
         if (!empty($date_select)) {
             if ($data_type == 'start_date') {
                 $rs = $rs->where('start_date', Date2DB($date_select));
@@ -69,6 +69,10 @@ class BookingRoomConferenceController extends Controller
             $rs = $rs->where('status', $status);
         }
 
+        if (!empty($status_conference)) {
+            $rs = $rs->where('status_conference', $status_conference);
+        }
+
         if (@$_GET['export'] == 'excel') {
 
             header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
@@ -85,7 +89,7 @@ class BookingRoomConferenceController extends Controller
 
             $rs = $rs->orderBy('id', 'desc')->paginate($perPage);
 
-            return view('booking-room-conference.index', compact('rs', 'rs_all'));
+            return view('booking-room-conference.index', compact('rs'));
 
         }
     }
@@ -103,6 +107,9 @@ class BookingRoomConferenceController extends Controller
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
+        if ($requestData['use_conference'] == 1) {
+            $requestData['status_conference'] = 'รออนุมัติ';
+        }
         $data = BookingRoom::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน

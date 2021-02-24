@@ -29,7 +29,7 @@ class BookingRoomController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*')->where('use_conference', '<>', 1);
+        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*');
 
         /**
          *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
@@ -106,6 +106,10 @@ class BookingRoomController extends Controller
         $requestData = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
+        if ($requestData['use_conference'] == 1) {
+            $requestData['status_conference'] = 'รออนุมัติ';
+        }
+
         $data = BookingRoom::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
@@ -146,11 +150,9 @@ class BookingRoomController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        $rs_all = $rs->get();
-
         $rs = $rs->orderBy('id', 'desc')->with('department', 'bureau', 'division', 'st_room')->get();
 
-        return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('backend');
+        return view('include.__booking-room-show', compact('rs'))->withFrom('backend');
     }
 
     public function edit($id)
@@ -172,11 +174,11 @@ class BookingRoomController extends Controller
         $rs = BookingRoom::findOrFail($id);
 
         // approve conference
-        $rs->status_conference = @$requestData['status_conference'];
-        if ($rs->isDirty('status_conference')) {
-            $requestData['approve_conference_by_id'] = Auth::user()->id;
-            $requestData['approve_conference_date'] = date('Y-m-d H:i:s');
-        }
+        // $rs->status_conference = @$requestData['status_conference'];
+        // if ($rs->isDirty('status_conference')) {
+        //     $requestData['approve_conference_by_id'] = Auth::user()->id;
+        //     $requestData['approve_conference_date'] = date('Y-m-d H:i:s');
+        // }
 
         $email = 0;
         $rs->status = @$requestData['status'];

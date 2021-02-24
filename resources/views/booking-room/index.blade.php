@@ -45,7 +45,7 @@
         @endif
     </div>
 
-    @include('include._color_status', [ 'allrow' => $rs_all ])
+    @include('include._color_status', ['type'=>'room'])
 
     <div class="pagination-wrapper">
         {!! $rs->appends(@$_GET)->render() !!}

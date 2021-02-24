@@ -1,12 +1,3 @@
-{{-- @dump(Request::fullUrl()) --}}
-@php
-    // if(count($_GET)){
-    //     $link = '&';
-    // }else{
-    //     $link = '?';
-    // }
-@endphp
-
 <h5><b>ความหมายสถานะ</b></h5>
 <ul class="list-unstyled list-inline">
     @if(@$from == 'frontend')
@@ -25,31 +16,47 @@
         </li>
 
     @else
-        {{-- @php
-            if($is_conference == 1){
-                $conference_path = '&is_conference=1';
+        @php
+            if($type == 'room'){
+                $booking_room = App\Model\BookingRoom::where('use_conference', '<>', 1)->get();
+            }elseif($type == 'conference'){
+                $booking_room = App\Model\BookingRoom::where('use_conference', 1)->get();
             }
-        @endphp --}}
+        @endphp
         <li>
-            <a href="{{ url(Request::url().'?status=รออนุมัติ&is_conference='.@$is_conference) }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('รออนุมัติ') }};"> </span> รออนุมัติ ({{$allrow->where('status','รออนุมัติ')->count()}})
+            <a href="{{ url(Request::url().'?status=รออนุมัติ') }}">
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('รออนุมัติ') }};"> </span> รออนุมัติ ({{$booking_room->where('status','รออนุมัติ')->count()}})
             </a>
         </li>
         <li>
-            <a href="{{ url(Request::url().'?status=อนุมัติ&is_conference='.@$is_conference) }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('อนุมัติ') }};"> </span> อนุมัติ ({{$allrow->where('status','อนุมัติ')->count()}})
+            <a href="{{ url(Request::url().'?status=อนุมัติ') }}">
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('อนุมัติ') }};"> </span> อนุมัติ ({{$booking_room->where('status','อนุมัติ')->count()}})
             </a>
         </li>
         <li>
-            <a href="{{ url(Request::url().'?status=ไม่อนุมัติ&is_conference='.@$is_conference) }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ ({{$allrow->where('status','ไม่อนุมัติ')->count()}})
+            <a href="{{ url(Request::url().'?status=ไม่อนุมัติ') }}">
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ ({{$booking_room->where('status','ไม่อนุมัติ')->count()}})
             </a>
         </li>
         <li>
-            <a href="{{ url(Request::url().'?status=ยกเลิก&is_conference='.@$is_conference) }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ยกเลิก') }};"> </span> ยกเลิก ({{$allrow->where('status','ยกเลิก')->count()}})
+            <a href="{{ url(Request::url().'?status=ยกเลิก') }}">
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ยกเลิก') }};"> </span> ยกเลิก ({{$booking_room->where('status','ยกเลิก')->count()}})
             </a>
         </li>
-
     @endif
 </ul>
+
+@if(@$from == 'frontend')
+<h5><b>สถานะของ Conference</b></h5>
+<ul class="list-unstyled list-inline">
+    <li>
+        <img src="{{ asset('images/vdo-conference-gray.png') }}" width="32" height="32"> รออนุมัติ
+    </li>
+    <li>
+        <img src="{{ asset('images/vdo-conference2.png') }}" width="32" height="32"> อนุมัติ
+    </li>
+    <li>
+        <img src="{{ asset('images/vdo-conference-not.png') }}" width="32" height="32"> ไม่อนุมัติ
+    </li>
+</ul>
+@endif

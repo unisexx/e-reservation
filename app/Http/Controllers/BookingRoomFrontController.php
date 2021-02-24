@@ -23,6 +23,9 @@ class BookingRoomFrontController extends Controller
         $requestData['start_date'] = Date2DB($request->start_date);
         $requestData['end_date'] = Date2DB($request->end_date);
         $requestData['status'] = 'รออนุมัติ';
+        if ($requestData['use_conference'] == 1) {
+            $requestData['status_conference'] = 'รออนุมัติ';
+        }
         $data = BookingRoom::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน

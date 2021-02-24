@@ -64,7 +64,7 @@
                     </ul>
                 </li>
                 @endif
-                <li><a href="{{ url('profile') }}" class="vtip" title="{{ @Auth::user()->prefix->title }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }}<br>- {{ @Auth::user()->department->title }}<br>- {{ @Auth::user()->bureau->title }}<br>- {{ @Auth::user()->division->title }}<br>[{{ @Auth::user()->permission_group->title }}]"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
+                <li><a href="{{ url('profile') }}" class="vtip" title="ข้อมูลส่วนตัว"><img src="{{ url('images/user_info.png') }}" width="16" height="16" /></a></li>
                 <li>
                     <a class="" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <!-- {{ __('Logout') }} -->
@@ -81,3 +81,11 @@
         <!--/.nav-collapse -->
     </div>
 </nav>
+
+<div style="font-size: 10px; line-height: 15px; z-index:9;" class="col-md-12 text-right info">
+    {{ @Auth::user()->prefix->title }} {{ @Auth::user()->givename }} {{ @Auth::user()->familyname }}
+    <br>{{ @Auth::user()->department->title }}
+    <br>{{ @Auth::user()->bureau->title }}
+    <br>{{ @Auth::user()->division->title }}
+    <br>[{{ @Auth::user()->permission_group->title }}]
+</div>

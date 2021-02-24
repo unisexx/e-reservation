@@ -181,7 +181,7 @@
 @else
 
     {{-- แสดงผลแบบปฏิทิน --}}
-    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from, 'is_conference' => request('is_conference') ])
+    @include('include._color_status', ['type'=>'room','from' => $from])
 
     @php
         $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';

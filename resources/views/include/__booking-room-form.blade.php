@@ -105,7 +105,7 @@ if(isset($rs->end_time)){
                 </div>
             </div>
 
-            <div class="row input-daterange">
+            <div class="row input-daterange chkTime">
                 <div class="col-md-12"> <label>วัน เวลา ที่ต้องการใช้ห้องประชุม<span class="Txt_red_12"> *</span></label><br>
                 </div>
 
@@ -308,40 +308,45 @@ if(isset($rs->end_time)){
                 <div class="mt-30"></div>
                 <h3>สำหรับเจ้าหน้าที่ดูแลระบบ</h3>
 
+                {{-- อนุมัติการจองห้อง --}}
+                @if(Request::segment(1) == 'booking-room')
                 <div class="row form-group">
                     <div class="col-md-3">
-                        <label>สถานะ</label>
+                        <label>สถานะการจองห้อง</label>
                         @php
                             $statusArray = ['รออนุมัติ'=>'รออนุมัติ','อนุมัติ'=>'อนุมัติ','ไม่อนุมัติ'=>'ไม่อนุมัติ','ยกเลิก'=>'ยกเลิก']
                         @endphp
                         {{ Form::select("status", $statusArray, @$rs->status, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8']) }}
             
-                        {!! !CanPerm('booking-room-edit')?'<input type="hidden" name="status" value="'.@$rs->status.'">':'' !!}
+                        {{-- {!! !CanPerm('booking-room-edit')?'<input type="hidden" name="status" value="'.@$rs->status.'">':'' !!} --}}
                     </div>
                 </div>
+                @endif
 
-                {{-- Approve Conference สำหรับเจ้าหน้าที่ที่สิทธิ์การใช้งานติ๊ก (ดูเฉพาะที่มีการจอง conference) --}}
-                @if(@$rs->st_room->is_conference == 1)
+                {{-- อนุมัติการจอง conference --}}
+                @if((@$rs->st_room->is_conference == 1) && (Request::segment(1) == 'booking-room-conference'))
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <label>สถานะการจองห้อง</label>
+                        <div>{{ @$rs->status }}</div>
+                        <input type="hidden" name="status" value="{{ @$rs->status }}">
+                    </div>
+                </div>
                 <div class="row form-group">
                     <div class="col-md-2">
                         <label>สถานะ Conference</label>
-                        <select name="status_conference" class="form-control" style="width:100%;" {{ !CanPerm('booking-room-conference-view')?'disabled':'' }}>
-                            <option value="รออนุมัติ" {{ @$rs->status_conference == 'รออนุมัติ' ? 'selected' : ''}}>รออนุมัติ</option>
-                            <option value="อนุมัติ" {{ @$rs->status_conference == 'อนุมัติ' ? 'selected' : ''}}>อนุมัติ</option>
-                            <option value="ไม่อนุมัติ" {{ @$rs->status_conference == 'ไม่อนุมัติ' ? 'selected' : ''}}>ไม่อนุมัติ</option>
-                        </select>
+                        @php
+                            $statusConfArray = ['รออนุมัติ'=>'รออนุมัติ','อนุมัติ'=>'อนุมัติ','ไม่อนุมัติ'=>'ไม่อนุมัติ']
+                        @endphp
+                        {{ Form::select("status_conference", $statusConfArray, @$rs->status_conference, ['class'=>'form-control selectpicker', 'data-live-search'=>'true', 'data-size'=>'8']) }}
                     </div>
                 </div>
-                {!! !CanPerm('booking-room-conference-view')?'<input type="hidden" name="status_conference" value="'.@$rs->status_conference.'">':'' !!}
-
-                    {{-- ถ้าเจ้าหน้าที่มีสิทธิ์เฉพาะ approve conference อย่างเดียว (ให้ปิดฟอร์ม เปิดแค่ select สถานะ conference) --}}
-                    @if(CanPerm('booking-room-conference-view') && !CanPerm('booking-room-edit'))
-                        <script>
-                        $(document).ready(function(){
-                            $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").attr('disabled', 'disabled');
-                        });
-                        </script>
-                    @endif
+                
+                <script>
+                $(document).ready(function(){
+                    $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input, #MainFrmSubmit input").attr('disabled', 'disabled');
+                });
+                </script>
                 @endif
 
                 <div class="col-md-12">
@@ -357,7 +362,7 @@ if(isset($rs->end_time)){
             @endif
 
 
-            <div class="row mt-30 mb-7">
+            <div id="MainFrmSubmit" class="row mt-30 mb-7">
                 <div class="col-md-4 col-md-offset-2">
                     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
                 </div>
