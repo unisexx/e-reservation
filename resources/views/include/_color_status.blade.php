@@ -18,29 +18,35 @@
     @else
         @php
             if($type == 'room'){
-                $booking_room = App\Model\BookingRoom::where('use_conference', '<>', 1)->get();
+                $count = App\Model\BookingRoom::get();
             }elseif($type == 'conference'){
-                $booking_room = App\Model\BookingRoom::where('use_conference', 1)->get();
+                $count = App\Model\BookingRoom::where('use_conference', 1)->get();
+            }elseif($type == 'vehicle'){
+                $count = App\Model\BookingVehicle::get();
+            }elseif($type == 'resource'){
+                $count = App\Model\BookingResource::get();
+            }elseif($type == 'boss'){
+                $count = App\Model\BookingBoss::get();
             }
         @endphp
         <li>
             <a href="{{ url(Request::url().'?status=รออนุมัติ') }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('รออนุมัติ') }};"> </span> รออนุมัติ ({{$booking_room->where('status','รออนุมัติ')->count()}})
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('รออนุมัติ') }};"> </span> รออนุมัติ ({{$count->where('status','รออนุมัติ')->count()}})
             </a>
         </li>
         <li>
             <a href="{{ url(Request::url().'?status=อนุมัติ') }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('อนุมัติ') }};"> </span> อนุมัติ ({{$booking_room->where('status','อนุมัติ')->count()}})
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('อนุมัติ') }};"> </span> อนุมัติ ({{$count->where('status','อนุมัติ')->count()}})
             </a>
         </li>
         <li>
             <a href="{{ url(Request::url().'?status=ไม่อนุมัติ') }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ ({{$booking_room->where('status','ไม่อนุมัติ')->count()}})
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ไม่อนุมัติ') }};"> </span> ไม่อนุมัติ ({{$count->where('status','ไม่อนุมัติ')->count()}})
             </a>
         </li>
         <li>
             <a href="{{ url(Request::url().'?status=ยกเลิก') }}">
-                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ยกเลิก') }};"> </span> ยกเลิก ({{$booking_room->where('status','ยกเลิก')->count()}})
+                <span class="fc-event-dot" style="background-color:{{ colorStatus2('ยกเลิก') }};"> </span> ยกเลิก ({{$count->where('status','ยกเลิก')->count()}})
             </a>
         </li>
     @endif

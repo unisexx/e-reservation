@@ -55,18 +55,6 @@ if (isset($rs->st_bureau_code)) {
     <tr>
         <th>ผู้ดูแลผู้บริหาร<span class="Txt_red_12"> *</span></th>
         <td>
-            {{-- <button type="button" id="addRes" class="btn btn-warning">+ เพิ่มผู้ดูแล</button>
-
-            <div id="resHere">
-            @if(@count($rs->stBossRes))
-                @foreach($rs->stBossRes as $st_boss_res)
-                    @include('include.___res_form', ['st_boss_res' => $st_boss_res])
-                @endforeach
-            @else
-                @include('include.___res_form')
-            @endif
-            </div> --}}
-
             @php
                 // หา permission_group_id ที่มีสิทธิ์ในการดูแลผู้บริหาร (permission_id = 93)
                 $permission_group_ids = \App\Model\PermissionGroup::whereHas('permissionRole', function($q){
@@ -75,11 +63,14 @@ if (isset($rs->st_bureau_code)) {
 
                 // เอา permission_group_id ที่ได้มาหา user
                 $users = \App\User::whereIn('permission_group_id', $permission_group_ids)->where('status', 1)->get();
+
             @endphp
             @foreach($users as $user)
+            <div>
                 <label>
-                    {{ Form::checkbox('res[user_id][]', $user->id, @$rs->stBossRes->where('user_id', $user->id)->count() > 0 ? true : false) }} {{ @$user->prefix->title }} {{ @$user->givename }} {{ @$user->familyname }}
+                    {{ Form::checkbox('res[user_id][]', @$user->id, @count($rs->stBossRes) ? @$rs->stBossRes->where('user_id', @$user->id)->count() > 0 ? true : false : '') }} {{ @$user->prefix->title }} {{ @$user->givename }} {{ @$user->familyname }}
                 </label>
+            </div>
             @endforeach
         </td>
     </tr>

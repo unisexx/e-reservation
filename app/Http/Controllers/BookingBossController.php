@@ -43,6 +43,11 @@ class BookingBossController extends Controller
                     $q->where('end_date', Date2DB($req->date_select));
                 }
             }
+
+            if ($req->status) {
+                $q->where('status', $req->status);
+            }
+
         });
 
         if (@$_GET['export'] == 'excel') {

@@ -65,7 +65,7 @@ $st_resource = $q->orderBy('id','desc')->get();
     @endif
 </div>
 
-@include('include._color_status', [ 'allrow' => $rs_all ])
+@include('include._color_status', ['type'=>'resource'])
 
 <div class="pagination-wrapper">
     {!! $rs->appends(@$_GET)->render() !!}

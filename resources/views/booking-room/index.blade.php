@@ -86,10 +86,10 @@
                 {{ @$row->st_room->name }}
                 @if(empty(request('export')))
                     <img src="{{ url('images/detail.png') }}" class="vtip" title="
-                    <u>จำนวนคนที่รองรับได้</u> {{ $row->st_room->people }} คน<br>
-                    <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ $row->st_room->equipment }}<br>
-                    <u>ผู้รับผิดชอบห้องประชุม</u> {{ $row->st_room->res_name }} {{ $row->st_room->department->title }} {{ $row->st_room->bureau->title }}<br>{{ $row->st_room->division->title }}<br>
-                    <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ $row->st_room->fee }}" />
+                    <u>จำนวนคนที่รองรับได้</u> {{ @$row->st_room->people }} คน<br>
+                    <u>อุปกรณ์ที่ติดตั้งในห้อง</u> {{ @$row->st_room->equipment }}<br>
+                    <u>ผู้รับผิดชอบห้องประชุม</u> {{ @$row->st_room->res_name }} {{ @$row->st_room->department->title }} {{ @$row->st_room->bureau->title }}<br>{{ @$row->st_room->division->title }}<br>
+                    <u>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม</u> {{ @$row->st_room->fee }}" />
                 @endif
             </td>
             <td>
