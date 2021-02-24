@@ -251,7 +251,7 @@
     <td>{{ isset($rs->start_date) ? DB2Date($rs->start_date) : '-' }} เวลา {{ isset($rs->start_time) ? date("H:i", strtotime($rs->start_time)) : '-' }} น.</td>
 </tr>
 <tr>
-    <th>วันที่เริ่มสินสุด</th>
+    <th>วันที่สินสุด</th>
     <td>{{ isset($rs->end_date) ? DB2Date($rs->end_date) : '-' }} เวลา {{ isset($rs->end_time) ? date("H:i", strtotime($rs->end_time)) : '-' }} น.</td>
 </tr>
 <tr>
