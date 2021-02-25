@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองห้องประชุม/อบรม</h3>
+<h3>จองห้อง Conference</h3>
 
 @if(empty(request('export')))
     <div id="search">

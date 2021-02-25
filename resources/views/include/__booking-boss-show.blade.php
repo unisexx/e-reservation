@@ -236,7 +236,7 @@
 @else
 
     {{-- แสดงผลแบบปฏิทิน --}}
-    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
+    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from, 'type'=>'boss' ])
 
     <div id="bossSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ผู้บริหาร +">

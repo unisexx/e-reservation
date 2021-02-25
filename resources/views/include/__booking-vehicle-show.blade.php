@@ -236,7 +236,7 @@
 @else
 
     {{-- แสดงผลแบบปฏิทิน --}}
-    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from ])
+    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from, 'type'=>'vehicle' ])
     <div id='calendar'></div>
 
 @endif

@@ -52,7 +52,7 @@
     @endif
 </ul>
 
-@if(@$from == 'frontend')
+@if(@$from == 'frontend' && (@$type == 'room' || @$type == 'conference' ))
 <h5><b>สถานะของ Conference</b></h5>
 <ul class="list-unstyled list-inline">
     <li>

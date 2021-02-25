@@ -32,7 +32,7 @@ if (isset($rs->st_bureau_code)) {
         <th>ชื่อ-สกุล<span class="Txt_red_12"> *</span></th>
         <td>
             <div class="form-inline">
-                <input name="name" type="text" class="form-control" placeholder="ชื่อ-สกุล" style="width:500px;" value="{{ $rs->name ?? old('name') }}" required/></div>
+                <input name="name" type="text" class="form-control chkDoubleSraA" placeholder="ชื่อ-สกุล" style="width:500px;" value="{{ $rs->name ?? old('name') }}" required/></div>
         </td>
     </tr>
     <tr>
@@ -130,3 +130,19 @@ if (isset($rs->st_bureau_code)) {
     }
 </script>
 @endpush
+
+{{-- @push('js')
+<script>
+    $(document).ready(function(){
+        $("body").on( "keyup", '.chkDoubleSraA', function() {
+            var str = $(this).val();
+            $(this).val(str.replace("เเ", "แ"));
+
+            // var str2 = "เเ";
+            // if(str.indexOf(str2) != -1){
+            //     alert('จะใช้สระแอ อย่าพิมพ์สระเอสองตัวเถอะ ขอร้อง!!!');
+            // }
+        });
+    });
+</script>
+@endpush --}}
