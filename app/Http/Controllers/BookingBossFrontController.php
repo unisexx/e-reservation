@@ -6,6 +6,7 @@ use App\Http\Requests\BookingBossRequest;
 // use App\Jobs\SendEmail;
 use App\Mail\Summary;
 use App\Model\BookingBoss;
+use App\Model\StBoss;
 use Illuminate\Http\Request;
 use Mail;
 
@@ -104,5 +105,20 @@ class BookingBossFrontController extends Controller
     {
         $rs = BookingBoss::findOrFail($id);
         $this->sendEmail($rs);
+    }
+
+    public function schedule()
+    {
+        // $bosses = StBoss::whereHas('bookingBoss', function ($q) {
+        //     $q->whereDate('start_date', '=', '2021-02-08');
+        // })->where('status', 1)->get();
+
+        // $bookingbosses = BookingBoss::whereDate('start_date', '=', '2021-02-08')->get();
+
+        $bosses = StBoss::where('status', 1)->get();
+
+        $bookingbosses = BookingBoss::where('status', 'อนุมัติ')->get();
+
+        return view('include._boss_schedule', compact('bosses', 'bookingbosses'));
     }
 }

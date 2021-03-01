@@ -43,11 +43,11 @@ class StRoomRequest extends FormRequest
             $stRoom = StRoom::find($this->segment(3));
             if ($stRoom->notHavingImageInDb()) { // เช็กฐานข้อมูลว่าฟิลด์ image มีค่าหรือไม่, ถ้าไม่มีค่าให้ validate รูป แต่ถ้ามีข้อมูลรูปแล้ว ไม่ต้อง validate
                 $rules['image'] = 'required';
-                $rules['image.*'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+                $rules['image.*'] = 'mimes:jpeg,png,jpg,gif|max:2048';
             }
         } else { // ถ้าเป็นการ create ให้ validate รูป
             $rules['image'] = 'required';
-            $rules['image.*'] = 'image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['image.*'] = 'mimes:jpeg,png,jpg,gif|max:2048';
         }
 
         return $rules;

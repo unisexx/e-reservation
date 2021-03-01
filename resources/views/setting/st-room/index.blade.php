@@ -28,6 +28,7 @@
     <tr>
         <th>ลำดับ</th>
         <th style="width:20%">ภาพห้องประชุม</th>
+        <th>จังหวัด</th>
         <th style="width:20%">ชื่อห้องประชุม</th>
         <th style="width:30%">รายละเอียด</th>
         <th>สถานะ</th>
@@ -51,6 +52,7 @@
                 @endforeach
             @endif
         </td>
+        <td>{{ $item->stProvince->name }}</td>
         <td>{{ $item->name }}</td>
         <td>
             <div style="margin-bottom:10px;">จำนวนคนที่รองรับได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>

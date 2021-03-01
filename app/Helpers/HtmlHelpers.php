@@ -109,3 +109,12 @@ if (!function_exists('getBossCboxDetail')) {
         return $txt;
     }
 }
+
+if (!function_exists('getProviceName')) {
+    function getProviceName($id)
+    {
+        $rs = \App\Model\StProvince::find($id);
+
+        return $rs->name;
+    }
+}

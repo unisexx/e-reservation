@@ -88,6 +88,10 @@ class AjaxController extends Controller
             $rs = $rs->where('st_bureau_code', $_GET['bureau_code']);
         }
 
+        if (!empty($_GET['st_province_id'])) {
+            $rs = $rs->where('st_province_id', $_GET['st_province_id']);
+        }
+
         $rs = $rs->orderBy('id', 'asc')->get();
 
         return view('ajax.ajaxGetRoom', compact('rs'));

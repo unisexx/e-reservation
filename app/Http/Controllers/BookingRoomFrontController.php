@@ -46,6 +46,7 @@ class BookingRoomFrontController extends Controller
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_room_id');
         $status = $request->get('status');
+        $st_province_id = $request->get('st_province_id');
 
         $rs = BookingRoom::with('department', 'bureau', 'division', 'st_room');
         $rs_all = $rs->get();
@@ -69,6 +70,12 @@ class BookingRoomFrontController extends Controller
 
         if (!empty($status)) {
             $rs = $rs->where('status', $status);
+        }
+
+        if ($st_province_id) {
+            $rs = $rs->whereHas('st_room', function ($q) use ($st_province_id) {
+                $q->where('st_province_id', $st_province_id);
+            });
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
@@ -103,5 +110,10 @@ class BookingRoomFrontController extends Controller
     {
         $rs = BookingRoom::findOrFail($id);
         $this->sendEmail($rs);
+    }
+
+    public function province()
+    {
+        return view('include._province_select');
     }
 }

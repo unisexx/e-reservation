@@ -86,6 +86,11 @@ class StRoom extends Model
         return $this->hasMany('App\Model\ManageRoom', 'st_room_id', 'id');
     }
 
+    public function stProvince()
+    {
+        return $this->hasOne('App\Model\StProvince', 'id', 'st_province_id');
+    }
+
     // logsActivity
     protected static $logAttributes = [
         'name',

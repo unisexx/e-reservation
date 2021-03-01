@@ -5,8 +5,9 @@
 @php
     $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
 
-    $st_rooms = App\Model\StRoom::where('status', 1)->where('is_conference', '<>', 1)->orderBy('name', 'asc')->get();
-    $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
+    $st_rooms = App\Model\StRoom::where('status', 1)->where('st_province_id', @$_GET['st_province_id'])->orderBy('name', 'asc')->get();
+    // $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
+    $req_st_room_id = request('st_room_id');
 @endphp
 
 <script>
@@ -25,7 +26,7 @@
                 addBtn: {
                     text: '+ ขอจองห้องประชุม/อบรม',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create?st_room_id={{ @$req_st_room_id }}";
+                        window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}&st_room_id={{ @$req_st_room_id }}";
                     }
                 }
             },
@@ -119,7 +120,7 @@
     <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองห้องประชุม/อบรม</h3>
+<h3>จองห้องประชุม/อบรม ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})</h3>
 
 <div id="search">
     <div id="searchBox">
@@ -187,10 +188,10 @@
         $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';
     @endphp
     @if(!request('is_conference'))
-    <div class="text-center" style="width:50%; margin: 0 auto;">
+    <div id="roomSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
             @foreach($st_rooms as $item)
-                <option value="{{ url($action.'/show?st_room_id='.$item->id.'&search='.request('search').@$conference_path) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                <option value="{{ url($action.'/show?st_province_id='.@$_GET['st_province_id'].'&st_room_id='.$item->id.'&search='.request('search').@$conference_path) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
             @endforeach
         </select>
     </div>
@@ -231,10 +232,10 @@ $(document).ready(function(){
 
 @push('css')
 <style>
-    .bootstrap-select.btn-group .dropdown-toggle .filter-option{
+    #roomSelectDiv .bootstrap-select.btn-group .dropdown-toggle .filter-option{
         font-size: 25px;
     }
-    .bootstrap-select > .dropdown-toggle{
+    #roomSelectDiv .bootstrap-select > .dropdown-toggle{
         height: 55px !important;
     }
 </style>

@@ -440,6 +440,7 @@ if(isset($rs->end_time)){
                 data: {
                     search: $("#searchTxt").val(),
                     depertment_code: $("#searchDepartment").val(),
+                    st_province_id: {{ request('st_province_id') }},
                 }
             })
             .done(function(data) {

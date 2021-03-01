@@ -52,6 +52,7 @@ Route::get('download/permform', function () {
 });
 
 // Booking
+Route::get('booking-room-front/province', 'BookingRoomFrontController@province');
 Route::get('booking-room-front/summary/{id}', 'BookingRoomFrontController@summary');
 Route::get('booking-room-front/print/{id}', 'BookingRoomFrontController@print');
 Route::resource('booking-room-front', 'BookingRoomFrontController');
@@ -65,6 +66,7 @@ Route::resource('booking-resource-front', 'BookingResourceFrontController');
 
 Route::get('booking-boss-front/summary/{id}', 'BookingBossFrontController@summary');
 Route::get('booking-boss-front/print/{id}', 'BookingBossFrontController@print');
+Route::get('booking-boss-front/schedule', 'BookingBossFrontController@schedule');
 Route::resource('booking-boss-front', 'BookingBossFrontController');
 
 // Dashboard

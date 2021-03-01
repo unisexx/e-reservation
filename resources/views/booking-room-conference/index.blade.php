@@ -41,7 +41,7 @@
             <input type="button" title="export excel" value="export excel" class="btn vtip" />
         </a>
         @if(CanPerm('booking-room-conference-create'))
-        <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room-conference/create') }}'" class="btn btn-success vtip" />
+        <input type="button" title="+ จองห้อง Conference" value="+ จองห้อง Conference" onclick="document.location='{{ url('/booking-room-conference/create') }}'" class="btn btn-success vtip" />
         @endif
     </div>
 
