@@ -31,6 +31,7 @@
         {{-- <th>ระดับตำแหน่ง</th> --}}
         <th>ตำแหน่ง</th>
         <th>ข้อมูลติดต่อ</th>
+        <th>ผู้ดูแล</th>
         <th>สถานะ</th>
         <th>จัดการ</th>
     </tr>
@@ -42,6 +43,13 @@
             {{-- <td>{{ @$item->stPositionLevel->name ?? '-' }}</td> --}}
             <td>{{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}</td>
             <td>{{ $item->tel }}</td>
+            <td>
+                <ul>
+                    @foreach($item->stBossRes as $stBossRes)
+                    <li>{{ @$stBossRes->user->prefix->title }} {{ @$stBossRes->user->givename }} {{ @$stBossRes->user->familyname }}</li>
+                    @endforeach
+                </ul>
+            </td>
             <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
             <td>
 

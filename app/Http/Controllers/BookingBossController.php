@@ -48,6 +48,15 @@ class BookingBossController extends Controller
                 $q->where('status', $req->status);
             }
 
+            // ถ้ามีสิทธิ์ดูแลผู้บริหาร จะสามารถเห็นรายการจองเฉพาะผู้บริหารที่ตัวเองดูแลเท่านั้น
+            if (CanPerm('boss-manager')) {
+                $q->whereHas('stBoss', function ($r) {
+                    $r->whereHas('stBossRes', function ($s) {
+                        $s->where('user_id', @Auth::user()->id);
+                    });
+                });
+            }
+
         });
 
         if (@$_GET['export'] == 'excel') {

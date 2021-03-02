@@ -10,4 +10,9 @@ class StBossRes extends Model
         'st_boss_id',
         'user_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
 }

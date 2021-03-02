@@ -128,7 +128,7 @@
 </style>
 
 <div id="btnBox">
- <a href="{{ $from == 'backend' ? url('booking-vehicle') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
+ <a href="{{ $from == 'backend' ? url('booking-boss') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
 <h3>จองวาระผู้บริหาร</h3>

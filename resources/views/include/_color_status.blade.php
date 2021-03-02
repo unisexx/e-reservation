@@ -26,7 +26,16 @@
             }elseif($type == 'resource'){
                 $count = App\Model\BookingResource::get();
             }elseif($type == 'boss'){
-                $count = App\Model\BookingBoss::get();
+                $count = App\Model\BookingBoss::where(function($q){
+                    // ถ้ามีสิทธิ์ดูแลผู้บริหาร จะสามารถเห็นรายการจองเฉพาะผู้บริหารที่ตัวเองดูแลเท่านั้น
+                    if (CanPerm('boss-manager')) {
+                        $q->whereHas('stBoss', function ($r) {
+                            $r->whereHas('stBossRes', function ($s) {
+                                $s->where('user_id', @Auth::user()->id);
+                            });
+                        });
+                    }
+                })->get();
             }
         @endphp
         <li>

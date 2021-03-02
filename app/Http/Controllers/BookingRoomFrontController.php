@@ -7,6 +7,7 @@ use App\Http\Requests\BookingRoomRequest;
 // use App\Jobs\SendEmail;
 use App\Mail\Summary;
 use App\Model\BookingRoom;
+use DB;
 use Illuminate\Http\Request;
 use Mail;
 
@@ -43,6 +44,8 @@ class BookingRoomFrontController extends Controller
 
     public function show(Request $request)
     {
+        DB::enableQueryLog();
+
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_room_id');
         $status = $request->get('status');
@@ -72,13 +75,14 @@ class BookingRoomFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        if ($st_province_id) {
+        if (!empty($st_province_id)) {
             $rs = $rs->whereHas('st_room', function ($q) use ($st_province_id) {
                 $q->where('st_province_id', $st_province_id);
             });
         }
 
         $rs = $rs->orderBy('id', 'desc')->get();
+        // dd(DB::getQueryLog());
 
         return view('include.__booking-room-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }
