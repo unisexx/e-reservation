@@ -31,9 +31,9 @@ if(isset($rs->end_time)){
     <div class="container bg-white" >
 
     <h3>@if(Request::segment(1) == 'booking-room-conference')
-        จองห้อง Conference (เพิ่ม / แก้ไข)
+        จองห้อง Conference
         @else
-        จองห้องประชุม/อบรม (เพิ่ม / แก้ไข)
+        จองห้องประชุม/อบรม ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})
         @endif
         {{-- แสดงเฉพาะด้านหน้า --}}
         @if($formWhere == 'frontend')

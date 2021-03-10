@@ -44,11 +44,11 @@ class StVehicleRequest extends FormRequest
             $stVehicle = StVehicle::find($this->segment(3));
             if ($stVehicle->notHavingImageInDb()) {
                 // เช็กฐานข้อมูลว่าฟิลด์ image มีค่าหรือไม่, ถ้าไม่มีค่าให้ validate รูป แต่ถ้ามีข้อมูลรูปแล้ว ไม่ต้อง validate
-                $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+                $rules['image'] = 'required|mimes:jpeg,png,jpg,gif|max:2048';
             }
         } else {
             // ถ้าเป็นการ create ให้ validate รูป
-            $rules['image'] = 'required|image|mimes:jpeg,png,jpg,gif|max:2048';
+            $rules['image'] = 'required|mimes:jpeg,png,jpg,gif|max:2048';
         }
 
         return $rules;
@@ -63,7 +63,7 @@ class StVehicleRequest extends FormRequest
     {
         return [
             'image.required'              => 'ภาพยานพาหนะ ห้ามเป็นค่าว่าง',
-            'image.image'                 => 'ภาพยานพาหนะ เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
+            // 'image.image'                 => 'ภาพยานพาหนะ เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
             'image.mimes'                 => 'ภาพยานพาหนะ เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
             'image.max'                   => 'ภาพยานพาหนะ ขนาดต้องไม่เกิน 2048 kb',
             'st_vehicle_type_id.required' => 'ประเภท ห้ามเป็นค่าว่าง',

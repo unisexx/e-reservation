@@ -42,6 +42,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
     <tr>
         <th>ลำดับ</th>
         <th>ภาพยานพาหนะ</th>
+        <th>จังหวัด</th>
         <th>ประเภท / ยี่ห้อ / ที่นั่ง / สี / เลขทะเบียน</th>
         <th>หน่วยงานที่รับผิดชอบ</th>
         {{-- <th>พนักงานขับวันนี้</th> --}}
@@ -52,6 +53,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
     <tr @if(($key % 2)==1) class="odd" @endif>
         <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
         <td>@if($row->image) <img src="{{ url('uploads/vehicle/'.$row->image) }}" width="90"> @endif</td>
+        <td>{{ @$row->stProvince->name }}</td>
         <td>{{$row->st_vehicle_type->name}} {{$row->brand}} {{!empty($row->seat)?$row->seat:'-'}} ที่นั่ง สี{{$row->color}} ทะเบียน {{$row->reg_number}}</td>
         <td>
             {{ $row->department->title }} >

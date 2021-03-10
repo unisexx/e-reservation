@@ -71,7 +71,9 @@
                             <div class="service-desc">
                             <h5>จองยานพาหนะ</h5>
                             <div class="divider-header"></div>
-                            <a href="{{ url('booking-vehicle-front/show') }}" class="btn btn-skin">booking</a>
+                                {{-- <a href="{{ url('booking-vehicle-front/show') }}" class="btn btn-skin">booking</a> --}}
+                                <a href="{{ url('booking-vehicle-front/show?st_province_id=1') }}" class="btn btn-skin">ส่วนกลาง</a>
+                                <a href="{{ url('booking-vehicle-front/province') }}" class="btn btn-skin">ภูมิภาค</a>
                             </div>
                         </div>
                         </div>

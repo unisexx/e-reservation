@@ -23,6 +23,22 @@ if (isset($rs->st_bureau_code)) {
 ?>
 
 <table class="tbadd">
+    <tr>
+        <th>จังหวัดของยานพาหนะ</th>
+        <td>
+            {{ Form::select(
+                'st_province_id', 
+                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','id'), 
+                $stroom->st_province_id ?? old('st_province_id'), 
+                [
+                    'class' => 'form-control selectpicker', 
+                    'data-live-search' => 'true',
+                    'data-size' => '8',
+                    'data-width' => 'auto',
+                ])
+            }}
+        </td>
+    </tr>
     <tr class="{{ $errors->has('image') ? 'has-error' : '' }}">
         <th>ภาพยานพาหนะ <span class="Txt_red_12"> *</span></th>
         <td>

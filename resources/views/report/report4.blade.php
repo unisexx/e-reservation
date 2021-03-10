@@ -20,12 +20,12 @@
     <div id="searchBox">
         <form method="GET" action="{{ url('report4') }}" accept-charset="UTF-8" class="form-inline" role="search">
 
-            <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
+            {{-- <select name="st_department_code" id="lunch" class="selectpicker" data-live-search="true" title="กรม">
                 <option value="">+ กรม +</option>
                 @foreach($st_departments as $item)
                     <option value="{{ $item->code }}" @if($item->code == @request('st_department_code')) selected="selected" @endif>{{ $item->title }}</option>
                 @endforeach
-            </select>
+            </select> --}}
 
             <input type="text" class="form-control" style="width:370px;" placeholder="ชื่อผู้บริหาร" name="search" value="{{ request('search') }}">
 
@@ -51,7 +51,7 @@
     <thead>
     <tr>
         <th>ลำดับ</th>
-        <th>ชื่อกรม</th>
+        {{-- <th>ชื่อกรม</th> --}}
         <th>ชื่อผู้บริหาร</th>
         <th>สถานะ</th>
     </tr>
@@ -60,9 +60,9 @@
     @foreach($rs as $key=>$row)
     <tr>
         <td>{{ $key+1 }}</td>
-        <td>
-            {{ $row->department->title }} 
-        </td>
+        {{-- <td>
+            {{ @$row->department->title }} 
+        </td> --}}
         <td><a href="{{ url('report4_detail?st_boss_id='.$row->id.'&'.$get) }}">{{ $row->name }}</a></td>
         <td>
             <?php 

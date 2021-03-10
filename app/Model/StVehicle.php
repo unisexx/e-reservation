@@ -45,6 +45,7 @@ class StVehicle extends Model
         'st_division_code',
         'res_name',
         'res_tel',
+        'st_province_id',
     ];
 
     /** Dear Custom Function */
@@ -84,6 +85,11 @@ class StVehicle extends Model
     public function bookingVehicle()
     {
         return $this->hasMany('App\Model\BookingVehicle', 'st_vehicle_id', 'id');
+    }
+
+    public function stProvince()
+    {
+        return $this->hasOne('App\Model\StProvince', 'id', 'st_province_id');
     }
 
     // logsActivity

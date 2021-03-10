@@ -56,7 +56,7 @@ if (isset($rs->req_st_bureau_code)) {
 
     <div class="container bg-white" >
 
-    <h3>จองยานพาหนะ (เพิ่ม / แก้ไข)
+    <h3>จองยานพาหนะ ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})
         {{-- แสดงเฉพาะด้านหน้า --}}
         @if($formWhere == 'frontend')
         <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="36" style="float: right;"></a>

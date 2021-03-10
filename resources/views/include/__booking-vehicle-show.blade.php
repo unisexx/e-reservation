@@ -30,7 +30,7 @@
                 addBtn: {
                     text: '+ ขอจองยานพาหนะ',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create";
+                        window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}";
                     }
                 }
             },
@@ -52,7 +52,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}&start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
@@ -131,7 +131,7 @@
  <a href="{{ $from == 'backend' ? url('booking-vehicle') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองยานพาหนะ</h3>
+<h3>จองยานพาหนะ ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})</h3>
 
 <div id="search">
     <div id="searchBox">

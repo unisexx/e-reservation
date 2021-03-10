@@ -24,11 +24,11 @@
     </tr>
     @foreach($perms as $perm)
     <tr>
-        <th colspan="3" class="topic">{{ $perm->name }}</th>
+        <th colspan="3" class="topic">{!! $perm->name !!}</th>
     </tr>
         @foreach ($perm->childs()->orderBy('order')->where('status',1)->get() as $key => $child)
         <tr class="perm_id_{{ $child->id }}">
-            <th class="paddL40"><div style="width: 200px;">{{ $child->name }}</div></th>
+            <th class="paddL40"><div style="width: 200px;">{!! $child->name !!}</div></th>
             <td class="row_{{ $child->id }}">
                 @foreach($child->permissions()->orderBy('id')->get() as $key => $p)
                     <label class="chkbox">

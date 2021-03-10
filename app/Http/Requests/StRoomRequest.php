@@ -62,7 +62,7 @@ class StRoomRequest extends FormRequest
     {
         return [
             'image.required'              => 'ภาพห้องประชุม ห้ามเป็นค่าว่าง',
-            'image.*.image'               => 'ภาพห้องประชุม เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
+            // 'image.*.image'               => 'ภาพห้องประชุม เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
             'image.*.mimes'               => 'ภาพห้องประชุม เป็นไฟล์รูปนามสกุล .jpeg, .png, .jpg, .gif เท่านั้น',
             'image.*.max'                 => 'ภาพห้องประชุม ขนาดต้องไม่เกิน 2048 kb',
             'name.required'               => 'ชื่อห้องประชุม ห้ามเป็นค่าว่าง',

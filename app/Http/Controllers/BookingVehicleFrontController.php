@@ -47,6 +47,7 @@ class BookingVehicleFrontController extends Controller
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
         $status = $request->get('status');
+        $st_province_id = $request->get('st_province_id');
 
         $rs = BookingVehicle::select('*');
         $rs_all = $rs->get();
@@ -82,6 +83,12 @@ class BookingVehicleFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
+        if (!empty($st_province_id)) {
+            $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_province_id) {
+                $q->where('st_province_id', $st_province_id);
+            });
+        }
+
         $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();
 
         return view('include.__booking-vehicle-show', compact('rs', 'rs_all'))->withFrom('frontend');
@@ -115,5 +122,10 @@ class BookingVehicleFrontController extends Controller
     {
         $rs = BookingVehicle::findOrFail($id);
         $this->sendEmail($rs);
+    }
+
+    public function province()
+    {
+        return view('include._province_select');
     }
 }
