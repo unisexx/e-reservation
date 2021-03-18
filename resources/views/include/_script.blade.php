@@ -353,6 +353,7 @@
             url: "{{ url('ajaxGetBureauVehicle') }}",
             data: {
                 st_department_code: $department.val(),
+                st_province_code: '{{ @$_GET['st_province_code'] }}',
             }
         }).done(function(data) {
             $.map(data, function(i) {
@@ -371,6 +372,7 @@
             url: "{{ url('ajaxGetDivisionVehicle') }}",
             data: {
                 st_bureau_code: $bureau.val(),
+                st_province_code: '{{ @$_GET['st_province_code'] }}',
             }
         }).done(function(data) {
             $.map(data, function(i) {
@@ -463,3 +465,6 @@ function thToTimeStamp(thDate){
         font-size: 1.6rem !important;
     }
 </style>
+
+<script src='{{ asset('js/spectrum-1.8.1/spectrum.js') }}'></script>
+<link rel='stylesheet' href='{{ asset('js/spectrum-1.8.1/spectrum.css') }}' />

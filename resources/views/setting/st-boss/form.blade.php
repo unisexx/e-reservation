@@ -75,6 +75,18 @@ if (isset($rs->st_bureau_code)) {
         </td>
     </tr>
     <tr>
+        <th>สี<span class="Txt_red_12"> *</span></th>
+        <td>
+            {{ Form::text('color', $rs->color ?? '#000000', ['id' => 'custom', 'class'=>'form-control']) }}
+        </td>
+    </tr>
+    <tr>
+        <th>อักษรย่อ<span class="Txt_red_12"> *</span></th>
+        <td>
+            {{ Form::text('abbr', @$rs->abbr, ['class'=>'form-control', 'maxlength'=>'2', 'size'=>'2', 'style'=>'width:50px']) }}
+        </td>
+    </tr>
+    <tr>
         <th>เปิดการใช้งาน</th>
         <td>
             <input name="status" type="hidden" value="0" checked="checked" />
@@ -131,18 +143,10 @@ if (isset($rs->st_bureau_code)) {
 </script>
 @endpush
 
-{{-- @push('js')
+@push('js')
 <script>
-    $(document).ready(function(){
-        $("body").on( "keyup", '.chkDoubleSraA', function() {
-            var str = $(this).val();
-            $(this).val(str.replace("เเ", "แ"));
-
-            // var str2 = "เเ";
-            // if(str.indexOf(str2) != -1){
-            //     alert('จะใช้สระแอ อย่าพิมพ์สระเอสองตัวเถอะ ขอร้อง!!!');
-            // }
-        });
+    $("#custom").spectrum({
+        preferredFormat: "hex"
     });
 </script>
-@endpush --}}
+@endpush

@@ -30,7 +30,7 @@
                 addBtn: {
                     text: '+ ขอจองยานพาหนะ',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}";
+                        window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}";
                     }
                 }
             },
@@ -52,7 +52,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}&start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
@@ -127,11 +127,12 @@
     }
 </style>
 
-<div id="btnBox">
+<div style="float:right;">
  <a href="{{ $from == 'backend' ? url('booking-vehicle') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองยานพาหนะ ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})</h3>
+<center><h1>{{ @$_GET['st_province_code'] == 10 ? 'สำหรับส่วนกลาง' : 'สำหรับส่วนภูมิภาค' }}</h1></center>
+<h3>จองยานพาหนะ ({{ @getProviceName(@$_GET['st_province_code']) }})</h3>
 
 <div id="search">
     <div id="searchBox">

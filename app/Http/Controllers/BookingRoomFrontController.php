@@ -49,7 +49,7 @@ class BookingRoomFrontController extends Controller
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_room_id');
         $status = $request->get('status');
-        $st_province_id = $request->get('st_province_id');
+        $st_province_code = $request->get('st_province_code');
 
         $rs = BookingRoom::with('department', 'bureau', 'division', 'st_room');
         $rs_all = $rs->get();
@@ -75,9 +75,9 @@ class BookingRoomFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        if (!empty($st_province_id)) {
-            $rs = $rs->whereHas('st_room', function ($q) use ($st_province_id) {
-                $q->where('st_province_id', $st_province_id);
+        if (!empty($st_province_code)) {
+            $rs = $rs->whereHas('st_room', function ($q) use ($st_province_code) {
+                $q->where('st_province_code', $st_province_code);
             });
         }
 

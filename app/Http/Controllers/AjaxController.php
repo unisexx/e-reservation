@@ -14,6 +14,7 @@ use App\Model\StRoom;
 use App\Model\StVehicle;
 use Auth;
 use DB;
+use Illuminate\Http\Request;
 
 class AjaxController extends Controller
 {
@@ -28,30 +29,68 @@ class AjaxController extends Controller
         return view('ajax.magicsuggest');
     }
 
-    public function ajaxGetBureau()
+    public function ajaxGetBureau(Request $req)
     {
-        $data['rs'] = StBureau::where('code', 'like', $_GET['st_department_code'] . '%')->orderBy('code', 'asc')->get();
+        $data['rs'] = StBureau::where(function ($q) use ($req) {
+            if ($req->st_department_code) {
+                $q->where('code', 'LIKE', "%$req->st_department_code%");
+            }
+            if ($req->st_province_code) {
+                $q->where('st_province_code', $req->st_province_code);
+            }
+        })->orderBy('code', 'asc')->get();
 
         return $data['rs'];
     }
 
-    public function ajaxGetDivision()
+    public function ajaxGetDivision(Request $req)
     {
-        $data['rs'] = StDivision::where('code', 'like', $_GET['st_bureau_code'] . '%')->orderBy('code', 'asc')->get();
+        $data['rs'] = StDivision::where(function ($q) use ($req) {
+            if ($req->st_bureau_code) {
+                $q->where('code', 'LIKE', "%$req->st_bureau_code%");
+            }
+            if ($req->st_province_code) {
+                $q->where('st_province_code', $req->st_province_code);
+            }
+        })->orderBy('code', 'asc')->get();
 
         return $data['rs'];
     }
 
-    public function ajaxGetBureauVehicle()
+    public function ajaxGetBureauVehicle(Request $req)
     {
-        $data['rs'] = StVehicle::select('st_bureau_code')->where('st_department_code', 'like', $_GET['st_department_code'] . '%')->where('status', 'พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+        // $data['rs'] = StVehicle::select('st_bureau_code')->where('st_department_code', 'like', $_GET['st_department_code'] . '%')->where('status', 'พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
+
+        $data['rs'] = StVehicle::select('st_bureau_code')->where(function ($q) use ($req) {
+            $q->where('status', 'พร้อมใช้');
+
+            if ($req->st_department_code) {
+                $q->where('st_department_code', 'LIKE', "%$req->st_department_code%");
+            }
+
+            if ($req->st_province_code) {
+                $q->where('st_province_code', $req->st_province_code);
+            }
+        })->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
 
         return $data['rs'];
     }
 
-    public function ajaxGetDivisionVehicle()
+    public function ajaxGetDivisionVehicle(Request $req)
     {
-        $data['rs'] = StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $_GET['st_bureau_code'] . '%')->where('status', 'พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+        // $data['rs'] = StVehicle::select('st_division_code')->where('st_bureau_code', 'like', $_GET['st_bureau_code'] . '%')->where('status', 'พร้อมใช้')->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
+
+        $data['rs'] = StVehicle::select('st_division_code')->where(function ($q) use ($req) {
+            $q->where('status', 'พร้อมใช้');
+
+            if ($req->st_bureau_code) {
+                $q->where('st_bureau_code', 'LIKE', "%$req->st_bureau_code%");
+            }
+
+            if ($req->st_province_code) {
+                $q->where('st_province_code', $req->st_province_code);
+            }
+        })->with('division')->distinct()->orderBy('st_division_code', 'asc')->get();
 
         return $data['rs'];
     }
@@ -88,8 +127,8 @@ class AjaxController extends Controller
             $rs = $rs->where('st_bureau_code', $_GET['bureau_code']);
         }
 
-        if (!empty($_GET['st_province_id'])) {
-            $rs = $rs->where('st_province_id', $_GET['st_province_id']);
+        if (!empty($_GET['st_province_code'])) {
+            $rs = $rs->where('st_province_code', $_GET['st_province_code']);
         }
 
         $rs = $rs->orderBy('id', 'asc')->get();
@@ -337,5 +376,19 @@ class AjaxController extends Controller
     {
         DB::table('st_rooms')->update(['is_default' => 0]);
         DB::table('st_rooms')->where('id', $_GET['id'])->update(['is_default' => 1]);
+    }
+
+    public function ajaxSaveOrder(Request $req)
+    {
+        parse_str($req->data, $get_array);
+        // dump($get_array);
+        // print_r($get_array['id']);
+
+        foreach ($get_array['id'] as $key => $value) {
+            DB::table($req->tb)->where('id', $value)->update(['order' => ($key + 1)]);
+
+            // dump($value);
+        }
+
     }
 }

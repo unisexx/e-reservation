@@ -24,7 +24,7 @@ class StBossController extends Controller
             if ($req->search) {
                 $q->where('name', 'LIKE', "%$req->search%");
             }
-        })->orderBy('id', 'desc')->paginate(10);
+        })->orderBy('order', 'asc')->paginate(999);
 
         return view('setting.st-boss.index', compact('rs'));
     }
@@ -62,6 +62,7 @@ class StBossController extends Controller
 
     public function update(StBossRequest $request, $id)
     {
+        // dd($request->color);
         // dd($request->all());
         $requestData = $request->all();
 

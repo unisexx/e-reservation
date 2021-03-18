@@ -1,3 +1,9 @@
+@php
+    $st_province_code = @$rs->st_province_code ?? request('st_province_code');
+    $province_txt = @$st_province_code == 1 ? 'ส่วนกลาง' : @getProviceName(@$st_province_code);
+    // dump($province_txt);
+@endphp
+
 <?php
 $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
 
@@ -33,7 +39,7 @@ if(isset($rs->end_time)){
     <h3>@if(Request::segment(1) == 'booking-room-conference')
         จองห้อง Conference
         @else
-        จองห้องประชุม/อบรม ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})
+        จองห้องประชุม/อบรม ({{ @$province_txt }})
         @endif
         {{-- แสดงเฉพาะด้านหน้า --}}
         @if($formWhere == 'frontend')
@@ -368,6 +374,7 @@ if(isset($rs->end_time)){
 
             <div id="MainFrmSubmit" class="row mt-30 mb-7">
                 <div class="col-md-4 col-md-offset-2">
+                    <input type="hidden" name="st_province_code" value="{{ @$st_province_code }}">
                     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
                 </div>
                 <div class="col-md-4">
@@ -440,7 +447,7 @@ if(isset($rs->end_time)){
                 data: {
                     search: $("#searchTxt").val(),
                     depertment_code: $("#searchDepartment").val(),
-                    st_province_id: {{ request('st_province_id') }},
+                    st_province_code: {{ @$st_province_code }},
                 }
             })
             .done(function(data) {

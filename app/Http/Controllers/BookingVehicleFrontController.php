@@ -47,7 +47,7 @@ class BookingVehicleFrontController extends Controller
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
         $status = $request->get('status');
-        $st_province_id = $request->get('st_province_id');
+        $st_province_code = $request->get('st_province_code');
 
         $rs = BookingVehicle::select('*');
         $rs_all = $rs->get();
@@ -83,9 +83,9 @@ class BookingVehicleFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
-        if (!empty($st_province_id)) {
-            $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_province_id) {
-                $q->where('st_province_id', $st_province_id);
+        if (!empty($st_province_code)) {
+            $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_province_code) {
+                $q->where('st_province_code', $st_province_code);
             });
         }
 

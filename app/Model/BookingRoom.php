@@ -142,6 +142,7 @@ class BookingRoom extends Model
         'use_conference',
         'approve_conference_by_id',
         'approve_conference_date',
+        'st_province_code',
     ];
     protected static $logOnlyDirty = true;
 }

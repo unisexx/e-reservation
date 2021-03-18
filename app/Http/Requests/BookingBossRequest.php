@@ -28,7 +28,7 @@ class BookingBossRequest extends FormRequest
             'request_name'         => 'required',
             'request_position'     => 'required',
             'request_tel'          => 'required',
-            'request_email'        => 'required|email',
+            'request_email'        => 'required|email:rfc,dns',
             'st_department_code'   => 'required',
             'st_bureau_code'       => 'required',
             'st_division_code'     => 'required',

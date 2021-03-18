@@ -115,7 +115,7 @@
 </table>
 
 <div id="btnBoxAdd">
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ $from == 'backend' ? url('/booking-room') : url('/booking-room-front/show') }}'" class="btn btn-default" style="width:100px;" />
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ $from == 'backend' ? url('/booking-room') : url('/booking-room-front/show?st_province_code='.@$rs->st_province_code) }}'" class="btn btn-default" style="width:100px;" />
 
     <a href="{{ url('booking-room-front/print/'.$rs->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="width:48px; margin-left:10px;"></a>
 </div>
@@ -200,7 +200,7 @@
 </table>
 
 <div id="btnBoxAdd">
-    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ $from == 'backend' ? url('/booking-vehicle') : url('/booking-vehicle-front/show') }}'" class="btn btn-default" style="width:100px;" />
+    <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="document.location='{{ $from == 'backend' ? url('/booking-vehicle') : url('/booking-vehicle-front/show?st_province_code='.@$rs->st_province_code) }}'" class="btn btn-default" style="width:100px;" />
 
     <a href="{{ url('booking-vehicle-front/print/'.$rs->id) }}" target="_blank"><img src="{{ asset('images/printer.png') }}" alt="พิมพ์ใบจอง" style="width:48px; margin-left:10px;"></a>
 </div>

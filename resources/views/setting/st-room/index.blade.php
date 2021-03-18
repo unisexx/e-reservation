@@ -7,10 +7,19 @@
     <div id="searchBox">
         <form method="GET" action="{{ url('/setting/st-room') }}" accept-charset="UTF-8" class="form-inline" role="search">
             <input type="text" class="form-control" style="width:350px;" placeholder="ชื่อห้องประชุม" name="search" value="{{ request('search') }}">
+            {{ Form::select(
+                'st_province_code', 
+                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), request('st_province_code'), 
+                [
+                    'class' => 'form-control selectpicker', 
+                    'data-live-search' => 'true',
+                    'data-size' => '8',
+                    'data-width' => 'auto',
+                    'data-title' => 'เลือกจังหวัด',
+                ])
+            }}
             <button type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
-
-
     </div>
 </div>
 
@@ -24,7 +33,8 @@
     {!! $stroom->appends(['search' => Request::get('search')])->render() !!}
 </div>
 
-<table class="tblist">
+<table class="tblist table-striped">
+    <thead>
     <tr>
         <th>ลำดับ</th>
         <th style="width:20%">ภาพห้องประชุม</th>
@@ -37,8 +47,10 @@
         @endif
         <th>จัดการ</th>
     </tr>
+    </thead>
+    <tbody>
     @foreach($stroom as $key=>$item)
-    <tr @if(($key % 2)==1) class="odd" @endif>
+    <tr id="id-{{ $item->id }}">
         <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}</td>
         <td class="imgGroup">
             @if($item->image)
@@ -55,9 +67,9 @@
         <td>{{ $item->stProvince->name }}</td>
         <td>{{ $item->name }}</td>
         <td>
-            <div style="margin-bottom:10px;">จำนวนคนที่รองรับได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
-            <div style="margin-bottom:10px;">อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
-            <div style="margin-bottom:10px;">
+            <div>จำนวนคนที่รองรับได้ : {{ !empty($item->people) ? $item->people : "-" }} คน</div>
+            <div>อุปกรณ์ที่ติดตั้งในห้อง : {{ !empty($item->equipment) ? $item->equipment : "-" }}</div>
+            <div>
                 ผู้รับผิดชอบห้องประชุม : {{ !empty($item->res_name) ? $item->res_name : "-" }}
                 {{ !empty($item->st_department_code) ? $item->department->title : "-" }}
                 {{ !empty($item->st_bureau_code) ? $item->bureau->title : "-" }}
@@ -72,7 +84,6 @@
         </td>
         @endif
         <td>
-
             @if(CanPerm('st-room-edit'))
             <a href="{{ url('/setting/st-room/' . $item->id . '/edit') }}" title="Edit StAscc">
                 <img src="{{ url('images/edit.png') }}" width="24" height="24" class="vtip" title="แก้ไขรายการนี้" />
@@ -91,6 +102,7 @@
         </td>
     </tr>
     @endforeach
+    </tbody>
 </table>
 
 <div class="pagination-wrapper">
@@ -127,9 +139,73 @@ $(document).ready(function(){
             id: roomId,
         },
         function(data){
-            
+            console.log('set default complete');
         });
     });
 });
+</script>
+@endpush
+
+@push('css')
+<style>
+table.tblist {
+    border-spacing: collapse;
+    border-spacing: 0;
+}
+td {
+    width: 50px;
+    height: 25px;
+    border: 1px solid black;
+}
+.yellow
+{
+    background:rgb(211, 211, 211) !important;
+}
+</style>
+@endpush
+
+@push('js')
+<script>
+$(function() {
+    $("tbody").sortable({
+        helper: fixWidthHelper,
+        start: function( event, ui ) { 
+            $(ui.item).addClass("yellow");
+        },
+            stop:function( event, ui ) { 
+            $(ui.item).removeClass("yellow");
+        },
+        update: function( ) {
+            // console.log('drop');
+
+            // เรียงลำดับเลขแถวใหม่
+            var c = 0;
+            $('.tblist > tbody > tr').each(function(ind, el) {
+                orderNumber = ++c;
+                $(el).find("td:eq(0)").html(orderNumber + ".");
+                $(el).find(".roomOrder").val(orderNumber);
+            });
+
+            var oData = $(this).sortable('serialize');
+            // console.log( oData );
+
+            // อัพเดท order ลงฐานข้อมูล
+            $.get("{{ url('ajaxSaveOrder') }}",
+            {
+                data: oData,
+                tb: 'st_rooms',
+            },function(data){
+                console.log('save order complete');
+            });
+        }
+    }).disableSelection();
+});
+
+function fixWidthHelper(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+}
 </script>
 @endpush

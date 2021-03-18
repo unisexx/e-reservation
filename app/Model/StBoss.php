@@ -18,6 +18,9 @@ class StBoss extends Model
         'st_bureau_code',
         'st_division_code',
         'st_boss_position_id',
+        'color',
+        'abbr',
+        'order',
     ];
 
     public function stBossPosition()
@@ -53,6 +56,18 @@ class StBoss extends Model
     public function stBossRes()
     {
         return $this->hasMany('App\Model\StBossRes');
+    }
+
+    // หา user ปัจจบันที่อยู่ใน permission group ที่มีการตั้งค่าเป็นผู้ดูแลผูุ้บริหารอยู่
+    public function availableStBossRes()
+    {
+        return $this->stBossRes()->whereHas('user', function ($q) {
+            $q->whereHas('permission_group', function ($r) {
+                $r->whereHas('permissionRole', function ($s) {
+                    $s->where('permission_id', 93);
+                });
+            });
+        });
     }
 
     public static function boot()

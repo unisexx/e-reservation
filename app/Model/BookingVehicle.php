@@ -134,6 +134,7 @@ class BookingVehicle extends Model
         'st_driver_id',
         'approve_by_id',
         'approve_date',
+        'st_province_code',
     ];
     protected static $logOnlyDirty = true;
 }

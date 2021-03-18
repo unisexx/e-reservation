@@ -6,7 +6,7 @@
 @if(empty(request('export')))
 <div id="search">
     <div id="searchBox">
-        <form method="GET" action="{{ url('booking-boss') }}" accept-charset="UTF-8" class="form-inline" role="search">
+        <form method="GET" action="{{ url('booking-boss') }}" accept-charset="UTF-8" class="form-inline" role="search" autocomplete="off">
 
             <input type="text" class="form-control" style="width:370px;"
                 placeholder="รหัสการจอง / ชื่อผู้บริหาร / ข้อมูลการจอง" name="keyword" value="{{ request('keyword') }}">

@@ -89,6 +89,7 @@ Route::get('ajaxGetDivisionVehicle', 'AjaxController@ajaxGetDivisionVehicle');
 Route::get('ajaxSetDefaultRoom', 'AjaxController@ajaxSetDefaultRoom');
 Route::get('ajaxBossChkOverlap', 'AjaxController@ajaxBossChkOverlap');
 Route::get('ajaxGetBoss', 'AjaxController@ajaxGetBoss');
+Route::get('ajaxSaveOrder', 'AjaxController@ajaxSaveOrder');
 
 // test email
 Route::get('email-room-front/{bookingId}', 'BookingRoomFrontController@testEmail');
@@ -185,3 +186,5 @@ Route::any('captcha-test', function () {
 
     return $form;
 });
+
+// Route::any('test', 'HomeController@test');

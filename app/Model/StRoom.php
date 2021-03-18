@@ -49,7 +49,8 @@ class StRoom extends Model
         'is_default',
         'is_internet',
         'is_conference',
-        'st_province_id',
+        'st_province_code',
+        'order',
     ];
 
     /** Dear Custom Function */
@@ -88,7 +89,7 @@ class StRoom extends Model
 
     public function stProvince()
     {
-        return $this->hasOne('App\Model\StProvince', 'id', 'st_province_id');
+        return $this->hasOne('App\Model\StProvince', 'code', 'st_province_code');
     }
 
     // logsActivity
@@ -110,7 +111,8 @@ class StRoom extends Model
         'is_default',
         'is_internet',
         'is_conference',
-        'st_province_id',
+        'st_province_code',
+        'order',
     ];
     protected static $logOnlyDirty = true;
 }

@@ -5,7 +5,7 @@
 @php
     $action = ($from == 'backend' ? 'booking-room' : 'booking-room-front');
 
-    $st_rooms = App\Model\StRoom::where('status', 1)->where('st_province_id', @$_GET['st_province_id'])->orderBy('name', 'asc')->get();
+    $st_rooms = App\Model\StRoom::where('status', 1)->where('st_province_code', @$_GET['st_province_code'])->orderBy('order', 'asc')->get();
     // $req_st_room_id = request('st_room_id') ?? App\Model\StRoom::where('is_default', 1)->first()->id;
     $req_st_room_id = request('st_room_id');
 @endphp
@@ -26,7 +26,7 @@
                 addBtn: {
                     text: '+ ขอจองห้องประชุม/อบรม',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}&st_room_id={{ @$req_st_room_id }}";
+                        window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&st_room_id={{ @$req_st_room_id }}";
                     }
                 }
             },
@@ -47,7 +47,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?st_province_id={{ @$_GET['st_province_id'] }}&start_date=" + arg.startStr + "&st_room_id={{ @$req_st_room_id }}";
+                window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&start_date=" + arg.startStr + "&st_room_id={{ @$req_st_room_id }}";
             },
             events: [
                 @foreach($rs as $key => $row) {
@@ -116,11 +116,12 @@
     }
 </style>
 
-<div id="btnBox">
+<div style="float:right;">
     <a href="{{ $from == 'backend' ? url('booking-room') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองห้องประชุม/อบรม ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})</h3>
+<center><h1>{{ @$_GET['st_province_code'] == 10 ? 'สำหรับส่วนกลาง' : 'สำหรับส่วนภูมิภาค' }}</h1></center>
+<h3>จองห้องประชุม/อบรม ({{ @getProviceName(@$_GET['st_province_code']) }})</h3>
 
 <div id="search">
     <div id="searchBox">
@@ -191,7 +192,7 @@
     <div id="roomSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ห้องประชุม +">
             @foreach($st_rooms as $item)
-                <option value="{{ url($action.'/show?st_province_id='.@$_GET['st_province_id'].'&st_room_id='.$item->id.'&search='.request('search').@$conference_path) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
+                <option value="{{ url($action.'/show?st_province_code='.@$_GET['st_province_code'].'&st_room_id='.$item->id.'&search='.request('search').@$conference_path) }}" @if(@$req_st_room_id == $item->id) selected="selected" @endif>{{ $item->name }}</option>
             @endforeach
         </select>
     </div>

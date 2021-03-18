@@ -1,3 +1,9 @@
+@php
+    $st_province_code = @$rs->st_province_code ?? request('st_province_code');
+    $province_txt = @$st_province_code == 1 ? 'ส่วนกลาง' : @getProviceName(@$st_province_code);
+    // dump($province_txt);
+@endphp
+
 <?php
 $currDate = date("Y-m-d");
 $currTime = date("H:i:s");
@@ -33,7 +39,13 @@ if(isset($rs->point_time)){
 }
 
 // หน่วยงานของยานพาหนะ
-$req_st_departments = App\Model\StVehicle::select('st_department_code')->where('status','พร้อมใช้')->with('department')->distinct()->orderBy('st_department_code', 'asc')->get();
+$req_st_departments = App\Model\StVehicle::select('st_department_code')
+                            ->where('st_province_code', @$st_province_code)
+                            ->where('status','พร้อมใช้')
+                            ->with('department')
+                            ->distinct()
+                            ->orderBy('st_department_code', 'asc')
+                            ->get();
 
 if (old('req_st_department_code')) {
     $req_st_bureaus = App\Model\StVehicle::select('st_bureau_code')->where('st_department_code', 'like', old('req_st_department_code') . '%')->where('status','พร้อมใช้')->with('bureau')->distinct()->orderBy('st_bureau_code', 'asc')->get();
@@ -56,7 +68,7 @@ if (isset($rs->req_st_bureau_code)) {
 
     <div class="container bg-white" >
 
-    <h3>จองยานพาหนะ ({{ @$_GET['st_province_id'] == 1 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_id']) }})
+    <h3>จองยานพาหนะ ({{ @$province_txt }})
         {{-- แสดงเฉพาะด้านหน้า --}}
         @if($formWhere == 'frontend')
         <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="36" style="float: right;"></a>
@@ -133,7 +145,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-md-1">คน</div>
             </div>
 
-            <div class="row input-daterange mt-20">
+            <div class="row input-daterange mt-20 chkTime">
                 <div class="col-md-12"> <label>วัน เวลา ที่ต้องการใช้<span class="Txt_red_12"> *</span></label><br>
                 </div>
 
@@ -262,7 +274,7 @@ if (isset($rs->req_st_bureau_code)) {
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row dep-chain-group">
                 <div class="col-md-4 mt-10">
                     <select name="st_department_code" class="chain-department selectpicker w-100" data-live-search="true" title="กรม" data-size="10">
                         <option value="">+ กรม +</option>
@@ -363,6 +375,7 @@ if (isset($rs->req_st_bureau_code)) {
 
             <div class="row mt-30 mb-7">
                 <div class="col-md-4 col-md-offset-2">
+                    <input type="hidden" name="st_province_code" value="{{ @$st_province_code }}">
                     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
                 </div>
                 <div class="col-md-4">

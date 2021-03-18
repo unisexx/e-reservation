@@ -23,9 +23,11 @@
     {!! $rs->appends(@$_GET)->render() !!} 
 </div>
 
-<table class="tblist">
+<table class="tblist table-striped">
+    <thead>
     <tr>
         <th>ลำดับ</th>
+        <th>อักษรย่อ</th>
         <th>ระดับผู้บริหาร</th>
         <th>ชื่อผู้บริหาร</th>
         {{-- <th>ระดับตำแหน่ง</th> --}}
@@ -35,9 +37,14 @@
         <th>สถานะ</th>
         <th>จัดการ</th>
     </tr>
+    </thead>
+    <tbody>
     @foreach($rs as $key=>$item)
-        <tr @if(($key % 2) == 1) class="odd" @endif>
+        <tr id="id-{{ $item->id }}">
             <td>{{ (($rs->currentPage() - 1 ) * $rs->perPage() ) + $loop->iteration }}</td>
+            <td>
+                <span class='badge' style='color:#000; background-color:{{ $item->color }}'>{{ @$item->abbr }}</span>
+            </td>
             <td>{{ @$item->stPositionLevel->name }}</td>
             <td>{{ $item->name }}</td>
             {{-- <td>{{ @$item->stPositionLevel->name ?? '-' }}</td> --}}
@@ -45,7 +52,10 @@
             <td>{{ $item->tel }}</td>
             <td>
                 <ul>
-                    @foreach($item->stBossRes as $stBossRes)
+                    {{-- @foreach($item->stBossRes as $stBossRes)
+                    <li>{{ @$stBossRes->user->prefix->title }} {{ @$stBossRes->user->givename }} {{ @$stBossRes->user->familyname }}</li>
+                    @endforeach --}}
+                    @foreach($item->availableStBossRes as $stBossRes)
                     <li>{{ @$stBossRes->user->prefix->title }} {{ @$stBossRes->user->givename }} {{ @$stBossRes->user->familyname }}</li>
                     @endforeach
                 </ul>
@@ -71,6 +81,7 @@
             </td>
         </tr>
     @endforeach
+    </tbody>
 </table>
 
 <div class="pagination-wrapper"> 
@@ -78,3 +89,49 @@
 </div>
 
 @endsection
+
+@push('js')
+<script>
+$(function() {
+    $("tbody").sortable({
+        helper: fixWidthHelper,
+        start: function( event, ui ) { 
+            $(ui.item).addClass("yellow");
+        },
+            stop:function( event, ui ) { 
+            $(ui.item).removeClass("yellow");
+        },
+        update: function( ) {
+            // console.log('drop');
+
+            // เรียงลำดับเลขแถวใหม่
+            var c = 0;
+            $('.tblist > tbody > tr').each(function(ind, el) {
+                orderNumber = ++c;
+                $(el).find("td:eq(0)").html(orderNumber + ".");
+                $(el).find(".roomOrder").val(orderNumber);
+            });
+
+            var oData = $(this).sortable('serialize');
+            // console.log( oData );
+
+            // อัพเดท order ลงฐานข้อมูล
+            $.get("{{ url('ajaxSaveOrder') }}",
+            {
+                data: oData,
+                tb: 'st_bosses',
+            },function(data){
+                console.log('save order complete');
+            });
+        }
+    }).disableSelection();
+});
+
+function fixWidthHelper(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+}
+</script>
+@endpush

@@ -4,7 +4,7 @@
 
 @php
     $action = ($from == 'backend' ? 'booking-boss' : 'booking-boss-front');
-    $st_bosses = App\Model\StBoss::where('status', 1)->orderBy('id', 'asc')->get();
+    $st_bosses = App\Model\StBoss::where('status', 1)->orderBy('order', 'asc')->get();
 
     // หน่วยงานที่รับผิดชอบ
     $st_departments = App\Model\StDepartment::orderBy('code', 'asc')->get();
@@ -69,7 +69,7 @@
                 // console.log(info.view.type);
                 // console.log(info.el.childNodes);
                 // console.log(info.event.extendedProps.description);
-                $(info.el.childNodes).find('.fc-title').text(info.event.extendedProps.shortTitle);
+                $(info.el.childNodes).find('.fc-title').html(info.event.extendedProps.shortTitle);
 
                 // ถ้าเป็นหน้าลิสรายการ
                 if (info.view.type == 'listMonth') {
@@ -241,7 +241,12 @@
     <div id="bossSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ ผู้บริหาร +">
             @foreach($st_bosses as $item)
-                <option value="{{ url($action.'/show?st_boss_id='.$item->id.'&search='.request('search').'&st_department_code='.request('st_department_code').'&st_bureau_code='.request('st_bureau_code').'&st_division_code='.request('st_division_code')) }}" @if(@request('st_boss_id') == $item->id) selected="selected" @endif>{{ $item->name }} {{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}</option>
+                <option 
+                    value="{{ url($action.'/show?st_boss_id='.$item->id.'&search='.request('search').'&st_department_code='.request('st_department_code').'&st_bureau_code='.request('st_bureau_code').'&st_division_code='.request('st_division_code')) }}" 
+                    @if(@request('st_boss_id') == $item->id) selected="selected" @endif  
+                    data-content="<span class='badge' style='color:#000; background-color:{{ $item->color }}'>{{ @$item->abbr }}</span> {{ $item->name }} {{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}">
+                ลิสต์รายการที่แสดงอยู่ใน data-content
+                </option>
             @endforeach
         </select>
     </div>

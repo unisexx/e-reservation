@@ -36,10 +36,10 @@ class BookingBossController extends Controller
                 });
             }
 
-            if ($req->date_select) {
-                if ($req->data_type == 'start_date') {
+            if ($req->date_type) {
+                if ($req->date_type == 'start_date') {
                     $q->where('start_date', Date2DB($req->date_select));
-                } elseif ($req->data_type == 'end_date') {
+                } elseif ($req->date_type == 'end_date') {
                     $q->where('end_date', Date2DB($req->date_select));
                 }
             }

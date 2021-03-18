@@ -27,9 +27,9 @@ if (isset($rs->st_bureau_code)) {
         <th>จังหวัดของยานพาหนะ</th>
         <td>
             {{ Form::select(
-                'st_province_id', 
-                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','id'), 
-                $stroom->st_province_id ?? old('st_province_id'), 
+                'st_province_code', 
+                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
+                $stroom->st_province_code ?? old('st_province_code'), 
                 [
                     'class' => 'form-control selectpicker', 
                     'data-live-search' => 'true',
