@@ -14,10 +14,10 @@ class StBureau extends Model
     protected $table = 'st_bureaus';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -25,5 +25,10 @@ class StBureau extends Model
      *
      * @var array
      */
-    protected $fillable = ['code','title'];
+    protected $fillable = ['code', 'title'];
+
+    public function stVehicle()
+    {
+        return $this->hasMany('App\Model\StVehicle', 'st_bureau_code', 'code');
+    }
 }

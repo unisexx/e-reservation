@@ -85,18 +85,49 @@ if (isset($rs->req_st_bureau_code)) {
     @endif
 
     <div class="p-1 mt-30">
+
+            @if(!isset($st_province_code))
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group form-margin">
+                            <label>จองยานพาหนะของจังหวัด</label>
+                            {{ Form::select(
+                                'tmpProvinceCode', 
+                                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
+                                $stroom->st_province_code ?? old('st_province_code'), 
+                                [
+                                    'class' => 'form-control selectpicker', 
+                                    'data-live-search' => 'true',
+                                    'data-size' => '8',
+                                    'data-title' => 'เลือกจังหวัด'
+                                ])
+                            }}
+                        </div>
+                    </div>
+                </div>
+                @push('js')
+                <script>
+                    $(document).ready(function(){
+                        $('body').on('change', 'select[name=tmpProvinceCode]', function() {
+                            window.location.href = window.location.href + "?st_province_code=" + $(this).val();
+                        });
+                    });
+                </script>
+                @endpush
+            @endif
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group form-margin">
                         <label class="control-label">วันที่ยื่นคำขอจอง <span class="Txt_red_12">*</span></label>
-                        <input name="request_date" type="text" class="form-control datepicker fdate" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}"/>
+                        <input required name="request_date" type="text" class="form-control datepicker fdate @error('request_date') has-error @enderror" value="{{ isset($rs->request_date) ? DB2Date($rs->request_date) : '' }} {{ old('request_date') ? old('request_date') : @DB2Date($currDate) }}"/>
                     </div>
                 </div>
             </div>
             <div class="row dep-chain-group">
                 <div class="col-md-4 mt-10">
                     <label class="control-label">ขอใช้ยานพาหนะของหน่วยงาน<span class="Txt_red_12">*</span></label>
-                    <select name="req_st_department_code" class="chain-department-vehicle selectpicker w-100" data-live-search="true" data-size="10" title="กรม">
+                    <select required name="req_st_department_code" class="chain-department-vehicle selectpicker w-100 @error('req_st_department_code') has-error @enderror" data-live-search="true" data-size="10" title="กรม">
                         <option value="">+ กรม +</option>
                         @foreach($req_st_departments as $item)
                         <option value="{{ $item->st_department_code }}" @if($item->st_department_code == @old('req_st_department_code')) selected="selected" @endif @if($item->st_department_code == @$rs->req_st_department_code) selected="selected" @endif>{{ $item->department->title }}</option>
@@ -105,7 +136,7 @@ if (isset($rs->req_st_bureau_code)) {
                 </div>
                 <div class="col-md-4 mt-10">
                     <label class="control-label">&nbsp;</label>
-                    <select name="req_st_bureau_code" class="chain-bureau-vehicle selectpicker w-100" data-live-search="true" data-size="10" title="สำนัก">
+                    <select required name="req_st_bureau_code" class="chain-bureau-vehicle selectpicker w-100 @error('req_st_bureau_code') has-error @enderror" data-live-search="true" data-size="10" title="สำนัก">
                         <option value="">+ สำนัก +</option>
                         @if(old('req_st_department_code') || isset($rs->req_st_department_code))
                         @foreach($req_st_bureaus as $item)
@@ -116,7 +147,7 @@ if (isset($rs->req_st_bureau_code)) {
                 </div>
                 <div class="col-md-4 mt-10">
                     <label class="control-label">&nbsp;</label>
-                    <select name="req_st_division_code" class="chain-division-vehicle selectpicker w-100" data-live-search="true" data-size="10" title="กลุ่ม">
+                    <select required name="req_st_division_code" class="chain-division-vehicle selectpicker w-100 @error('req_st_division_code') has-error @enderror" data-live-search="true" data-size="10" title="กลุ่ม">
                         <option value="">+ กลุ่ม +</option>
                         @if(old('req_st_bureau_code') || isset($rs->req_st_bureau_code))
                         @foreach($req_st_divisions as $item)
@@ -131,7 +162,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-md-12">
                     <div class="form-group form-margin">
                         <label class="control-label">ไปเพื่อ<span class="Txt_red_12">*</span></label>
-                        <input name="gofor" type="text" class="form-control" value="{{ $rs->gofor ?? old('gofor') }}" />
+                        <input required name="gofor" type="text" class="form-control @error('gofor') has-error @enderror" value="{{ $rs->gofor ?? old('gofor') }}" />
                     </div>
                 </div>
             </div>
@@ -140,7 +171,7 @@ if (isset($rs->req_st_bureau_code)) {
                     <label class="control-label">จำนวนผู้โดยสาร<span class="Txt_red_12">*</span></label>
                 </div>
                 <div class="col-md-1">
-                    <input name="number" type="number" min="1" class="form-control numOnly" value="{{ $rs->number ?? old('number') }}">
+                    <input required name="number" type="number" min="1" class="form-control numOnly @error('number') has-error @enderror" value="{{ $rs->number ?? old('number') }}">
                 </div>
                 <div class="col-md-1">คน</div>
             </div>
@@ -152,7 +183,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-xs-12 col-sm-8 col-md-5">
                     <div class="col-xs-12 col-sm-4 col-md-5 p-0">
                         <div class="form-group form-margin">
-                            <input id="sDate" name="start_date" type="text" class="form-control range-date" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" required/>
+                            <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ isset($rs->start_date) ? DB2Date($rs->start_date) : old('start_date') }}" required/>
                         </div>
                     </div>
                     <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
@@ -179,7 +210,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-xs-12 col-sm-8 col-md-5">
                     <div class="col-xs-12 col-sm-4 col-md-5 p-0">
                         <div class="form-group form-margin">
-                            <input id="eDate" name="end_date" type="text" class="form-control range-date" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
+                            <input id="eDate" name="end_date" type="text" class="form-control range-date @error('end_date') has-error @enderror" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" style="width:120px;" required/>
                         </div>
                     </div>
                     <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
@@ -210,7 +241,7 @@ if (isset($rs->req_st_bureau_code)) {
                     <div class="form-group form-margin">
                         <label class="control-label">สถานที่ขึ้นรถ <span class="Txt_red_12">
                                 *</span></label>
-                        <input name="point_place" type="text" class="form-control" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}">
+                        <input required name="point_place" type="text" class="form-control @error('point_place') has-error @enderror" placeholder="สถานที่ขึ้นรถ" value="{{ isset($rs->point_place) ? $rs->point_place : old('point_place') }}">
                     </div>
                 </div>
                 <div class="col-md-4 time2">
@@ -250,7 +281,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-md-12">
                     <div class="form-group form-margin">
                         <label class="control-label">สถานที่ไป <span class="Txt_red_12">*</span></label>
-                        <input name="destination" type="text" class="form-control" placeholder="สถานที่ไป" value="{{ $rs->destination ?? old('destination') }}">
+                        <input required name="destination" type="text" class="form-control @error('destination') has-error @enderror" placeholder="สถานที่ไป" value="{{ $rs->destination ?? old('destination') }}">
                     </div>
                 </div>
             </div>
@@ -262,21 +293,21 @@ if (isset($rs->req_st_bureau_code)) {
                     <div class="form-group form-margin">
                         <label class="control-label">ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12">
                                 *</span></label>
-                        <input name="request_name" type="text" class="form-control" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ $rs->request_name ?? old('request_name') }}">
+                        <input required name="request_name" type="text" class="form-control @error('request_name') has-error @enderror" placeholder="ชื่อผู้ขอใช้ยานพาหนะ" value="{{ $rs->request_name ?? old('request_name') }}">
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <label class="control-label">&nbsp;</label>
                     <div class="form-group form-margin">
-                        <input name="request_position" type="text" class="form-control" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ $rs->request_position ?? old('request_position') }}">
+                        <input required name="request_position" type="text" class="form-control @error('request_position') has-error @enderror" placeholder="ตำแหน่งผู้ขอใช้ยานพาหนะ" value="{{ $rs->request_position ?? old('request_position') }}">
                     </div>
                 </div>
             </div>
 
             <div class="row dep-chain-group">
                 <div class="col-md-4 mt-10">
-                    <select name="st_department_code" class="chain-department selectpicker w-100" data-live-search="true" title="กรม" data-size="10">
+                    <select required name="st_department_code" class="chain-department selectpicker w-100 @error('st_department_code') has-error @enderror" data-live-search="true" title="กรม" data-size="10">
                         <option value="">+ กรม +</option>
                         @foreach($st_departments as $item)
                         <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
@@ -284,7 +315,7 @@ if (isset($rs->req_st_bureau_code)) {
                     </select>
                 </div>
                 <div class="col-md-4 mt-10">
-                    <select name="st_bureau_code" class="chain-bureau selectpicker w-100" data-live-search="true" title="สำนัก" data-size="10">
+                    <select required name="st_bureau_code" class="chain-bureau selectpicker w-100 @error('st_bureau_code') has-error @enderror" data-live-search="true" title="สำนัก" data-size="10">
                         <option value="">+ สำนัก +</option>
                         @if(old('st_department_code') || isset($rs->st_department_code))
                         @foreach($st_bureaus as $item)
@@ -294,7 +325,7 @@ if (isset($rs->req_st_bureau_code)) {
                     </select>
                 </div>
                 <div class="col-md-4 mt-10">
-                    <select name="st_division_code" class="chain-division selectpicker w-100" data-live-search="true" title="กลุ่ม" data-size="10">
+                    <select required name="st_division_code" class="chain-division selectpicker w-100 @error('st_division_code') has-error @enderror" data-live-search="true" title="กลุ่ม" data-size="10">
                         <option value="">+ กลุ่ม +</option>
                         @if(old('st_bureau_code') || isset($rs->st_bureau_code))
                         @foreach($st_divisions as $item)
@@ -306,10 +337,10 @@ if (isset($rs->req_st_bureau_code)) {
             </div>
             <div class="row">
                 <div class="col-md-4 mt-20">
-                    <input name="request_tel" type="text" class="form-control" placeholder="เบอร์โทรศัพท์" value="{{ $rs->request_tel ?? old('request_tel') }}">
+                    <input required name="request_tel" type="text" class="form-control @error('request_tel') has-error @enderror" placeholder="เบอร์โทรศัพท์" value="{{ $rs->request_tel ?? old('request_tel') }}">
                 </div>
                 <div class="col-md-6 mt-20">
-                    <input name="request_email" type="text" class="form-control" placeholder="อีเมล์" value="{{ $rs->request_email ?? old('request_email') }}">
+                    <input required name="request_email" type="text" class="form-control @error('request_email') has-error @enderror" placeholder="อีเมล์" value="{{ $rs->request_email ?? old('request_email') }}">
                 </div>
             </div>
             <div class="row">
@@ -377,6 +408,7 @@ if (isset($rs->req_st_bureau_code)) {
                 <div class="col-md-4 col-md-offset-2">
                     <input type="hidden" name="st_province_code" value="{{ @$st_province_code }}">
                     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
+                    <button type="submit" style="display:none;"></button>
                 </div>
                 <div class="col-md-4">
                     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default btn-lg w-100 mt-15" >
@@ -467,8 +499,18 @@ if (isset($rs->req_st_bureau_code)) {
             $.colorbox.close();
         });
 
-        $("#submitFormBtn").click(function() {
-            chkOverlap();
+    });
+
+    $(document).ready(function() {
+        var $formWhere = "{{ $formWhere }}";
+        // console.log($formWhere);
+
+        $("#submitFormBtn").click(function(){
+            if($formWhere == 'frontend'){
+                chkOverlap();
+            }else{
+                $('form#bookingVehicleForm').find('[type="submit"]').trigger('click');
+            }
         });
     });
 
@@ -500,7 +542,7 @@ if (isset($rs->req_st_bureau_code)) {
             })
             .done(function(data) {
                 if( data == 'ไม่เหลื่อม' ){
-                    $('form').submit();
+                    $('form#bookingVehicleForm').find('[type="submit"]').trigger('click');
                 }else{
                     $('#getDupData').html(data);
                     $.colorbox({inline:true, width:"95%", height:"95%", open:true, href:"#inline_dup" }); 

@@ -57,6 +57,37 @@ if(isset($rs->end_time)){
     @endif
 
     <div class="p-1 mt-30">
+
+            @if(!isset($st_province_code))
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                        <div class="form-group form-margin">
+                            <label>จองห้องประชุมของจังหวัด</label>
+                            {{ Form::select(
+                                'tmpProvinceCode', 
+                                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
+                                $stroom->st_province_code ?? old('st_province_code'), 
+                                [
+                                    'class' => 'form-control selectpicker', 
+                                    'data-live-search' => 'true',
+                                    'data-size' => '8',
+                                    'data-title' => 'เลือกจังหวัด'
+                                ])
+                            }}
+                        </div>
+                    </div>
+                </div>
+                @push('js')
+                <script>
+                    $(document).ready(function(){
+                        $('body').on('change', 'select[name=tmpProvinceCode]', function() {
+                            window.location.href = window.location.href + "?st_province_code=" + $(this).val();
+                        });
+                    });
+                </script>
+                @endpush
+            @endif
+
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                     <div class="form-group form-margin">
@@ -95,7 +126,7 @@ if(isset($rs->end_time)){
                     <div class="form-group form-margin">
                         <label class="control-label">ชื่อเรื่อง / หัวข้อการประชุม-อบรม<span class="Txt_red_12">
                                 *</span></label>
-                        <input name="title" type="text" class="form-control" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" required>
+                        <input name="title" type="text" class="form-control @error('title') has-error @enderror" placeholder="ชื่อเรื่อง" value="{{ isset($rs->title) ? $rs->title : old('title') }}" required>
                     </div>
                 </div>
             </div>
@@ -125,7 +156,7 @@ if(isset($rs->end_time)){
                             @php
                                 @$start_date = $rs->start_date ?? $_GET['start_date'];
                             @endphp
-                            <input id="sDate" name="start_date" type="text" class="form-control range-date" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}" required/>
+                            <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}" required/>
                         </div>
                     </div>
                     <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
@@ -152,7 +183,7 @@ if(isset($rs->end_time)){
                 <div class="col-xs-12 col-sm-8 col-md-5">
                     <div class="col-xs-12 col-sm-4 col-md-5 p-0">
                         <div class="form-group form-margin">
-                            <input id="eDate" name="end_date" type="text" class="form-control range-date {{ $errors->has('end_date') ? 'has-error' : '' }}" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" required/>
+                            <input id="eDate" name="end_date" type="text" class="form-control range-date @error('end_date') has-error @enderror" value="{{ isset($rs->end_date) ? DB2Date($rs->end_date) : old('end_date') }}" required/>
                         </div>
                     </div>
                     <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
@@ -182,7 +213,7 @@ if(isset($rs->end_time)){
                     <label class="control-label">จำนวนผู้เข้าร่วมประชุม <span class="Txt_red_12">*</span></label>
                 </div>
                 <div class="col-md-1">
-                    <input name="number" type="number" min="1" class="form-control" placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" required>
+                    <input name="number" type="number" min="1" class="form-control @error('number') has-error @enderror" placeholder="จำนวน" value="{{ isset($rs->number) ? $rs->number : old('number') }}" required>
                 </div>
                 <div class="col-md-1">คน</div>
                 <span id="overTxt" style="color:red; margin-left:10px;"></span>
@@ -193,7 +224,7 @@ if(isset($rs->end_time)){
                     <label class="control-label">ขอ User เพื่อเข้าใช้งานอินเทอร์เน็ต</label>
                 </div>
                 <div class="col-md-1">
-                    <input name="internet_number" type="number" min="0" class="form-control" placeholder="จำนวน" value="{{ @$rs->internet_number ?? old('internet_number') }}" required>
+                    <input name="internet_number" type="number" min="0" class="form-control @error('internet_number') has-error @enderror" placeholder="จำนวน" value="{{ @$rs->internet_number ?? old('internet_number') }}">
                 </div>
                 <div class="col-md-1">คน</div>
             </div>
@@ -216,21 +247,21 @@ if(isset($rs->end_time)){
                     <div class="form-group form-margin">
                         <label class="control-label">ข้อมูลการติดต่อผู้ขอใช้ <span class="Txt_red_12">
                                 *</span></label>
-                        <input name="request_name" type="text" class="form-control" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
+                        <input name="request_name" type="text" class="form-control @error('request_name') has-error @enderror" placeholder="ชื่อผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_name) ? $rs->request_name : old('request_name') }}" required>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <label class="control-label">&nbsp;</label>
                     <div class="form-group form-margin">
-                        <input name="request_position" type="text" class="form-control" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" required>
+                        <input name="request_position" type="text" class="form-control @error('request_position') has-error @enderror" placeholder="ตำแหน่งผู้ขอใช้ห้องประชุม" value="{{ isset($rs->request_position) ? $rs->request_position : old('request_position') }}" required>
                     </div>
                 </div>
             </div>
 
             <div class="row dep-chain-group">
                 <div class="col-md-4 mt-10">
-                    <select name="st_department_code" class="chain-department selectpicker w-100" data-live-search="true" title="กรม" required>
+                    <select name="st_department_code" class="chain-department selectpicker w-100 @error('st_department_code') has-error @enderror" data-live-search="true" title="กรม" required>
                         <option value="">+ กรม +</option>
                         @foreach($st_departments as $item)
                         <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
@@ -238,7 +269,7 @@ if(isset($rs->end_time)){
                     </select>
                 </div>
                 <div class="col-md-4 mt-10">
-                    <select name="st_bureau_code" class="chain-bureau selectpicker w-100" data-live-search="true" title="สำนัก" required>
+                    <select name="st_bureau_code" class="chain-bureau selectpicker w-100 @error('st_bureau_code') has-error @enderror" data-live-search="true" title="สำนัก" required>
                         <option value="">+ สำนัก +</option>
                         @if(old('st_department_code') || isset($rs->st_department_code))
                         @foreach($st_bureaus as $item)
@@ -248,7 +279,7 @@ if(isset($rs->end_time)){
                     </select>
                 </div>
                 <div class="col-md-4 mt-10">
-                    <select name="st_division_code" class="chain-division selectpicker w-100" data-live-search="true" title="กลุ่ม" required>
+                    <select name="st_division_code" class="chain-division selectpicker w-100 @error('st_division_code') has-error @enderror" data-live-search="true" title="กลุ่ม" required>
                         <option value="">+ กลุ่ม +</option>
                         @if(old('st_bureau_code') || isset($rs->st_bureau_code))
                         @foreach($st_divisions as $item)
@@ -260,10 +291,10 @@ if(isset($rs->end_time)){
             </div>
             <div class="row">
                 <div class="col-md-4 mt-20">
-                    <input name="request_tel" type="text" class="form-control" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" required>
+                    <input name="request_tel" type="text" class="form-control @error('request_tel') has-error @enderror" placeholder="เบอร์โทรศัพท์" value="{{ isset($rs->request_tel) ? $rs->request_tel : old('request_tel') }}" required>
                 </div>
                 <div class="col-md-6 mt-20">
-                    <input name="request_email" type="text" class="form-control" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required>
+                    <input name="request_email" type="text" class="form-control @error('request_email') has-error @enderror" placeholder="อีเมล์" value="{{ isset($rs->request_email) ? $rs->request_email : old('request_email') }}" required>
                 </div>
             </div>
             <div class="row">
@@ -376,6 +407,7 @@ if(isset($rs->end_time)){
                 <div class="col-md-4 col-md-offset-2">
                     <input type="hidden" name="st_province_code" value="{{ @$st_province_code }}">
                     <input id="submitFormBtn" name="input" type="button" title="บันทึกข้อมูล" value="บันทึกข้อมูล" class="btn btn-primary btn-lg w-100 mt-15">
+                    <button type="submit" style="display:none;"></button>
                 </div>
                 <div class="col-md-4">
                     <input name="input2" type="button" title="ย้อนกลับ" value="ย้อนกลับ" onclick="window.history.go(-1); return false;" class="btn btn-default btn-lg w-100 mt-15" >
@@ -447,7 +479,7 @@ if(isset($rs->end_time)){
                 data: {
                     search: $("#searchTxt").val(),
                     depertment_code: $("#searchDepartment").val(),
-                    st_province_code: {{ @$st_province_code }},
+                    st_province_code: '{{ @$st_province_code }}',
                 }
             })
             .done(function(data) {
@@ -493,8 +525,8 @@ if(isset($rs->end_time)){
                 chkOverlap();
             }else{
                 $('form input, form select, form textarea').not("select[name=status_conference], #btnBoxAdd input").removeAttr('disabled');
-                $('#submitFormBtn').attr('disabled','disabled');
-                $('form').submit();
+                // $('#submitFormBtn').attr('disabled','disabled');
+                $('form#bookingRoomForm').find('[type="submit"]').trigger('click');
             }
         });
     });
@@ -514,7 +546,7 @@ if(isset($rs->end_time)){
             })
             .done(function(data) {
                 if( data == 'ไม่เหลื่อม' ){
-                    $('form').submit();
+                    $('form#bookingRoomForm').find('[type="submit"]').trigger('click');
                 }else{
                     $('#getDupData').html(data);
                     $.colorbox({inline:true, width:"95%", height:"95%", open:true, href:"#inline_dup" }); 
@@ -582,9 +614,8 @@ $(document).ready(function(){
 </script>
 
 @php
-if(@$_GET['st_room_id']){
-    $stRoom = App\Model\StRoom::find(@$_GET['st_room_id']);
-}
+$stRoomId = old('st_room_id') ?? @$_GET['st_room_id'];
+$stRoom = App\Model\StRoom::find(@$stRoomId);
 @endphp
 <script>
 $(document).ready(function(){

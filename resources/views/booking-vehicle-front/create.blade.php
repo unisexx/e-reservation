@@ -6,7 +6,7 @@
  <a href="{{ url('') }}"><img src="{{ url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<form method="POST" action="{{ url('booking-vehicle-front') }}" accept-charset="UTF-8" enctype="multipart/form-data" autocomplete="off">
+<form id="bookingVehicleForm" method="POST" action="{{ url('booking-vehicle-front') }}" accept-charset="UTF-8" enctype="multipart/form-data" autocomplete="off">
     {{ csrf_field() }}
     @include ('include.__booking-vehicle-form', ['formMode' => 'create', 'formWhere' => 'frontend'])
 </form>

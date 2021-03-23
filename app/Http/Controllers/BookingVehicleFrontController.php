@@ -48,6 +48,7 @@ class BookingVehicleFrontController extends Controller
         $st_division_code = $request->get('st_division_code');
         $status = $request->get('status');
         $st_province_code = $request->get('st_province_code');
+        $req_st_bureau_code = $request->get('req_st_bureau_code');
 
         $rs = BookingVehicle::select('*');
         $rs_all = $rs->get();
@@ -83,10 +84,18 @@ class BookingVehicleFrontController extends Controller
             $rs = $rs->where('status', $status);
         }
 
+        // if (!empty($st_province_code)) {
+        //     $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_province_code) {
+        //         $q->where('st_province_code', $st_province_code);
+        //     });
+        // }
+
         if (!empty($st_province_code)) {
-            $rs = $rs->whereHas('st_vehicle', function ($q) use ($st_province_code) {
-                $q->where('st_province_code', $st_province_code);
-            });
+            $rs = $rs->where('st_province_code', $st_province_code);
+        }
+
+        if (!empty($req_st_bureau_code)) {
+            $rs = $rs->where('req_st_bureau_code', $req_st_bureau_code);
         }
 
         $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();

@@ -468,3 +468,34 @@ function thToTimeStamp(thDate){
 
 <script src='{{ asset('js/spectrum-1.8.1/spectrum.js') }}'></script>
 <link rel='stylesheet' href='{{ asset('js/spectrum-1.8.1/spectrum.css') }}' />
+
+<script>
+// เปลี่ยนข้อความใน required แอททริบิวต์ ของฟอร์ม
+$(document).ready(function(){
+    var elements = document.getElementsByTagName("input");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("ฟิลด์นี้ห้ามเป็นค่าว่าง");
+            }
+        };
+        elements[i].oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    }
+
+    var elements = document.getElementsByTagName("select");
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].oninvalid = function(e) {
+            e.target.setCustomValidity("");
+            if (!e.target.validity.valid) {
+                e.target.setCustomValidity("ฟิลด์นี้ห้ามเป็นค่าว่าง");
+            }
+        };
+        elements[i].oninput = function(e) {
+            e.target.setCustomValidity("");
+        };
+    }
+});
+</script>

@@ -53,7 +53,7 @@ if (isset($rs->st_bureau_code)) {
         </td>
     </tr>
     <tr>
-        <th>ผู้ดูแลผู้บริหาร<span class="Txt_red_12"> *</span></th>
+        <th>ผู้ดูแลผู้บริหาร</th>
         <td>
             @php
                 // หา permission_group_id ที่มีสิทธิ์ในการดูแลผู้บริหาร (permission_id = 93)
@@ -77,13 +77,13 @@ if (isset($rs->st_bureau_code)) {
     <tr>
         <th>สี<span class="Txt_red_12"> *</span></th>
         <td>
-            {{ Form::text('color', $rs->color ?? '#000000', ['id' => 'custom', 'class'=>'form-control']) }}
+            {{ Form::text('color', $rs->color ?? '#f1f1f1', ['id' => 'custom', 'class'=>'form-control', 'required']) }}
         </td>
     </tr>
     <tr>
         <th>อักษรย่อ<span class="Txt_red_12"> *</span></th>
         <td>
-            {{ Form::text('abbr', @$rs->abbr, ['class'=>'form-control', 'maxlength'=>'2', 'size'=>'2', 'style'=>'width:50px']) }}
+            {{ Form::text('abbr', @$rs->abbr, ['class'=>'form-control', 'required', 'maxlength'=>'2', 'size'=>'2', 'style'=>'width:50px']) }}
         </td>
     </tr>
     <tr>
