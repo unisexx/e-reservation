@@ -61,6 +61,10 @@
 สรุปรายละเอียดการจองห้องประชุม/อบรม
 <table class="table table-striped table-bordered">
 <tr>
+    <th>จังหวัด</th>
+    <td>{{ @$rs->st_province_code == 10 ? 'ส่วนกลาง' : @getProviceName(@$rs->st_province_code) }}</td>
+</tr>
+<tr>
     <th>รหัสการจอง</th>
     <td>{{ $rs->code }}</td>
 </tr>

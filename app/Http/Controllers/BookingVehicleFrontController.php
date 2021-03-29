@@ -41,6 +41,8 @@ class BookingVehicleFrontController extends Controller
 
     public function show(Request $request)
     {
+        // DB::enableQueryLog();
+
         $keyword = $request->get('search');
         $st_room_id = $request->get('st_vehicle_id');
         $st_department_code = $request->get('st_department_code');
@@ -99,6 +101,7 @@ class BookingVehicleFrontController extends Controller
         }
 
         $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();
+        // dd(DB::getQueryLog());
 
         return view('include.__booking-vehicle-show', compact('rs', 'rs_all'))->withFrom('frontend');
     }

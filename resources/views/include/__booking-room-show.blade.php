@@ -121,7 +121,7 @@
 </div>
 
 <center><h1>{{ @$_GET['st_province_code'] == 10 ? 'สำหรับส่วนกลาง' : 'สำหรับส่วนภูมิภาค' }}</h1></center>
-<h3>จองห้องประชุม/อบรม ({{ @getProviceName(@$_GET['st_province_code']) }})</h3>
+<h3>จองห้องประชุม/อบรม ({{ @$_GET['st_province_code'] == 10 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_code']) }})</h3>
 
 <div id="search">
     <div id="searchBox">

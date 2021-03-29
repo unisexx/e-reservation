@@ -57,6 +57,9 @@
                     </div>
                 </div> --}}
 
+                @php
+                    $stBossIdSelect = @$rs->st_boss_id ?? old('st_boss_id') ?? @request('st_boss_id');
+                @endphp
                 <div class="row">
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group form-margin">
@@ -67,7 +70,7 @@
                             {{ Form::select(
                                 "st_boss_id", 
                                 isset($rs->st_position_level_id) ? \App\Model\StBoss::where('status', 1)->where('st_position_level_id', $rs->st_position_level_id)->pluck('name', 'id') : \App\Model\StBoss::where('status', 1)->pluck('name', 'id'), 
-                                @$rs->st_boss_id, 
+                                @$stBossIdSelect, 
                                 [
                                     'class'=>'form-control selectpicker '.$hasError,
                                     'data-live-search'=>'true', 
@@ -141,7 +144,10 @@
                     <div class="col-xs-12 col-sm-8 col-md-5">
                         <div class="col-xs-12 col-sm-4 col-md-5 p-0">
                             <div class="form-group form-margin">
-                                <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ old('start_date') ?? @DB2Date($rs->start_date) }}"
+                                @php
+                                    @$start_date = $rs->start_date ?? $_GET['start_date'];
+                                @endphp
+                                <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}"
                                 required  placeholder="วัน/เดือน/ปี">
                             </div>
                         </div>

@@ -203,6 +203,7 @@ class AjaxController extends Controller
         $end_date = Date2DB($_GET['end_date']);
         $start_time = $_GET['start_time'];
         $end_time = $_GET['end_time'];
+        $st_province_code = @$_GET['st_province_code'];
         $id = $_GET['id'];
 
         $rs = BookingRoom::select('*')->where('st_room_id', $st_room_id)
@@ -212,6 +213,10 @@ class AjaxController extends Controller
             ->where(function ($q) use ($start_time, $end_time) {
                 $q->whereRaw('start_time <= ? and end_time >= ? or start_time <= ? and end_time >= ? ', [$start_time, $start_time, $end_time, $end_time]);
             });
+
+        if (!empty($st_province_code)) {
+            $rs = $rs->where('st_province_code', $st_province_code);
+        }
 
         if (!empty($id)) { // เช็กในกรณีแก้ไข ไม่ให้นับ row ของตัวเอง จะได้หาค่าที่เหลือมกับของคนอื่น
             $rs = $rs->where('id', '<>', $id);
@@ -238,6 +243,7 @@ class AjaxController extends Controller
         $req_st_department_code = @$_GET['req_st_department_code'];
         $req_st_bureau_code = @$_GET['req_st_bureau_code'];
         $req_st_division_code = @$_GET['req_st_division_code'];
+        $st_province_code = @$_GET['st_province_code'];
         $id = $_GET['id'];
 
         $rs = BookingVehicle::select('*');
@@ -256,6 +262,10 @@ class AjaxController extends Controller
 
         if (!empty($req_st_division_code)) {
             $rs = $rs->where('req_st_division_code', $req_st_division_code);
+        }
+
+        if (!empty($st_province_code)) {
+            $rs = $rs->where('st_province_code', $st_province_code);
         }
 
         $rs = $rs->where(function ($q) use ($start_date, $end_date) {

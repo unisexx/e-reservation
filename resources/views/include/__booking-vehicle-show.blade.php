@@ -30,7 +30,7 @@
                 addBtn: {
                     text: '+ ขอจองยานพาหนะ',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}";
+                        window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&req_st_bureau_code={{ @$_GET['req_st_bureau_code'] }}";
                     }
                 }
             },
@@ -52,7 +52,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?st_province_code={{ @$_GET['st_province_code'] }}&req_st_bureau_code={{ @$_GET['req_st_bureau_code'] }}&start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
@@ -176,7 +176,7 @@
                 </select>
             </span>
 
-            {{-- <input type="hidden" name="searchform" value="1"> --}}
+            <input type="hidden" name="searchform" value="1">
             <input type="hidden" name="st_province_code" value="{{ request('st_province_code') }}">
             <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
 
@@ -197,12 +197,13 @@
                         $q->where('st_province_code', '10');
                     })->orderBy('code', 'asc')->get();
         // dd($st_bureaus);
+        // dump(\Request::getRequestUri());
     @endphp
     <div id="vehicleSelectDiv" class="text-center" style="width:50%; margin: 0 auto;">
         <select class="selectpicker goUrl form-control" data-size="15" data-live-search="true" title="+ สำนัก +">
             @foreach($st_bureaus as $item)
                 <option 
-                    value="{{ url($action.'/show?st_province_code='.@$_GET['st_province_code'].'&req_st_bureau_code='.$item->code.'&search='.request('search').'&searchform=1') }}" 
+                    value="{{ url(\Request::getRequestUri().'&req_st_bureau_code='.$item->code.'&search='.request('search').'&searchform=1') }}" 
                     @if(request('req_st_bureau_code') == $item->code) selected="selected" @endif
                 >
                 {{ $item->title }}

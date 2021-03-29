@@ -36,6 +36,7 @@
 <table class="tblist table-striped">
     <thead>
     <tr>
+        <th style="text-align: center;">ลากวางเพื่อเรียงลำดับ</th>
         <th>ลำดับ</th>
         <th style="width:20%">ภาพห้องประชุม</th>
         <th>จังหวัด</th>
@@ -51,7 +52,10 @@
     <tbody>
     @foreach($stroom as $key=>$item)
     <tr id="id-{{ $item->id }}">
-        <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}</td>
+        <td align="center">
+            <img src="{{ asset('images/scroll.png') }}" width="24" class="vtip" title="ลากวางเพื่อเรียงลำดับ" />
+        </td>
+        <td>{{ (($stroom->currentPage() - 1 ) * $stroom->perPage() ) + $loop->iteration }}.</td>
         <td class="imgGroup">
             @if($item->image)
                 @php 
@@ -182,7 +186,7 @@ $(function() {
             var c = 0;
             $('.tblist > tbody > tr').each(function(ind, el) {
                 orderNumber = ++c;
-                $(el).find("td:eq(0)").html(orderNumber + ".");
+                $(el).find("td:eq(1)").html(orderNumber + ".");
                 $(el).find(".roomOrder").val(orderNumber);
             });
 

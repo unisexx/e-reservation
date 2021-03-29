@@ -30,7 +30,7 @@
                 addBtn: {
                     text: '+ จองวาระผู้บริหาร',
                     click: function() {
-                        window.location.href = "/{{ $action }}/create";
+                        window.location.href = "/{{ $action }}/create?st_boss_id={{ @request('st_boss_id') }}";
                     }
                 }
             },
@@ -52,7 +52,7 @@
             displayEventTime: false,
             select: function(arg) {
                 // console.log(arg.startStr);
-                window.location.href = "/{{ $action }}/create?start_date=" + arg.startStr;
+                window.location.href = "/{{ $action }}/create?st_boss_id={{ @request('st_boss_id') }}&start_date=" + arg.startStr;
             },
             events: [
                 @foreach($rs as $key => $row) {
