@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Model\StDriver;
-use Illuminate\Http\Request;
-
 use Auth;
+use Illuminate\Http\Request;
 
 class StDriverController extends Controller
 {
@@ -21,7 +18,7 @@ class StDriverController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +34,7 @@ class StDriverController extends Controller
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
 
-        $rs = StDriver::select('*');
+        $rs = StDriver::withCount('bookingVehicle');
 
         if (!empty($st_department_code)) {
             $rs = $rs->where('st_department_code', $st_department_code);
@@ -59,11 +56,10 @@ class StDriverController extends Controller
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
          */
         if (CanPerm('access-self')) {
-            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+            $rs = $rs->where('st_division_code', Auth::user()->st_division_code);
         }
 
-        $rs = $rs->orderBy('id','desc')->paginate(10);
-
+        $rs = $rs->orderBy('id', 'desc')->paginate(10);
 
         return view('setting.st-driver.index', compact('rs'));
     }
@@ -96,19 +92,20 @@ class StDriverController extends Controller
             'st_bureau_code'     => 'required',
             'st_division_code'   => 'required',
             'tel'                => 'required',
-		], [
+        ], [
             'name.required'               => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
             'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
             'st_division_code.required'   => 'กลุ่ม ห้ามเป็นค่าว่าง',
             'tel.required'                => 'เบอร์ติดต่อ ห้ามเป็นค่าว่าง',
         ]);
-        
+
         $requestData = $request->all();
-        
+
         StDriver::create($requestData);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('setting/st-driver');
     }
 
@@ -136,7 +133,7 @@ class StDriverController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-driver-edit','setting/st-driver');
+        ChkPerm('st-driver-edit', 'setting/st-driver');
 
         $rs = StDriver::findOrFail($id);
 
@@ -159,7 +156,7 @@ class StDriverController extends Controller
             'st_bureau_code'     => 'required',
             'st_division_code'   => 'required',
             'tel'                => 'required',
-		], [
+        ], [
             'name.required'               => 'ชื่อสกุล ห้ามเป็นค่าว่าง',
             'st_department_code.required' => 'กรม ห้ามเป็นค่าว่าง',
             'st_bureau_code.required'     => 'สำนัก ห้ามเป็นค่าว่าง',
@@ -173,6 +170,7 @@ class StDriverController extends Controller
         $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('setting/st-driver');
     }
 
@@ -186,11 +184,12 @@ class StDriverController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-driver-delete','setting/st-driver');
+        ChkPerm('st-driver-delete', 'setting/st-driver');
 
         StDriver::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('setting/st-driver');
     }
 }

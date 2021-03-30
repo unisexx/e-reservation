@@ -39,7 +39,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
 </div>
 
 <div id="btnBox">
-    <a href="{{ url('/booking-vehicle/show') }}">
+    <a href="{{ url('/booking-vehicle/show?st_province_code='.@Auth::user()->bureau->st_province_code) }}">
         <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
     </a>
     <?php
@@ -52,7 +52,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
         <input type="button" title="export excel" value="export excel" class="btn vtip" />
     </a>
     @if(CanPerm('booking-vehicle-create'))
-    <input type="button" title="+ ขอจองยานพาหนะ" value="+ ขอจองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create') }}'" class="btn btn-success vtip" />
+    <input type="button" title="+ ขอจองยานพาหนะ" value="+ ขอจองยานพาหนะ" onclick="document.location='{{ url('/booking-vehicle/create?st_province_code='.@Auth::user()->bureau->st_province_code) }}'" class="btn btn-success vtip" />
     @endif
 </div>
 

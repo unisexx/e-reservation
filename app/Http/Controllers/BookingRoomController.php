@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BookingRoomRequest;
 use App\Mail\Summary;
 use App\Model\BookingRoom;
-use App\Model\ManageRoom;
 use Auth;
 use Illuminate\Http\Request;
 use Mail;
@@ -29,25 +28,9 @@ class BookingRoomController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingRoom::with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')->select('*');
-
-        /**
-         *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
-         */
-        $is_manageroom = ManageRoom::select('st_room_id')->where('user_id', Auth::user()->id)->get()->toArray();
-        // dd($is_manageroom);
-        if ($is_manageroom) {
-            $rs = $rs->whereIn('st_room_id', $is_manageroom);
-        } else {
-            /**
-             * เห็นเฉพาะห้องที่อยู่ในกลุ่มของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, ถ้าเป็น default คือเห็นทั้งหมด
-             */
-            if (CanPerm('access-self')) {
-                $rs = $rs->whereHas('st_room', function ($q) {
-                    $q->where('st_division_code', Auth::user()->st_division_code);
-                });
-            }
-        }
+        $rs = BookingRoom::filterByPermissionView()
+            ->with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')
+            ->select('*');
 
         $rs_all = $rs->get();
 
@@ -128,15 +111,9 @@ class BookingRoomController extends Controller
         $st_room_id = $request->get('st_room_id');
         $status = $request->get('status');
 
-        $rs = BookingRoom::select('*')->where('use_conference', '<>', 1);
-
-        // if (!empty($st_room_id)) { // ถ้าไม่ได้มาจากช่องค้นหา ให้ select room ตามค่าที่ตั้ง default ไว้ในเมนูตั้งค่าห้อง
-        //     $rs = $rs->where('st_room_id', $st_room_id);
-        // } else {
-        //     $rs = $rs->whereHas('st_room', function ($q) {
-        //         $q->where('is_default', 1);
-        //     });
-        // }
+        $rs = BookingRoom::filterByPermissionView()
+            ->select('*')
+            ->where('use_conference', '<>', 1);
 
         if (!empty($keyword)) {
             $rs = $rs->where(function ($q) use ($keyword) {

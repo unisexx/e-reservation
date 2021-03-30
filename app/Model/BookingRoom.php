@@ -2,9 +2,11 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Model\ManageRoom;
 
 // logsActivity
+use Auth;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class BookingRoom extends Model
@@ -60,6 +62,31 @@ class BookingRoom extends Model
         'approve_conference_date',
 
     ];
+
+    /**
+     * Scope
+     */
+    public function scopeFilterByPermissionView($q)
+    {
+        /**
+         *  ถ้า user ที่ login นี้ ได้ถูกเลือกเป็นผู้จัดการจองห้อง (Manage booking) ใน setting/st-room ให้แสดงเฉพาะการจองของห้องที่ถูกต้องค่าไว้ โดยไม่สนว่าจะเป็น access-self หรือ access-all
+         */
+        // ส่วนผู้จัดการจองห้อง
+        $is_manageroom = ManageRoom::select('st_room_id')->where('user_id', Auth::user()->id)->get()->toArray();
+        if ($is_manageroom) {
+            return $q->whereIn('st_room_id', $is_manageroom);
+        } else { // ส่วนเห็นเฉพาะกลุ่มตัวเอง
+            /**
+             * เห็นเฉพาะห้องที่อยู่ในกลุ่มของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, ถ้าเป็น default คือเห็นทั้งหมด
+             */
+            if (CanPerm('access-self')) {
+                return $q->whereHas('st_room', function ($s) {
+                    $s->where('st_division_code', Auth::user()->st_division_code);
+                });
+            }
+        }
+
+    }
 
     // relation
     public function department()

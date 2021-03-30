@@ -33,7 +33,7 @@ class StRoomController extends Controller
 
         $keyword = $request->get('search');
 
-        $rs = StRoom::select('*');
+        $rs = StRoom::withCount('bookingRoom');
 
         if (!empty($keyword)) {
             $rs = $rs->where('name', 'LIKE', "%$keyword%");

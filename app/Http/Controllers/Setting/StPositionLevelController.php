@@ -19,7 +19,7 @@ class StPositionLevelController extends Controller
         // ตรวจสอบ permission
         ChkPerm('st-position-level-view');
 
-        $rs = StPositionLevel::where(function ($q) use ($req) {
+        $rs = StPositionLevel::withCount('stBoss')->where(function ($q) use ($req) {
             if ($req->search) {
                 $q->where('name', 'LIKE', "%$req->search%");
             }

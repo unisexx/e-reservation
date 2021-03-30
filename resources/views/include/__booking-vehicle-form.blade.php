@@ -58,7 +58,7 @@ $province_txt = @$st_province_code == 10 ? 'ส่วนกลาง' : @getProv
                             <label>จองยานพาหนะของจังหวัด</label>
                             {{ Form::select(
                                 'tmpProvinceCode', 
-                                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
+                                App\Model\StProvince::filterByUserBureauProvince()->where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
                                 @$st_province_code, 
                                 [
                                     'class' => 'form-control selectpicker', 

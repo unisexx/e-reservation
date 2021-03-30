@@ -25,6 +25,11 @@ class PermissionGroup extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function stUser()
+    {
+        return $this->hasMany('App\User', 'permission_group_id', 'id');
+    }
+
     public function permissionRole()
     {
         return $this->hasMany('App\Model\PermissionRole');

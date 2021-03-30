@@ -128,6 +128,7 @@
         <form accept-charset="UTF-8" class="form-inline" role="search">
             <input id="searchTxt" type="text" class="form-control" style="width:80%;" placeholder="รหัสการจอง / ชื่อผู้ขอจอง" name="search" value="{{ request('search') }}">
             <input type="hidden" name="searchform" value="1">
+            <input type="hidden" name="st_province_code" value="{{ request('st_province_code') }}">
             <button id="searchRoomBtn" type="submit" class="btn btn-info"><img src="{{ url('images/search.png') }}" width="16" height="16" />ค้นหา</button>
         </form>
     </div>
@@ -137,7 +138,7 @@
 @if( @$_GET['searchform'] == 1)
 
     {{-- แสดงผลแบบตาราง --}}
-    <a href="{{ $from == 'backend' ? url('booking-room/show') : url('booking-room-front/show') }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
+    <a href="{{ $from == 'backend' ? url('booking-room/show?st_province_code='.request('st_province_code')) : url('booking-room-front/show?st_province_code='.request('st_province_code')) }}" class="btn btn-lg btn-warning pull-right" style="margin-bottom:10px;">กลับหน้าปฎิทิน</a>
     <h4>ผลการค้นหา</h4>
     <table class="table table-bordered table-striped sortable tblist">
         <thead>
@@ -181,7 +182,6 @@
     </table>
 
 @else
-
     {{-- แสดงผลแบบปฏิทิน --}}
     @include('include._color_status', ['type'=>'room','from' => $from])
 

@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Model\StVehicle;
-use Illuminate\Http\Request;
-
 use App\Http\Requests\StVehicleRequest;
-
+use App\Model\StVehicle;
 use Auth;
+use Illuminate\Http\Request;
 
 class StVehicleController extends Controller
 {
@@ -23,7 +19,7 @@ class StVehicleController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +33,7 @@ class StVehicleController extends Controller
         $st_vehicle_type_id = $request->get('st_vehicle_type_id');
         $keyword = $request->get('search');
 
-        $rs = StVehicle::select('*');
+        $rs = StVehicle::withCount('bookingVehicle');
 
         if (!empty($st_vehicle_type_id)) {
             $rs = $rs->where('st_vehicle_type_id', $st_vehicle_type_id);
@@ -51,12 +47,10 @@ class StVehicleController extends Controller
          * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
          */
         if (CanPerm('access-self')) {
-            $rs = $rs->where('st_division_code',Auth::user()->st_division_code);
+            $rs = $rs->where('st_division_code', Auth::user()->st_division_code);
         }
 
         $rs = $rs->orderBy('id', 'desc')->paginate(10);
-
-
 
         return view('setting.st-vehicle.index', compact('rs'));
     }
@@ -96,6 +90,7 @@ class StVehicleController extends Controller
         StVehicle::create($requestData);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle');
     }
 
@@ -123,7 +118,7 @@ class StVehicleController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-vehicle-edit','setting/st-vehicle');
+        ChkPerm('st-vehicle-edit', 'setting/st-vehicle');
 
         $rs = StVehicle::findOrFail($id);
 
@@ -154,6 +149,7 @@ class StVehicleController extends Controller
         $rs->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle');
     }
 
@@ -167,11 +163,12 @@ class StVehicleController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-vehicle-delete','setting/st-vehicle');
+        ChkPerm('st-vehicle-delete', 'setting/st-vehicle');
 
         StVehicle::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle');
     }
 }

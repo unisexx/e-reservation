@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Model\StVehicleType;
 use Illuminate\Http\Request;
 
@@ -19,7 +17,7 @@ class StVehicleTypeController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,12 +31,13 @@ class StVehicleTypeController extends Controller
         $keyword = $request->get('search');
         $perPage = 10;
 
+        $stvehicletype = StVehicleType::withCount('stVehicle');
+
         if (!empty($keyword)) {
-            $stvehicletype = StVehicleType::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $stvehicletype = StVehicleType::latest()->paginate($perPage);
+            $stvehicletype = $stvehicletype->where('name', 'LIKE', "%$keyword%");
         }
+
+        $stvehicletype = $stvehicletype->paginate($perPage);
 
         return view('setting.st-vehicle-type.index', compact('stvehicletype'));
     }
@@ -67,15 +66,16 @@ class StVehicleTypeController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-		], [
+        ], [
             'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
         ]);
-        
+
         $requestData = $request->all();
-        
+
         StVehicleType::create($requestData);
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle-type');
     }
 
@@ -103,7 +103,7 @@ class StVehicleTypeController extends Controller
     public function edit($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-vehicle-type-edit','setting/st-vehicle-type');
+        ChkPerm('st-vehicle-type-edit', 'setting/st-vehicle-type');
 
         $stvehicletype = StVehicleType::findOrFail($id);
 
@@ -122,7 +122,7 @@ class StVehicleTypeController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-		], [
+        ], [
             'name.required' => 'ชื่อประเภทรถ ห้ามเป็นค่าว่าง',
         ]);
 
@@ -132,6 +132,7 @@ class StVehicleTypeController extends Controller
         $stvehicletype->update($requestData);
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle-type');
     }
 
@@ -145,11 +146,12 @@ class StVehicleTypeController extends Controller
     public function destroy($id)
     {
         // ตรวจสอบ permission
-        ChkPerm('st-vehicle-type-delete','setting/st-vehicle-type');
+        ChkPerm('st-vehicle-type-delete', 'setting/st-vehicle-type');
 
         StVehicleType::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('setting/st-vehicle-type');
     }
 }

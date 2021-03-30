@@ -19,7 +19,7 @@ class StPositionMeetingController extends Controller
         // ตรวจสอบ permission
         ChkPerm('st-position-meeting-view');
 
-        $rs = StPositionMeeting::where(function ($q) use ($req) {
+        $rs = StPositionMeeting::withCount('bookingBoss')->where(function ($q) use ($req) {
             if ($req->search) {
                 $q->where('name', 'LIKE', "%$req->search%");
             }

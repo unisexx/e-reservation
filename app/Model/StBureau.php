@@ -31,4 +31,9 @@ class StBureau extends Model
     {
         return $this->hasMany('App\Model\StVehicle', 'st_bureau_code', 'code');
     }
+
+    public function stProvince()
+    {
+        return $this->belongsTo('App\Model\StProvince', 'st_province_code', 'code');
+    }
 }

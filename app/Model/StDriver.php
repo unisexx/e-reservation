@@ -20,10 +20,10 @@ class StDriver extends Model
     protected $table = 'st_drivers';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -54,6 +54,11 @@ class StDriver extends Model
     public function division()
     {
         return $this->hasOne('App\Model\StDivision', 'code', 'st_division_code');
+    }
+
+    public function bookingVehicle()
+    {
+        return $this->hasMany('App\Model\BookingVehicle', 'st_driver_id', 'id');
     }
 
     // logsActivity

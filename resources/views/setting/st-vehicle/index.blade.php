@@ -69,14 +69,16 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
             </a>
             @endif
 
-            @if(CanPerm('st-vehicle-delete'))
-            <form method="POST" action="{{ url('/setting/st-vehicle' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
-                {{ method_field('DELETE') }}
-                {{ csrf_field() }}
-                <button type="submit" title="Delete StAscc" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
-                    <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
-                </button>
-            </form>
+            @if($row->booking_vehicle_count == 0)
+                @if(CanPerm('st-vehicle-delete'))
+                <form method="POST" action="{{ url('/setting/st-vehicle' . '/' . $row->id) }}" accept-charset="UTF-8" style="display:inline">
+                    {{ method_field('DELETE') }}
+                    {{ csrf_field() }}
+                    <button type="submit" title="Delete StAscc" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
+                        <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้" />
+                    </button>
+                </form>
+                @endif
             @endif
         </td>
     </tr>

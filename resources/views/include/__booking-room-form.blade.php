@@ -68,14 +68,14 @@ if(isset($rs->end_time)){
                 // dump(Request::segment(2));
                 // dump(Request::segment(3));
             @endphp 
-            @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomController@create')
+            @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomController@create' || Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomConferenceController@create')
                 <div class="row">
                     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group form-margin">
                             <label>จองห้องประชุมของจังหวัด</label>
                             {{ Form::select(
                                 'tmpProvinceCode', 
-                                App\Model\StProvince::where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
+                                App\Model\StProvince::filterByUserBureauProvince()->where('status', 1)->orderBy('code', 'asc')->pluck('name','code'), 
                                 @$st_province_code, 
                                 [
                                     'class' => 'form-control selectpicker', 

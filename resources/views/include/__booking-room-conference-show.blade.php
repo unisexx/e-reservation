@@ -119,7 +119,8 @@
     <a href="{{ $from == 'backend' ? url('booking-room-conference') : url('') }}"><img src="{{ $from == 'backend' ? url('images/view_list.png') : url('images/home.png') }}" class="vtip" title="หน้าแรก" width="32"></a>
 </div>
 
-<h3>จองห้องประชุม/อบรม</h3>
+<center><h1>{{ @$_GET['st_province_code'] == 10 ? 'สำหรับส่วนกลาง' : 'สำหรับส่วนภูมิภาค' }}</h1></center>
+<h3>จองห้องประชุม/อบรม Conference ({{ @$_GET['st_province_code'] == 10 ? 'ส่วนกลาง' : @getProviceName(@$_GET['st_province_code']) }})</h3>
 
 <div id="search">
     <div id="searchBox">
@@ -191,8 +192,8 @@
 @else
 
     {{-- แสดงผลแบบปฏิทิน --}}
-    @include('include._color_status', [ 'allrow' => $rs_all, 'from' => $from, 'is_conference' => request('is_conference') ])
-    @include('include._conference_status')
+    @include('include._color_status', ['type'=>'conference','from' => $from])
+    @include('include._conference_status', ['type'=>'conference','from' => $from])
 
     @php
         $conference_path = request('is_conference') == 1 ? '&is_conference=1' : '';

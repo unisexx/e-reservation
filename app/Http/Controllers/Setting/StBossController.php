@@ -20,7 +20,7 @@ class StBossController extends Controller
         // ตรวจสอบ permission
         ChkPerm('st-boss-view');
 
-        $rs = StBoss::where(function ($q) use ($req) {
+        $rs = StBoss::withCount('bookingBoss')->where(function ($q) use ($req) {
             if ($req->search) {
                 $q->where('name', 'LIKE', "%$req->search%");
             }

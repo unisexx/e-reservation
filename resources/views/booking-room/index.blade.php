@@ -28,7 +28,7 @@
         {{-- <a href="{{ url('/booking-room/show?is_conference=1') }}">
             <img src="{{ url('images/online-meeting.png') }}" class="vtip" title="มุมมองปฎิทิน Conference" width="48" />
         </a> --}}
-        <a href="{{ url('/booking-room/show') }}">
+        <a href="{{ url('/booking-room/show?st_province_code='.@Auth::user()->bureau->st_province_code) }}">
             <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="มุมมองปฎิทิน" />
         </a>
         <?php
@@ -41,7 +41,7 @@
             <input type="button" title="export excel" value="export excel" class="btn vtip" />
         </a>
         @if(CanPerm('booking-room-create'))
-        <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room/create') }}'" class="btn btn-success vtip" />
+        <input type="button" title="+ ขอจองห้องประชุม/อบรม" value="+ ขอจองห้องประชุม/อบรม" onclick="document.location='{{ url('/booking-room/create?st_province_code='.@Auth::user()->bureau->st_province_code) }}'" class="btn btn-success vtip" />
         @endif
     </div>
 

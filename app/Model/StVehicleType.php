@@ -20,10 +20,10 @@ class StVehicleType extends Model
     protected $table = 'st_vehicle_types';
 
     /**
-    * The database primary key value.
-    *
-    * @var string
-    */
+     * The database primary key value.
+     *
+     * @var string
+     */
     protected $primaryKey = 'id';
 
     /**
@@ -31,9 +31,14 @@ class StVehicleType extends Model
      *
      * @var array
      */
-    protected $fillable = ['name','status'];
+    protected $fillable = ['name', 'status'];
 
     // logsActivity
-    protected static $logAttributes = ['name','status'];
+    protected static $logAttributes = ['name', 'status'];
     protected static $logOnlyDirty = true;
+
+    public function stVehicle()
+    {
+        return $this->hasMany('App\Model\StVehicle', 'st_vehicle_type_id', 'id');
+    }
 }

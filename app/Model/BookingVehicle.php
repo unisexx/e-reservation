@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 // logsActivity
@@ -12,25 +13,8 @@ class BookingVehicle extends Model
     // logsActivity
     use LogsActivity;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'booking_vehicles';
-
-    /**
-     * The database primary key value.
-     *
-     * @var string
-     */
     protected $primaryKey = 'id';
-
-    /**
-     * Attributes that should be mass-assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'code',
         'gofor',
@@ -62,7 +46,30 @@ class BookingVehicle extends Model
         'approve_date',
     ];
 
-    // relation
+    /**
+     * Scope
+     */
+    public function scopeFilterByUserProvince($q)
+    {
+        return $q->where('st_province_code', Auth::user()->bureau->st_province_code);
+    }
+
+    public function scopeFilterByPermissionView($q)
+    {
+        /**
+         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, ค่า default คือเห็นทั้งหมด
+         * เห็นเฉพาะการจองยานพาหนะที่อยู่ในสังกัดของตัวเอง
+         */
+        if (CanPerm('access-self')) {
+            return $q->where('req_st_department_code', Auth::user()->st_department_code)
+                ->where('req_st_bureau_code', Auth::user()->st_bureau_code)
+                ->where('req_st_division_code', Auth::user()->st_division_code);
+        }
+    }
+
+    /**
+     * Relation
+     */
     public function department()
     {
         return $this->hasOne('App\Model\StDepartment', 'code', 'st_department_code');

@@ -29,21 +29,7 @@ class BookingVehicleController extends Controller
         $status = $request->get('status');
         $perPage = 10;
 
-        $rs = BookingVehicle::with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->select('*');
-
-        /**
-         * เห็นเฉพาะของตัวเอง ในกรณีที่สิทธิ์การใช้งานตั้งค่าไว้, default คือเห็นทั้งหมด
-         * เห็นเฉพาะยานพาหนะที่อยู่ในสังกัดของตัวเอง
-         */
-        if (CanPerm('access-self')) {
-            // $rs = $rs->whereHas('st_vehicle', function($q){
-            //     $q->where('st_division_code',Auth::user()->st_division_code);
-            // });
-
-            $rs = $rs->where('req_st_department_code', Auth::user()->st_department_code)
-                ->where('req_st_bureau_code', Auth::user()->st_bureau_code)
-                ->where('req_st_division_code', Auth::user()->st_division_code);
-        }
+        $rs = BookingVehicle::filterByPermissionView()->with('st_vehicle', 'st_driver', 'department', 'bureau', 'division')->select('*');
         $rs_all = $rs->get();
 
         if (!empty($st_vehicle_type_id)) {
@@ -139,19 +125,18 @@ class BookingVehicleController extends Controller
     public function show(Request $request)
     {
         $keyword = $request->get('search');
-        $st_room_id = $request->get('st_vehicle_id');
+        $st_vehicle_id = $request->get('st_vehicle_id');
         $st_department_code = $request->get('st_department_code');
         $st_bureau_code = $request->get('st_bureau_code');
         $st_division_code = $request->get('st_division_code');
         $status = $request->get('status');
         $st_province_code = $request->get('st_province_code');
-        $req_st_bureau_code = $request->get('req_st_bureau_code');
 
-        $rs = BookingVehicle::select('*');
+        $rs = BookingVehicle::filterByPermissionView()->select('*');
         $rs_all = $rs->get();
 
-        if (!empty($st_room_id)) {
-            $rs = $rs->where('st_vehicle_id', $st_room_id);
+        if (!empty($st_vehicle_id)) {
+            $rs = $rs->where('st_vehicle_id', $st_vehicle_id);
         }
 
         if (!empty($keyword)) {
@@ -173,20 +158,12 @@ class BookingVehicleController extends Controller
             $rs = $rs->where('st_division_code', $st_division_code);
         }
 
-        // if ($st_department_code || $st_bureau_code || $st_division_code) {
-        //     $rs = $rs->orderBy('id', 'desc')->with('st_vehicle')->get();
-        // }
-
         if (!empty($status)) {
             $rs = $rs->where('status', $status);
         }
 
         if (!empty($st_province_code)) {
             $rs = $rs->where('st_province_code', $st_province_code);
-        }
-
-        if (!empty($req_st_bureau_code)) {
-            $rs = $rs->where('req_st_bureau_code', $req_st_bureau_code);
         }
 
         $rs = $rs->orderBy('id', 'desc')->with('st_vehicle.st_vehicle_type')->get();

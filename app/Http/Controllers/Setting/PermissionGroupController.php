@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Setting;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Model\PermissionGroup;
 use App\Model\PermissionRole;
-
 use Illuminate\Http\Request;
 
 class PermissionGroupController extends Controller
@@ -21,7 +18,7 @@ class PermissionGroupController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -35,12 +32,13 @@ class PermissionGroupController extends Controller
         $keyword = $request->get('search');
         $perPage = 10;
 
+        $permissiongroup = PermissionGroup::withCount('stUser');
+
         if (!empty($keyword)) {
-            $permissiongroup = PermissionGroup::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $permissiongroup = PermissionGroup::latest()->paginate($perPage);
+            $permissiongroup = $permissiongroup->where('name', 'LIKE', "%$keyword%");
         }
+
+        $permissiongroup = $permissiongroup->paginate($perPage);
 
         return view('setting.permission-group.index', compact('permissiongroup'));
     }
@@ -54,7 +52,7 @@ class PermissionGroupController extends Controller
     {
         // ตรวจสอบ permission
         ChkPerm('permission-group-create', 'setting/permission-group');
-        
+
         return view('setting.permission-group.create');
     }
 
@@ -68,27 +66,28 @@ class PermissionGroupController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required'
-		], [
-            'title.required' => 'ชื่อสิทธิ์การใช้งาน ห้ามเป็นค่าว่าง'
+            'title' => 'required',
+        ], [
+            'title.required' => 'ชื่อสิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
         $permissiongroup = PermissionGroup::create($requestData);
 
-        /** 
+        /**
          * บันทึกสิทธิ์การใช้งาน
          * */
-        if(isset($request->pm)){
-            foreach($request->pm as $key => $value){
+        if (isset($request->pm)) {
+            foreach ($request->pm as $key => $value) {
                 $pm = new PermissionRole;
                 $pm->permission_group_id = $permissiongroup->id;
-                $pm->permission_id  = $value;
+                $pm->permission_id = $value;
                 $pm->save();
             }
         }
 
         set_notify('success', 'บันทึกข้อมูลสำเร็จ');
+
         return redirect('setting/permission-group');
     }
 
@@ -134,9 +133,9 @@ class PermissionGroupController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'title' => 'required'
-		], [
-            'title.required' => 'ชื่อสิทธิ์การใช้งาน ห้ามเป็นค่าว่าง'
+            'title' => 'required',
+        ], [
+            'title.required' => 'ชื่อสิทธิ์การใช้งาน ห้ามเป็นค่าว่าง',
         ]);
 
         $requestData = $request->all();
@@ -147,21 +146,22 @@ class PermissionGroupController extends Controller
         /**
          * ลบทั้งหมดออกแล้วบันทึกใหม่
          */
-        PermissionRole::where('permission_group_id',$permissiongroup->id)->delete();
+        PermissionRole::where('permission_group_id', $permissiongroup->id)->delete();
 
-        /** 
+        /**
          * บันทึกสิทธิ์การใช้งาน
          * */
-        if(isset($request->pm)){
-            foreach($request->pm as $key => $value){
+        if (isset($request->pm)) {
+            foreach ($request->pm as $key => $value) {
                 $pm = new PermissionRole;
                 $pm->permission_group_id = $permissiongroup->id;
-                $pm->permission_id  = $value;
+                $pm->permission_id = $value;
                 $pm->save();
             }
         }
 
         set_notify('success', 'แก้ไขข้อมูลสำเร็จ');
+
         return redirect('setting/permission-group');
     }
 
@@ -180,6 +180,7 @@ class PermissionGroupController extends Controller
         PermissionGroup::destroy($id);
 
         set_notify('success', 'ลบข้อมูลสำเร็จ');
+
         return redirect('setting/permission-group');
     }
 }

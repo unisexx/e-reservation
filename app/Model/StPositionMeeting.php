@@ -10,4 +10,9 @@ class StPositionMeeting extends Model
         'name',
         'status',
     ];
+
+    public function bookingBoss()
+    {
+        return $this->hasMany('App\Model\BookingBoss', 'boss_status', 'id');
+    }
 }

@@ -47,15 +47,17 @@
                 </a>
                 {{-- @endif --}}
 
-                {{-- @if(CanPerm('st-resource-delete')) --}}
-                <form method="POST" action="{{ url('/setting/st-resource' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                    {{ method_field('DELETE') }}
-                    {{ csrf_field() }}
-                    <button type="submit" title="ลบ" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
-                        <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
-                    </button>
-                </form>
-                {{-- @endif --}}
+                @if($item->booking_resource_count == 0)
+                    {{-- @if(CanPerm('st-resource-delete')) --}}
+                    <form method="POST" action="{{ url('/setting/st-resource' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" title="ลบ" onclick="return confirm(&quot;Confirm delete?&quot;)" style="border:none; background:none; padding:0px;">
+                            <img src="{{ url('images/remove.png') }}" width="24" height="24" class="vtip" title="ลบรายการนี้"/>
+                        </button>
+                    </form>
+                    {{-- @endif --}}
+                @endif
             </td>
         </tr>
     @endforeach
