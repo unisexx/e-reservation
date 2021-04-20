@@ -22,15 +22,15 @@ class BookingRoomController extends Controller
         // ตรวจสอบ permission
         ChkPerm('booking-room-view');
 
-        $keyword = $request->get('search');
-        $data_type = $request->get('date_type');
+        $keyword     = $request->get('search');
+        $data_type   = $request->get('date_type');
         $date_select = $request->get('date_select');
-        $status = $request->get('status');
-        $perPage = 10;
+        $status      = $request->get('status');
+        $perPage     = 10;
 
         $rs = BookingRoom::filterByPermissionView()
             ->with('st_room.department', 'st_room.bureau', 'st_room.division', 'department', 'bureau', 'division', 'approver.prefix', 'conferenceApprover.prefix')
-            ->select('*');
+            ->select('*')->where('use_conference', '<>', 1);
 
         $rs_all = $rs->get();
 
@@ -86,9 +86,9 @@ class BookingRoomController extends Controller
 
     public function store(BookingRoomRequest $request)
     {
-        $requestData = $request->all();
+        $requestData               = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
-        $requestData['end_date'] = Date2DB($request->end_date);
+        $requestData['end_date']   = Date2DB($request->end_date);
         if ($requestData['use_conference'] == 1) {
             $requestData['status_conference'] = 'รออนุมัติ';
         }
@@ -96,7 +96,7 @@ class BookingRoomController extends Controller
         $data = BookingRoom::create($requestData);
 
         // อัพเดทรหัสการจอง โดยเอา ไอดี มาคำนวน
-        $rs = BookingRoom::find($data->id);
+        $rs       = BookingRoom::find($data->id);
         $rs->code = 'RR' . sprintf("%05d", $data->id);
         $rs->save();
 
@@ -107,9 +107,9 @@ class BookingRoomController extends Controller
 
     public function show(Request $request)
     {
-        $keyword = $request->get('search');
+        $keyword    = $request->get('search');
         $st_room_id = $request->get('st_room_id');
-        $status = $request->get('status');
+        $status     = $request->get('status');
 
         $rs = BookingRoom::filterByPermissionView()
             ->select('*')
@@ -144,9 +144,9 @@ class BookingRoomController extends Controller
 
     public function update(BookingRoomRequest $request, $id)
     {
-        $requestData = $request->all();
+        $requestData               = $request->all();
         $requestData['start_date'] = Date2DB($request->start_date);
-        $requestData['end_date'] = Date2DB($request->end_date);
+        $requestData['end_date']   = Date2DB($request->end_date);
 
         $rs = BookingRoom::findOrFail($id);
 
@@ -157,12 +157,12 @@ class BookingRoomController extends Controller
         //     $requestData['approve_conference_date'] = date('Y-m-d H:i:s');
         // }
 
-        $email = 0;
+        $email      = 0;
         $rs->status = @$requestData['status'];
         if ($rs->isDirty('status')) {
-            $email = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
+            $email                        = 1; // ถ้าสถานะมีการเปลี่ยนแปลง ให้ทำการส่งอีเมล์แจ้งเตือน
             $requestData['approve_by_id'] = Auth::user()->id;
-            $requestData['approve_date'] = date('Y-m-d H:i:s');
+            $requestData['approve_date']  = date('Y-m-d H:i:s');
         }
 
         $rs->update($requestData);

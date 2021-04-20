@@ -68,7 +68,7 @@ if(isset($rs->end_time)){
                 // dump(Request::segment(2));
                 // dump(Request::segment(3));
             @endphp 
-            @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomController@create' || Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomConferenceController@create')
+            {{-- @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomController@create' || Route::currentRouteAction() == 'App\Http\Controllers\BookingRoomConferenceController@create')
                 <div class="row">
                     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group form-margin">
@@ -96,7 +96,7 @@ if(isset($rs->end_time)){
                     });
                 </script>
                 @endpush
-            @endif
+            @endif --}}
 
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
@@ -616,7 +616,7 @@ $('.range-date').each(function(k, v) {
 <script>
 $(document).ready(function(){
     $('body').on('click', '#confirmSubmitBtn', function() {
-        $('form').submit();
+        $('form#bookingRoomForm').submit();
     });
     $('body').on('click', '#cboxCloseBtn', function() {
         $.colorbox.close();

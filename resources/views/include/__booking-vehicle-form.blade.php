@@ -51,7 +51,7 @@ $province_txt = @$st_province_code == 10 ? 'ส่วนกลาง' : @getProv
                 // dump(Request::segment(2));
                 // dump(Request::segment(3));
             @endphp 
-            @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingVehicleController@create') 
+            {{-- @if(Route::currentRouteAction() == 'App\Http\Controllers\BookingVehicleController@create') 
                 <div class="row">
                     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                         <div class="form-group form-margin">
@@ -79,7 +79,7 @@ $province_txt = @$st_province_code == 10 ? 'ส่วนกลาง' : @getProv
                     });
                 </script>
                 @endpush
-            @endif
+            @endif --}}
 
             <div class="row">
                 <div class="col-md-12">

@@ -13,9 +13,9 @@ class BookingVehicle extends Model
     // logsActivity
     use LogsActivity;
 
-    protected $table = 'booking_vehicles';
+    protected $table      = 'booking_vehicles';
     protected $primaryKey = 'id';
-    protected $fillable = [
+    protected $fillable   = [
         'code',
         'gofor',
         'number',
@@ -44,6 +44,7 @@ class BookingVehicle extends Model
         'st_driver_id',
         'approve_by_id',
         'approve_date',
+        'st_province_code',
     ];
 
     /**

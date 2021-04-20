@@ -118,3 +118,11 @@ if (!function_exists('getProviceName')) {
         return $rs->name;
     }
 }
+
+if (!function_exists('getLoginProvince')) {
+    function getLoginProvince()
+    {
+        $stProvince = @Auth::user()->bureau->stProvince;
+        return $stProvince;
+    }
+}

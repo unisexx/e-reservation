@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองยานพาหนะ</h3>
+<h3>จองยานพาหนะ ({{ @getLoginProvince()->code == 10 ? 'ส่วนกลาง' :  @getLoginProvince()->name }})</h3>
 
 @if(empty(request('export')))
 
@@ -39,7 +39,7 @@ $st_vehicle_types = App\Model\StVehicleType::where('status', '1')->orderBy('id',
 </div>
 
 <div id="btnBox">
-    <a href="{{ url('/booking-vehicle/show?st_province_code='.@Auth::user()->bureau->st_province_code) }}">
+    <a href="{{ url('/booking-vehicle/show?st_province_code='.@getLoginProvince()->code) }}">
         <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="ดูมุมมองปฎิทิน" />
     </a>
     <?php

@@ -65,20 +65,18 @@
                         <div class="form-group form-margin">
                             <label>เลือกผู้บริหาร<span class="Txt_red_12"> *</span></label>
                             @php
-                                $hasError = $errors->has('st_boss_id') ? 'has-error' : '';
+                                $stBoss = isset($rs->st_position_level_id) ? \App\Model\StBoss::where('status', 1)->where('st_position_level_id', $rs->st_position_level_id)->orderBy('order','asc')->get() : \App\Model\StBoss::where('status', 1)->orderBy('order','asc')->get();
                             @endphp
-                            {{ Form::select(
-                                "st_boss_id", 
-                                isset($rs->st_position_level_id) ? \App\Model\StBoss::where('status', 1)->where('st_position_level_id', $rs->st_position_level_id)->pluck('name', 'id') : \App\Model\StBoss::where('status', 1)->pluck('name', 'id'), 
-                                @$stBossIdSelect, 
-                                [
-                                    'class'=>'form-control selectpicker '.$hasError,
-                                    'data-live-search'=>'true', 
-                                    'data-size'=>'8', 
-                                    'title'=>'เลือกผู้บริหาร',
-                                    'required' => 'required'
-                                ]) 
-                            }}
+                            <select name="st_boss_id" class="form-control selectpicker {{ $errors->has('st_boss_id') ? 'has-error' : '' }}" data-size="8" data-live-search="true" title="เลือกผู้บริหาร">
+                                @foreach($stBoss as $item)
+                                    <option 
+                                        value="{{ @$item->id }}" 
+                                        @if($stBossIdSelect == @$item->id) selected="selected" @endif  
+                                        data-content="<span class='badge' style='color:#000; background-color:{{ $item->color }}'>{{ @$item->abbr }}</span> {{ $item->name }} {{ @$item->stBossPosition->name ?? '-' }} {{ !empty(@$item->position_more) ? '('.@$item->position_more.')' : '' }}">
+                                    ลิสต์รายการที่แสดงอยู่ใน data-content
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -88,7 +86,7 @@
                         <div class="form-group form-margin">
                             <label class="control-label">ชื่อเรื่อง / หัวข้อการประชุม<span class="Txt_red_12">
                                     *</span></label>
-                            <input required name="title" type="text" class="form-control @error('title') has-error @enderror" placeholder="ชื่อเรื่อง / หัวข้อการประชุม"
+                            <input name="title" type="text" class="form-control @error('title') has-error @enderror" placeholder="ชื่อเรื่อง / หัวข้อการประชุม"
                                 value="{{ $rs->title ?? old('title') }}">
                         </div>
                     </div>
@@ -111,13 +109,13 @@
                     <div class="col-md-6">
                         <div class="form-group form-margin">
                             <label class="control-label">ชื่อห้องประชุม<span class="Txt_red_12"> *</span></label>
-                            <input required name="room_name" type="text" class="form-control @error('room_name') has-error @enderror" placeholder="ชื่อห้องประชุม" value="{{ $rs->room_name ?? old('room_name') }}">
+                            <input name="room_name" type="text" class="form-control @error('room_name') has-error @enderror" placeholder="ชื่อห้องประชุม" value="{{ $rs->room_name ?? old('room_name') }}">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group form-margin">
                             <label class="control-label">สถานที่<span class="Txt_red_12"> *</span></label>
-                            <input required name="place" type="text" class="form-control @error('place') has-error @enderror" placeholder="สถานที่" value="{{ $rs->place ?? old('place') }}">
+                            <input name="place" type="text" class="form-control @error('place') has-error @enderror" placeholder="สถานที่" value="{{ $rs->place ?? old('place') }}">
                         </div>
                     </div>
                 </div>
@@ -126,7 +124,7 @@
                     <div class="col-md-6">
                         <div class="form-group form-margin">
                             <label>ชื่อเจ้าของงาน<span class="Txt_red_12"> *</span></label>
-                            <input required name="owner" type="text" class="form-control @error('owner') has-error @enderror" placeholder="ชื่อเจ้าของงาน" value="{{ $rs->owner ?? old('owner') }}">
+                            <input name="owner" type="text" class="form-control @error('owner') has-error @enderror" placeholder="ชื่อเจ้าของงาน" value="{{ $rs->owner ?? old('owner') }}">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -147,13 +145,12 @@
                                 @php
                                     @$start_date = $rs->start_date ?? $_GET['start_date'];
                                 @endphp
-                                <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}"
-                                required  placeholder="วัน/เดือน/ปี">
+                                <input id="sDate" name="start_date" type="text" class="form-control range-date @error('start_date') has-error @enderror" value="{{ old('start_date') ?? @DB2Date(@$start_date) }}" placeholder="วัน/เดือน/ปี">
                             </div>
                         </div>
                         <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
-                            <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
+                            <select id="sHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true">
                                 @foreach(getHour() as $item)
                                 <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
@@ -161,7 +158,7 @@
                         </div>
                         <div class="pull-left pt-1 p-0 col-xs-1 w-10 colon">:</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
-                            <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true" required>
+                            <select id="sMinute" name="sMinute" class="selectpicker" data-size="10" data-live-search="true">
                                 @foreach(getMinute() as $item)
                                 <option value="{{ $item }}" {{ $item == (@$sTimeArr[1] ?? old('sMinute')) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
@@ -175,13 +172,12 @@
                     <div class="col-xs-12 col-sm-8 col-md-5">
                         <div class="col-xs-12 col-sm-4 col-md-5 p-0">
                             <div class="form-group form-margin">
-                                <input id="eDate" name="end_date" type="text" class="form-control range-date @error('end_date') has-error @enderror" value="{{ old('end_date') ?? @DB2Date($rs->end_date) }}"
-                                    required  placeholder="วัน/เดือน/ปี">
+                                <input id="eDate" name="end_date" type="text" class="form-control range-date @error('end_date') has-error @enderror" value="{{ old('end_date') ?? @DB2Date($rs->end_date) }}" placeholder="วัน/เดือน/ปี">
                             </div>
                         </div>
                         <div class="pull-left pt-1 p-0 col-xs-1 col-sm-1">เวลา</div>
                         <div class="col-xs-2 col-sm-2 col-md-2  pull-left">
-                            <select id="eHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true" required>
+                            <select id="eHour" name="sHour" class="selectpicker" data-size="10" data-live-search="true">
                                 @foreach(getHour() as $item)
                                 <option value="{{ $item }}" {{ $item == (@$sTimeArr[0] ?? old('sHour')) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
@@ -189,7 +185,7 @@
                         </div>
                         <div class="pull-left pt-1 p-0 col-xs-1 w-10 colon">:</div>
                         <div class="col-xs-2 col-sm-2 col-md-2 pull-left">
-                            <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true" required>
+                            <select id="eMinute" name="eMinute" class="selectpicker" data-size="10" data-live-search="true">
                                 @foreach(getMinute() as $item)
                                 <option value="{{ $item }}" {{ $item == (@$eTimeArr[1] ?? old('eMinute')) ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
@@ -214,7 +210,7 @@
                                 {{ Form::checkbox('self_booking', '1', @$rs->booking_user_id == @Auth::user()->id ? @$rs->self_booking : '', ['id'=>'selfBookingChkbox']) }} ท่านเป็นผู้จองเอง
                             @endif
 
-                            <input required name="request_name" type="text" class="form-control " placeholder="ชื่อผู้ขอใช้"
+                            <input name="request_name" type="text" class="form-control @error('request_name') has-error @enderror" placeholder="ชื่อผู้ขอใช้"
                                 value="{{ $rs->request_name ?? old('request_name') }}">
                         </div>
                     </div>
@@ -223,14 +219,14 @@
                         <label class="control-label">&nbsp;</label>
                         <div class="form-group form-margin">
                             <input name="request_position" type="text" class="form-control @error('request_position') has-error @enderror"
-                                placeholder="ตำแหน่งผู้ขอใช้" value="{{ $rs->request_position ?? old('request_position') }}" required >
+                                placeholder="ตำแหน่งผู้ขอใช้" value="{{ $rs->request_position ?? old('request_position') }}" >
                         </div>
                     </div>
                 </div>
 
                 <div class="row dep-chain-group">
                     <div class="col-md-4 mt-10">
-                        <select name="st_department_code" class="chain-department selectpicker w-100 @error('st_department_code') has-error @enderror" data-live-search="true" data-size="8" title="กรม" required>
+                        <select name="st_department_code" class="chain-department selectpicker w-100 @error('st_department_code') has-error @enderror" data-live-search="true" data-size="8" title="กรม">
                             <option value="">+ กรม +</option>
                             @foreach($st_departments as $item)
                             <option value="{{ $item->code }}" @if($item->code == @old('st_department_code')) selected="selected" @endif @if($item->code == @$rs->st_department_code) selected="selected" @endif>{{ $item->title }}</option>
@@ -238,7 +234,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 mt-10">
-                        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker w-100 @error('st_bureau_code') has-error @enderror" data-live-search="true" data-size="8" title="สำนัก" required>
+                        <select name="st_bureau_code" id="lunch" class="chain-bureau selectpicker w-100 @error('st_bureau_code') has-error @enderror" data-live-search="true" data-size="8" title="สำนัก">
                             <option value="">+ สำนัก +</option>
                             @if(old('st_department_code') || isset($rs->st_department_code))
                             @foreach($st_bureaus as $item)
@@ -248,7 +244,7 @@
                         </select>
                     </div>
                     <div class="col-md-4 mt-10">
-                        <select name="st_division_code" id="lunch" class="chain-division selectpicker w-100 @error('st_division_code') has-error @enderror" data-live-search="true" data-size="8" title="กลุ่ม" required>
+                        <select name="st_division_code" id="lunch" class="chain-division selectpicker w-100 @error('st_division_code') has-error @enderror" data-live-search="true" data-size="8" title="กลุ่ม">
                             <option value="">+ กลุ่ม +</option>
                             @if(old('st_bureau_code') || isset($rs->st_bureau_code))
                             @foreach($st_divisions as $item)
@@ -260,10 +256,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 mt-20">
-                        <input name="request_tel" type="text" class="form-control @error('request_tel') has-error @enderror" placeholder="เบอร์โทรศัพท์" value="{{ $rs->request_tel ?? old('request_tel') }}" required >
+                        <input name="request_tel" type="text" class="form-control @error('request_tel') has-error @enderror" placeholder="เบอร์โทรศัพท์" value="{{ $rs->request_tel ?? old('request_tel') }}" >
                     </div>
                     <div class="col-md-6 mt-20">
-                        <input name="request_email" type="text" class="form-control @error('request_email') has-error @enderror" placeholder="อีเมล์" value="{{ $rs->request_email ?? old('request_email') }}" required >
+                        <input name="request_email" type="text" class="form-control @error('request_email') has-error @enderror" placeholder="อีเมล์" value="{{ $rs->request_email ?? old('request_email') }}" >
                     </div>
                 </div>
 
@@ -282,7 +278,7 @@
                         <label>กรุณาใส่ผลบวกที่ถูกต้อง <span class="Txt_red_12"> *</span></label>
                         <span class="form-inline">
                             {!! captcha_img() !!}
-                            <input class="form-control" type="text" name="captcha" style="width:100px;">
+                            <input class="form-control @error('captcha') has-error @enderror" type="text" name="captcha" style="width:100px;">
                         </span>
                     </div>
                 </div>

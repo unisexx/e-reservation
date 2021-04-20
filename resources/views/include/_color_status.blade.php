@@ -18,11 +18,11 @@
     @else
         @php
             if($type == 'room'){
-                $count = App\Model\BookingRoom::get();
+                $count = App\Model\BookingRoom::filterByPermissionView()->where('use_conference', '<>', 1)->get();
             }elseif($type == 'conference'){
-                $count = App\Model\BookingRoom::where('use_conference', 1)->get();
+                $count = App\Model\BookingRoom::filterByPermissionView()->where('use_conference', 1)->get();
             }elseif($type == 'vehicle'){
-                $count = App\Model\BookingVehicle::get();
+                $count = App\Model\BookingVehicle::filterByPermissionView()->get();
             }elseif($type == 'resource'){
                 $count = App\Model\BookingResource::get();
             }elseif($type == 'boss'){

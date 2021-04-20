@@ -15,9 +15,9 @@
     @else
         @php
             if($type == 'room'){
-                $booking_room = App\Model\BookingRoom::where('use_conference', '<>', 1)->get();
+                $booking_room = App\Model\BookingRoom::filterByPermissionView()->where('use_conference', '<>', 1)->get();
             }elseif($type == 'conference'){
-                $booking_room = App\Model\BookingRoom::where('use_conference', 1)->get();
+                $booking_room = App\Model\BookingRoom::filterByPermissionView()->where('use_conference', 1)->get();
             }
         @endphp
         <li>

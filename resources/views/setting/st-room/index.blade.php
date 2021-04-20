@@ -38,10 +38,11 @@
     <tr>
         <th style="text-align: center;">ลากวางเพื่อเรียงลำดับ</th>
         <th>ลำดับ</th>
-        <th style="width:20%">ภาพห้องประชุม</th>
+        <th>ภาพห้องประชุม</th>
         <th>จังหวัด</th>
-        <th style="width:20%">ชื่อห้องประชุม</th>
-        <th style="width:30%">รายละเอียด</th>
+        <th>ชื่อห้องประชุม</th>
+        <th width="25%">รายละเอียด</th>
+        <th width="20%">ผู้จัดการจองห้อง</th>
         <th>สถานะ</th>
         @if(CanPerm('is-superadmin'))
             <th style="text-align: center;">set default<br>(ค่าเริ่มต้นการแสดงผล)</th>
@@ -80,6 +81,11 @@
                 {{ !empty($item->st_division_code) ? $item->division->title : "-" }}
             </div>
             <div>ค่าใช้จ่าย/ค่าธรรมเนียมในการขอใช้ห้องประชุม : {{ !empty($item->fee) ? $item->fee : "-" }}</div>
+        </td>
+        <td>
+            @foreach ($item->manageRoom as $manageroom)
+                <div>- {{ @$manageroom->user->prefix->title }} {{ @$manageroom->user->givename }} {{ @$manageroom->user->familyname }}</div>
+            @endforeach
         </td>
         <td>@if($item->status == 1) <img src="{{ url('images/icon_checkbox.png')}}" width="24" height="24" /> @endif</td>
         @if(CanPerm('is-superadmin'))

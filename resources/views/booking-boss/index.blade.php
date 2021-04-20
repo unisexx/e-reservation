@@ -77,7 +77,7 @@
                 @endif
             </td>
             <td nowrap="nowrap">{{ $row->code }}</td>
-            <td>{{ @$row->stBoss->name }} ({{ @$row->getBossStatusTxt() }})</td>
+            <td><span class='badge' style='color:#000; background-color:{{ @$row->stBoss->color }}'>{{ @$row->stBoss->abbr }}</span> {{ @$row->stBoss->name }} ({{ @$row->getBossStatusTxt() }})</td>
             <td>
                 <div class="topicMeeting">{{ @$row->title }}</div>
                 <div>{{ @$row->place }}</div>

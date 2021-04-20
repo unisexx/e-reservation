@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3>จองห้องประชุม/อบรม</h3>
+<h3>จองห้องประชุม/อบรม ({{ @getLoginProvince()->code == 10 ? 'ส่วนกลาง' :  @getLoginProvince()->name }})</h3>
 
 @if(empty(request('export')))
     <div id="search">
@@ -28,7 +28,7 @@
         {{-- <a href="{{ url('/booking-room/show?is_conference=1') }}">
             <img src="{{ url('images/online-meeting.png') }}" class="vtip" title="มุมมองปฎิทิน Conference" width="48" />
         </a> --}}
-        <a href="{{ url('/booking-room/show?st_province_code='.@Auth::user()->bureau->st_province_code) }}">
+        <a href="{{ url('/booking-room/show?st_province_code='.@getLoginProvince()->code) }}">
             <img src="{{ url('images/view_calendar.png') }}" class="vtip" title="มุมมองปฎิทิน" />
         </a>
         <?php
