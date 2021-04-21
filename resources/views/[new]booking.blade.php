@@ -56,8 +56,8 @@
                             <div class="service-desc">
                             <h5>จองห้องประชุม</h5>
                             <div class="divider-header"></div>
-                                <a href="{{ url('booking-room-front/show?st_province_code=10') }}" class="btn btn-skin">booking</a>
-                                {{-- <a href="{{ url('booking-room-front/province') }}" class="btn btn-skin">ภูมิภาค</a> --}}
+                                <a href="{{ url('booking-room-front/show?st_province_code=10') }}" class="btn btn-skin">ส่วนกลาง</a>
+                                <a href="{{ url('booking-room-front/province') }}" class="btn btn-skin">ภูมิภาค</a>
                             </div>
                         </div>
                         </div>
@@ -72,14 +72,14 @@
                             <h5>จองยานพาหนะ</h5>
                             <div class="divider-header"></div>
                                 {{-- <a href="{{ url('booking-vehicle-front/show') }}" class="btn btn-skin">booking</a> --}}
-                                <a href="{{ url('booking-vehicle-front/show?st_province_code=10') }}" class="btn btn-skin">booking</a>
-                                {{-- <a href="{{ url('booking-vehicle-front/province') }}" class="btn btn-skin">ภูมิภาค</a> --}}
+                                <a href="{{ url('booking-vehicle-front/show?st_province_code=10') }}" class="btn btn-skin">ส่วนกลาง</a>
+                                <a href="{{ url('booking-vehicle-front/province') }}" class="btn btn-skin">ภูมิภาค</a>
                             </div>
                         </div>
                         </div>
                     </div>
 
-                    {{-- <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="animated rotateInDownLeft slow">
                         <div class="service-box">
                             <div class="service-icon">
@@ -92,9 +92,9 @@
                             </div>
                         </div>
                         </div>
-                    </div> --}}
+                    </div>
 
-                    {{-- <div class="col-md-3">
+                    <div class="col-md-3">
                         <div class="animated rotateInDownLeft slow">
                         <div class="service-box">
                             <div class="service-icon">
@@ -107,7 +107,7 @@
                             </div>
                         </div>
                         </div>
-                    </div> --}}
+                    </div>
 
 
                 </div>
